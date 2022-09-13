@@ -139,7 +139,7 @@ public class Lexer {
             return new Token(TokenType.MOD, sb.toString(), lineNumber);
         }
 
-        // deal with ||  %%
+        // deal with ||  &&
         else if (curChar == '&') {
             sb.append(curChar); read();
             sb.append(curChar); read();
@@ -226,7 +226,7 @@ public class Lexer {
             while (curChar != '"') {
                 sb.append(curChar); read();
             }
-            sb.append(curChar); read();
+            sb.append(curChar); read(); // skip the last '"'
             return new Token(TokenType.STRCON, sb.toString(), lineNumber);
         }
 
