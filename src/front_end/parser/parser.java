@@ -1,5 +1,8 @@
 package front_end.parser;
 
-public class parser {
+import front_end.lexer.TokenStream;
 
+public class parser {
+    private TokenStream tokenStream;
+    private
 }
