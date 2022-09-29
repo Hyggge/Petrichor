@@ -1,7 +1,7 @@
-import front_end.Lexer;
+import front_end.lexer.Lexer;
 import org.junit.Test;
-import utils.Token;
-import utils.TokenType;
+import front_end.lexer.Token;
+import front_end.lexer.TokenType;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

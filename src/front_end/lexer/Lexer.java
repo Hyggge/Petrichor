@@ -1,7 +1,4 @@
-package front_end;
-
-import utils.Token;
-import utils.TokenType;
+package front_end.lexer;
 
 import java.io.IOException;
 import java.io.PushbackInputStream;
@@ -11,7 +8,6 @@ public class Lexer {
     private int lineNumber;
     private char curChar;
     private PushbackInputStream stream;
-    private ArrayList<Token> tokenList;
 
     // constructor
     public Lexer(PushbackInputStream stream) throws IOException {

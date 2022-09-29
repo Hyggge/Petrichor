@@ -1,4 +1,4 @@
-package utils;
+package front_end.lexer;
 
 public enum TokenType {
     IDENFR,
