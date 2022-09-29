@@ -17,11 +17,15 @@ public class TokenStream {
     }
 
     public void unread() {
-        pos--;
+        if (pos - 1 >= 0) {
+            pos--;
+        }
     }
 
     public void unread(int step) {
-        pos -= step;
+        if (pos - step >= 0) {
+            pos -= step;
+        }
     }
 
     public int getPos() {
