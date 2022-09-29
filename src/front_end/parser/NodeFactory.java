@@ -41,7 +41,6 @@ public class NodeFactory {
     public static Node createNode(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {
         switch (type) {
             case COMP_UNIT:             return new CompUnit(startLine, endLine, type, children);
-            case MAIN_FUNC_DEF:         return new MainFuncDef(startLine, endLine, type, children);
 
             case CONST_DECL:            return new ConstDecl(startLine, endLine, type, children);
             case CONST_DEF:             return new ConstDef(startLine, endLine, type, children);
@@ -52,6 +51,7 @@ public class NodeFactory {
             case INIT_VAL:              return new InitVal(startLine, endLine, type, children);
 
             case FUNC_DEF:              return new FuncDef(startLine, endLine, type, children);
+            case MAIN_FUNC_DEF:         return new MainFuncDef(startLine, endLine, type, children);
             case FUNC_FORMAL_PARAMS:    return new FuncFormalParams(startLine, endLine, type, children);
             case FUNC_FORMAL_PARAM:     return new FuncFormalParam(startLine, endLine, type, children);
             case FUNC_REAL_PARAMS:      return new FuncRealParams(startLine, endLine, type, children);
