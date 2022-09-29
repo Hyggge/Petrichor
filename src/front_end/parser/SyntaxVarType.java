@@ -1,53 +1,65 @@
 package front_end.parser;
 
 public enum SyntaxVarType {
-    COMP_UNIT,
-    FUC_DEF,
-    MAIN_FUNC_DEF,
+    COMP_UNIT("CompUnit"),
+    MAIN_FUNC_DEF("MainFuncDef"),
 
     // const
-    CONST_DECL,
-    CONST_DEF,
-    CONST_INITVAL,
+    CONST_DECL("ConstDecl"),
+    CONST_DEF("ConstDef"),
+    CONST_INITVAL("ConstInitVal"),
 
-    VAR_DECL,
-    VAR_DEF,
-    INIT_VAL,
+    VAR_DECL("VarDecl"),
+    VAR_DEF("VarDef"),
+    INIT_VAL("InitVal"),
 
-    FUNC_DEF,
-    FUNC_FORMAL_PARAMS,
-    FUNC_REAL_PARAMS,
-    FUNC_FORMAL_PARAM,
-    BLOCK,
+    FUNC_DEF("FuncDef"),
+    FUNC_FORMAL_PARAMS("FuncFParams"),
+    FUNC_FORMAL_PARAM("FuncFParam"),
+    FUNC_REAL_PARAMS(""),
+    BLOCK("Block"),
 
-    STMT,
-    ASSIGN_STMT,
-    EXP_STMT,
-    IF_STMT,
-    WHILE_STMT,
-    BREAK_STMT,
-    CONTINUE_STMT,
-    RETURN_STMT,
-    GETINT_STMT,
-    PRINTF_STMT,
-
-
-    LVAL_EXP,
-    PRIMARY_EXP,
-    UNARY_EXP,
-    MUL_EXP,
-    ADD_EXP,
-    REL_EXP,
-    EQ_EXP,
-    LAND_EXP,
-    LOR_EXP,
-    CONST_EXP,
-    EXP,
-    COND_EXP,
-
-    TOKEN,
+    STMT("Stmt"),
+    ASSIGN_STMT("Stmt"),
+    EXP_STMT("Stmt"),
+    IF_STMT("Stmt"),
+    WHILE_STMT("Stmt"),
+    BREAK_STMT("Stmt"),
+    CONTINUE_STMT("Stmt"),
+    RETURN_STMT("Stmt"),
+    GETINT_STMT("Stmt"),
+    PRINTF_STMT("Stmt"),
 
 
+    LVAL_EXP("LVal"),
+    PRIMARY_EXP("PrimaryExp"),
+    UNARY_EXP("UnaryExp"),
+    MUL_EXP("MulExp"),
+    ADD_EXP("AddExp"),
+    REL_EXP("RelExp"),
+    EQ_EXP("EqExp"),
+    LAND_EXP("LAndExp"),
+    LOR_EXP("LOrExp"),
+    CONST_EXP("ConstExp"),
+    EXP("Exp"),
+    COND_EXP("Cond"),
+
+    // reserved
+    FUNC_TYPE("FuncType"),
+    NUMBER("Number"),
+    UNARY_OP("UnaryOp"),
+
+    TOKEN("token");
+
+    private final String typeName;
+
+    private SyntaxVarType(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String toString() {
+        return this.typeName;
+    }
 
 
 }
