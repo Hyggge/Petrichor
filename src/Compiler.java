@@ -1,6 +1,6 @@
 import front_end.lexer.Lexer;
 import front_end.lexer.Token;
-import front_end.lexer.TokenType;
+import front_end.lexer.TokenStream;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,13 +14,12 @@ public class Compiler {
         Lexer lexer = new Lexer(input);
 
         // get tokens
-        Token token = lexer.getToken();
-        while (token.getType() != TokenType.EOF) {
-            if (token.getType() == TokenType.RETURNTK) {
-                int a;
-            }
+        TokenStream tokenStream = lexer.getTokenStream();
+        Token token = tokenStream.read();
+        while (token != null) {
+            System.out.println(token);
             output.write(token.toString().getBytes());
-            token = lexer.getToken();
+            token = tokenStream.read();
         }
 
         // close all streams

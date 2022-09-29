@@ -8,13 +8,14 @@ public class Lexer {
     private int lineNumber;
     private char curChar;
     private PushbackInputStream stream;
+    private ArrayList<Token> tokenList;
 
     // constructor
     public Lexer(PushbackInputStream stream) throws IOException {
         this.stream = stream;
-        this.tokenList = new ArrayList<>();
         this.curChar = (char)stream.read();
         this.lineNumber = 1;
+        this.tokenList = null;
     }
 
     // tool function
@@ -70,8 +71,23 @@ public class Lexer {
         }
     }
 
+    public TokenStream getTokenStream() throws IOException {
+        return new TokenStream(getTokenList());
+    }
+
+    public ArrayList<Token> getTokenList() throws IOException {
+        if (tokenList != null) return tokenList;
+        tokenList = new ArrayList<>();
+        Token token = getToken();
+        while (token.getType() != TokenType.EOF) {
+            tokenList.add(token);
+            token = getToken();
+        }
+        return tokenList;
+    }
+
     // get a token from input stream
-    public Token getToken() throws IOException {
+    private Token getToken() throws IOException {
         StringBuilder sb = new StringBuilder();
 
         // delete the blank character

@@ -1,13 +1,12 @@
 import front_end.lexer.Lexer;
-import org.junit.Test;
-import front_end.lexer.Token;
 import front_end.lexer.TokenType;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.PushbackInputStream;
 
-public class test {
+public class testLexer {
     @Test
     public void testTokenType() {
         System.out.println(TokenType.IDENFR);
@@ -39,12 +38,5 @@ public class test {
         PushbackInputStream stream = new PushbackInputStream(bytes);
         Lexer lexer = new Lexer(stream);
 
-        Token token = lexer.getToken();
-        while (token.getType() != TokenType.EOF) {
-            System.out.println(token);
-            token = lexer.getToken();
-        }
-        bytes.close();
-        stream.close();
     }
 }
