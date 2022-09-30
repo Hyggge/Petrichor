@@ -5,10 +5,12 @@ import java.util.ArrayList;
 public class TokenStream {
     private ArrayList<Token> tokenList;
     private int pos;
+    private int watchPoint;
 
     public TokenStream(ArrayList<Token> tokenList) {
         this.tokenList = tokenList;
         this.pos = 0;
+        this.watchPoint = 0;
     }
 
     public Token read() {
@@ -22,10 +24,18 @@ public class TokenStream {
         }
     }
 
-    public void unread(int step) {
-        if (pos - step >= 0) {
-            pos -= step;
-        }
+    public Token look(int step) {
+        if (pos + step - 1 >= tokenList.size()) return null;
+        return tokenList.get(pos + step - 1);
+    }
+
+    public void setWatchPoint() {
+        watchPoint = pos;
+    }
+
+    public Token backToWatchPoint() {
+        pos = watchPoint - 1;
+        return read();
     }
 
     public int getPos() {

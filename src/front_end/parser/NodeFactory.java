@@ -32,8 +32,10 @@ import front_end.AST.Stmt.PrintfStmt;
 import front_end.AST.Stmt.ReturnStmt;
 import front_end.AST.Stmt.Stmt;
 import front_end.AST.Stmt.WhileStmt;
+import front_end.AST.TokenNode;
 import front_end.AST.VarDecl;
 import front_end.AST.VarDef;
+import front_end.lexer.Token;
 
 import java.util.ArrayList;
 
@@ -82,6 +84,10 @@ public class NodeFactory {
             case COND_EXP:              return new CondExp(startLine, endLine, type, children);
             default: return null;// TODO: error
         }
+    }
+
+    public static Node createNode(Token token) {
+        return new TokenNode(token.getLineNumber(), token.getLineNumber(), SyntaxVarType.TOKEN, null, token);
     }
 
 
