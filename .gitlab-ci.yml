@@ -1,0 +1,22 @@
+stages:
+  - test_la
+
+test_la:
+  stage: test_la
+  tags:
+    - machine001
+  script:
+    - echo "Building jar..."
+    - cd src
+    - javac -cp . -encoding UTF-8 Compiler.java
+    - jar cmvf META-INF/MANIFEST.MF Compiler.jar */ *
+    - cd ../
+    - echo "Build complete!"
+    - echo "Testing..."
+    - tree
+    - cp -r /root/file/CompilerTest ./test
+    - cp ./src/Compiler.jar ./test/Compiler.jar
+    - cd test
+    - python3 judger.py -la
+    - cd ../
+    - echo "Test complete!"
