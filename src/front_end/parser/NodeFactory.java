@@ -36,11 +36,13 @@ import front_end.AST.TokenNode;
 import front_end.AST.VarDecl;
 import front_end.AST.VarDef;
 import front_end.lexer.Token;
+import utils.Printer;
 
 import java.util.ArrayList;
 
 public class NodeFactory {
     public static Node createNode(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {
+        Printer.printSyntaxVarType(type);
         switch (type) {
             case COMP_UNIT:             return new CompUnit(startLine, endLine, type, children);
 
@@ -87,6 +89,7 @@ public class NodeFactory {
     }
 
     public static Node createNode(Token token) {
+        Printer.printToken(token);
         return new TokenNode(token.getLineNumber(), token.getLineNumber(), SyntaxVarType.TOKEN, null, token);
     }
 

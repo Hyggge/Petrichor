@@ -1,6 +1,7 @@
+import front_end.AST.Node;
 import front_end.lexer.Lexer;
-import front_end.lexer.Token;
 import front_end.lexer.TokenStream;
+import front_end.parser.Parser;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,15 +13,9 @@ public class Compiler {
         PushbackInputStream input = new PushbackInputStream(new FileInputStream("testfile.txt"), 16);
         FileOutputStream output = new FileOutputStream("output.txt");
         Lexer lexer = new Lexer(input);
-
-        // get tokens
         TokenStream tokenStream = lexer.getTokenStream();
-        Token token = tokenStream.read();
-        while (token != null) {
-            System.out.println(token);
-            output.write(token.toString().getBytes());
-            token = tokenStream.read();
-        }
+        Parser parser = new Parser(tokenStream);
+        Node AST = parser.parseCompUnit();
 
         // close all streams
         input.close();

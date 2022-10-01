@@ -8,11 +8,11 @@ import utils.Printer;
 
 import java.util.ArrayList;
 
-public class parser {
+public class Parser {
     private TokenStream tokenStream;
     private Token curToken;
 
-    public parser(TokenStream tokenStream) {
+    public Parser(TokenStream tokenStream) {
         this.tokenStream = tokenStream;
         read();
     }
@@ -34,8 +34,11 @@ public class parser {
         int startLine = curToken.getLineNumber();
         Node node = null;
         while (true) {
+            if (curToken == null) {
+                break;
+            }
             // parse MainFunDef
-            if (tokenStream.look(1).getType() == TokenType.MAINTK) {
+            else if (tokenStream.look(1).getType() == TokenType.MAINTK) {
                 node = parseMainFuncDef();
             }
             // parse FuncDef
@@ -50,7 +53,6 @@ public class parser {
             else if (curToken.getType() == TokenType.INTTK) {
                 node = parseVarDecl();
             }
-            // jump out of the loop
             else break;
             children.add(node);
         }
@@ -449,7 +451,10 @@ public class parser {
         }
 
         tokenStream.setWatchPoint();
-        parseExp();
+//        parseExp();
+        while (curToken.getType() != TokenType.ASSIGN && curToken.getType() != TokenType.SEMICN) {
+            read();
+        }
         if (curToken.getType() == TokenType.ASSIGN) {
             if (tokenStream.look(1).getType() == TokenType.GETINTTK) {
                 curToken = tokenStream.backToWatchPoint();
@@ -491,7 +496,7 @@ public class parser {
         Node node = null;
         // parse Exp
         if (curToken.getType() != TokenType.SEMICN) {
-            node = parseExpStmt();
+            node = parseExp();
             children.add(node);
         }
         // parse ';'
@@ -713,7 +718,7 @@ public class parser {
         int startLine = curToken.getLineNumber();
         Node node = null;
         // parse Ident '(' [FuncRealParams] ')'
-        if (curToken.getType() == TokenType.IDENFR) {
+        if (curToken.getType() == TokenType.IDENFR  && tokenStream.look(1).getType() == TokenType.LPARENT) {
             // parse Ident
             node = NodeFactory.createNode(curToken);
             children.add(node); read();
@@ -756,7 +761,7 @@ public class parser {
         Node node = parseUnaryExp();
         children.add(node);
         // parse {('*' | '+' | '-') UnaryExp}
-        while (curToken.getType() == TokenType.MULT || curToken.getType() == TokenType.PLUS || curToken.getType() == TokenType.MINU) {
+        while (curToken.getType() == TokenType.MULT || curToken.getType() == TokenType.DIV || curToken.getType() == TokenType.MOD) {
             Printer.printSyntaxVarType(SyntaxVarType.MUL_EXP);
             // parse ('*' | '+' | '-')
             node = NodeFactory.createNode(curToken);

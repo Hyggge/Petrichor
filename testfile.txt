@@ -1,23 +1,5 @@
-const int array[2] = {1,2};
 
 int main(){
-    int c;
-    c = getint();
-    printf("output is %d",c);
+    a * b + c;
     return c;
-    if (!(1 == 2 || 2 <= 3)) {  // judge
-        return 0;
-    }
-    return 0; /*
-
-    sfdff
-    /*
-
-    int a = 0; /*/
-    int b = 0; */
-    /*sssssss
-    ssss
-    ss
-
 }
-
