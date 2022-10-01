@@ -1,9 +1,6 @@
 package front_end.parser;
 
 import front_end.AST.Node;
-import front_end.AST.Stmt.BreakStmt;
-import front_end.AST.Stmt.GetIntStmt;
-import front_end.AST.Stmt.ReturnStmt;
 import front_end.lexer.Token;
 import front_end.lexer.TokenStream;
 import front_end.lexer.TokenType;
@@ -37,20 +34,28 @@ public class parser {
         int startLine = curToken.getLineNumber();
         Node node = null;
         while (true) {
+            // parse MainFunDef
             if (tokenStream.look(1).getType() == TokenType.MAINTK) {
                 node = parseMainFuncDef();
-            } else if (tokenStream.look(2).getType() == TokenType.LPARENT) {
+            }
+            // parse FuncDef
+            else if (tokenStream.look(2).getType() == TokenType.LPARENT) {
                 node = parseFuncDef();
-            } else if (curToken.getType() == TokenType.CONSTTK) {
+            }
+            // parse ConstDecl
+            else if (curToken.getType() == TokenType.CONSTTK) {
                 node = parseConstDecl();
-            } else if (curToken.getType() == TokenType.INTTK) {
+            }
+            // parse VarDecl
+            else if (curToken.getType() == TokenType.INTTK) {
                 node = parseVarDecl();
-            } else break;
+            }
+            // jump out of the loop
+            else break;
             children.add(node);
         }
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
-        Printer.printSyntaxVarType(SyntaxVarType.COMP_UNIT);
         return NodeFactory.createNode(startLine, endLine, SyntaxVarType.COMP_UNIT, children);
     }
 
@@ -124,14 +129,16 @@ public class parser {
             // parse '{'
             node = NodeFactory.createNode(curToken);
             children.add(node); read();
-            while (curToken.getType() != TokenType.RBRACE) {
-                // parse  ','
-                if (curToken.getType() == TokenType.COMMA) {
+            if (curToken.getType() != TokenType.RBRACE) {
+                // parse InitVal
+                node = parseInitVal();
+                children.add(node);
+                // parse {',' InitVal}
+                while (curToken.getType() == TokenType.COMMA) {
+                    // parse  ','
                     node = NodeFactory.createNode(curToken);
                     children.add(node); read();
-                }
-                // parse InitVal
-                else {
+                    // parse InitVal
                     node = parseInitVal();
                     children.add(node);
                 }
@@ -140,7 +147,7 @@ public class parser {
             node = NodeFactory.createNode(curToken);
             children.add(node); read();
         }
-        // parse Exp
+        // else parse Exp
         else {
             node = parseExp();
             children.add(node);
@@ -223,14 +230,16 @@ public class parser {
             // parse '{'
             node = NodeFactory.createNode(curToken);
             children.add(node); read();
-            while (curToken.getType() != TokenType.RBRACE) {
-                // parse ','
-                if (curToken.getType() == TokenType.COMMA) {
+            if (curToken.getType() != TokenType.RBRACE) {
+                // parse ConstInitVal
+                node = parseConstInitVal();
+                children.add(node);
+                // parse {',' ConstInitVal}
+                while (curToken.getType() == TokenType.COMMA) {
+                    // parse ','
                     node = NodeFactory.createNode(curToken);
                     children.add(node); read();
-                }
-                // parse ConstInitVal
-                else {
+                    // parse ConstInitVal
                     node = parseConstInitVal();
                     children.add(node);
                 }
@@ -239,7 +248,7 @@ public class parser {
             node = NodeFactory.createNode(curToken);
             children.add(node); read();
         }
-        // parse ConstExp
+        // else parse ConstExp
         else {
             node = parseConstExp();
             children.add(node);
@@ -265,7 +274,7 @@ public class parser {
         // parse '('
         node = NodeFactory.createNode(curToken);
         children.add(node); read();
-        // parse 'FuncFormalParams'
+        // parse ['FuncFormalParams']
         if (curToken.getType() != TokenType.RPARENT) {
             node = parseFuncFormalParams();
             children.add(node);
@@ -397,10 +406,10 @@ public class parser {
                 node = parseStmt();
                 children.add(node);
             }
-            // parse '}'
-            node = NodeFactory.createNode(curToken);
-            children.add(node); read();
         }
+        // parse '}'
+        node = NodeFactory.createNode(curToken);
+        children.add(node); read();
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
         return NodeFactory.createNode(startLine, endLine, SyntaxVarType.BLOCK, children);
@@ -528,7 +537,7 @@ public class parser {
     public Node parseWhileStmt() {
         ArrayList<Node> children = new ArrayList<>();
         int startLine = curToken.getLineNumber();
-        // parse 'While'
+        // parse 'while'
         Node node = NodeFactory.createNode(curToken);
         children.add(node); read();
         // parse '('
@@ -744,73 +753,160 @@ public class parser {
         ArrayList<Node> children = new ArrayList<>();
         int startLine = curToken.getLineNumber();
         // parse UnaryExp
+        Node node = parseUnaryExp();
+        children.add(node);
+        // parse {('*' | '+' | '-') UnaryExp}
+        while (curToken.getType() == TokenType.MULT || curToken.getType() == TokenType.PLUS || curToken.getType() == TokenType.MINU) {
+            Printer.printSyntaxVarType(SyntaxVarType.MUL_EXP);
+            // parse ('*' | '+' | '-')
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+            // parse UnaryExp
+            node = parseUnaryExp();
+            children.add(node);
+        }
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.MUL_EXP, children);
     }
 
     public Node parseAddExp() {
         ArrayList<Node> children = new ArrayList<>();
         int startLine = curToken.getLineNumber();
-
+        // parse MulExp
+        Node node = parseMulExp();
+        children.add(node);
+        // parse {('+' | '-') MulExp}
+        while (curToken.getType() == TokenType.PLUS || curToken.getType() == TokenType.MINU) {
+            Printer.printSyntaxVarType(SyntaxVarType.ADD_EXP);
+            // parse ('+' | '-')
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+            // parse MulExp
+            node = parseMulExp();
+            children.add(node);
+        }
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.ADD_EXP, children);
     }
 
     public Node parseRelExp() {
         ArrayList<Node> children = new ArrayList<>();
         int startLine = curToken.getLineNumber();
-
+        // parse AddExp
+        Node node = parseAddExp();
+        children.add(node);
+        // parse {('<' | '>' | '<=' | '>=') AddExp}
+        while (curToken.getType() == TokenType.LSS || curToken.getType() == TokenType.GRE
+                || curToken.getType() == TokenType.LEQ || curToken.getType() == TokenType.GEQ) {
+            Printer.printSyntaxVarType(SyntaxVarType.REL_EXP);
+            // parse ('<' | '>' | '<=' | '>=')
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+            // parse AddExp
+            node = parseAddExp();
+            children.add(node);
+        }
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.REL_EXP, children);
     }
 
     public Node parseEqExp() {
         ArrayList<Node> children = new ArrayList<>();
         int startLine = curToken.getLineNumber();
-
-
+        // parse RelExp
+        Node node = parseRelExp();
+        children.add(node);
+        // parse {('==' | '!=') RelExp}
+        while (curToken.getType() == TokenType.EQL || curToken.getType() == TokenType.NEQ) {
+            Printer.printSyntaxVarType(SyntaxVarType.EQ_EXP);
+            // parse ('==' | '!=')
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+            // parse RelExp
+            node = parseRelExp();
+            children.add(node);
+        }
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.EQ_EXP, children);
     }
 
     public Node parseLAndExp() {
         ArrayList<Node> children = new ArrayList<>();
         int startLine = curToken.getLineNumber();
-
-
+        // parse EqExp
+        Node node = parseEqExp();
+        children.add(node);
+        // parse {'&&' EqExp}
+        while (curToken.getType() == TokenType.AND) {
+            Printer.printSyntaxVarType(SyntaxVarType.LAND_EXP);
+            // parse '&&'
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+            // parse EqExp
+            node = parseEqExp();
+            children.add(node);
+        }
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.LAND_EXP, children);
     }
 
     public Node parseLOrExp() {
         ArrayList<Node> children = new ArrayList<>();
         int startLine = curToken.getLineNumber();
-
+        // parse LAndExp
+        Node node = parseLAndExp();
+        children.add(node);
+        // parse {'||' LAndExp}
+        while (curToken.getType() == TokenType.OR) {
+            Printer.printSyntaxVarType(SyntaxVarType.LOR_EXP);
+            // parse '||'
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+            // parse LAndExp
+            node = parseLAndExp();
+            children.add(node);
+        }
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.LOR_EXP, children);
     }
 
     public Node parseCondExp() {
         ArrayList<Node> children = new ArrayList<>();
         int startLine = curToken.getLineNumber();
+        // parse LorExp
+        Node node = parseLOrExp();
+        children.add(node);
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.COND_EXP, children);
     }
 
     public Node parseConstExp() {
         ArrayList<Node> children = new ArrayList<>();
         int startLine = curToken.getLineNumber();
-
+        // parse AddExp
+        Node node = parseAddExp();
+        children.add(node);
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.CONST_EXP, children);
     }
 
     public Node parseExp () {
         ArrayList<Node> children = new ArrayList<>();
         int startLine = curToken.getLineNumber();
-
+        // parse AddExp
+        Node node = parseAddExp();
+        children.add(node);
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.EXP, children);
     }
 
 }
