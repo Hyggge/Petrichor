@@ -16,7 +16,7 @@ public enum SyntaxVarType {
     FUNC_DEF("FuncDef"),
     FUNC_FORMAL_PARAMS("FuncFParams"),
     FUNC_FORMAL_PARAM("FuncFParam"),
-    FUNC_REAL_PARAMS(""),
+    FUNC_REAL_PARAMS("FuncRParams"),
     BLOCK("Block"),
 
     STMT("Stmt"),

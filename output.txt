@@ -921,7 +921,7 @@ IDENFR C_GLOBAL
 <MulExp>
 <AddExp>
 <Exp>
-<>
+<FuncRParams>
 RPARENT )
 <UnaryExp>
 <MulExp>
@@ -946,7 +946,7 @@ IDENFR B_GLOBAL
 <MulExp>
 <AddExp>
 <Exp>
-<>
+<FuncRParams>
 RPARENT )
 <UnaryExp>
 <MulExp>
@@ -1201,7 +1201,7 @@ IDENFR arr2_1_global
 <MulExp>
 <AddExp>
 <Exp>
-<>
+<FuncRParams>
 RPARENT )
 <UnaryExp>
 <MulExp>
@@ -1264,7 +1264,7 @@ RBRACK ]
 <MulExp>
 <AddExp>
 <Exp>
-<>
+<FuncRParams>
 RPARENT )
 <UnaryExp>
 <MulExp>
