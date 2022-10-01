@@ -1,59 +1,125 @@
-const int a = 1;
-const int b[2] = {1, 2};
-const int c[2][2] = {{1, 2}, {3, 4}};
-int d = 1;
-int e[2] = {1, 2};
-int f[2][2] = {{1, 2}, {3, 4}};
-int fk() {
-    d = 10;
-    return d + e[1];
+const int op = 5;
+int max(int a, int b, int c)
+{
+    int max = a;
+    if(b > max)
+    {
+        max = b;
+    }
+    if(c > max)
+    {
+        max = c;
+    }
+    return max;
 }
-int pm(int z, int x) {
-    return z + x;
+int maxx(int a, int b)
+{
+    int max = a;
+    if(b > max)
+    {
+        max = b;
+    }
+    return max;
 }
-void mp(int a, int b[], int c[][2]) {
-    b[0] = a + c[1][0];
+void mxx(int a, int b, int c, int d[][5])
+{
+    int max = a;
+    if(b > max)
+    {
+        max = b;
+    }
+    if(c > max)
+    {
+        max = c;
+    }
     return;
 }
-int main() {
+int fix()
+{
+    return 1;
+}
+void fixx()
+{
+
+}
+int minArr(int a[])
+{
+    int i = 0;
+    int j = 0;
+    int temp = 0;
+    while(i < 5)
     {
-        printf("Author: 19376160\n");
-        int d = 2 + 4;
+        while(j < 4 - i)
         {
-            int d = 3;
-        }
-        {
-
-        }
-    }
-    int d = 11;
-    int e[2] = {11, 22};
-    int f[2][2] = {{11, 22}, {33, 44}};
-    while (1) {
-        if (e[1] == -1 && f[0][0] == 5 && 2 >= 1 && fk() == 0 && !(1 + 0)) {
-
-            e[1] = 3 * 4;
-            continue;
-            mp(e[0], f[1], f);
-            d = pm(e[0], e[1]);
-        } else {
-            e[0] = fk();
-            mp(d, e, f);
-            if (-1 == -1 || f[0][0] == 5 || 2 > 1 || 4 <= 5) {
-                printf("There\n");
-                printf("is\n");
-                printf("nothing\n");
-                printf("special\n");
+            if(a[j] > a[j+1])
+            {
+                temp = a[j];
+                a[j] = a[j+1];
+                a[j+1] = temp;
             }
-            break;
+            j = j + 1;
         }
-        e[1] = 5 % 2;
-        e[1] = e[1] / 2;
+        j = 0;
+        i = i + 1;
     }
-    printf("%d\n", a);
-    printf("%d\n", d);
-    printf("%d\n", e[0]);
-    printf("%d\n", f[1][1]);
-    printf("The end");
+    return a[0];
+}
+int main()
+{
+    const int b = 4, a = 5, c = 6;
+    const int uu = 8, ui = 9;
+    const int e = 3;
+    const int f[1] = {0};
+    const int g[2][2] = {{1,1},{2,2}};
+    int k[5] = {8,7,6,5,4};
+    int h;
+    int r[1];
+    int s[2][2];
+    int l = 9, m = 10;
+    int n = 11;
+    int ouo = 1, sui = 9, siu = 19;
+    int o[2][2] = {{1,1},{2,2}};
+    int p[1] = {0};
+    h = getint();
+    int i = max(3,4,5);
+    int j = minArr(k);
+    int io = maxx(3,4);
+    int t = -1;
+    o[1][1] = 7;
+    p[1] = 9;
+    p[1] = o[1][1];
+    o[1][1] = 99;
+    if(o[1][1] == 99);
+    if(o[1][1] == 98){3;}
+    if((b + 4) >= (h - 4) && h * 4 <= a * 60 && h > 5 || h / 4 < 3 || h % 3 == 1 || h - 1 != 8 || h < max(40, 50, o[1][1]) || !t || -t || +t || fix())
+    {
+        printf("20231077\n");
+    }
+    else
+    {
+        i = 0;
+        while(i < 6)
+        {
+            if(i == 2)
+            {
+                break;
+            }
+            if(i == 3)
+            {
+                i = i + 1;
+                continue;
+            }
+            i = i + 1;
+        }
+    }
+    printf("20231077\n");
+    printf("%d\n",h);
+    printf("20231077\n");
+    printf("20231077\n");
+    printf("20231077\n");
+    printf("20231077\n");
+    printf("20231077\n");
+    printf("20231077\n");
+    printf("20231077\n");
     return 0;
 }
