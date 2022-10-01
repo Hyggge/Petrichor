@@ -96,13 +96,13 @@ public class Parser {
         // parse Ident
         Node node = NodeFactory.createNode(curToken);
         children.add(node); read();
-        // parse {'['  Exp  ']'}
+        // parse {'['  ConstExp  ']'}
         while (curToken.getType() == TokenType.LBRACK) {
             // parse '['
             node = NodeFactory.createNode(curToken);
             children.add(node); read();
             // parse Exp
-            node = parseExp();
+            node = parseConstExp();
             children.add(node);
             // parse ']'
             node = NodeFactory.createNode(curToken);
@@ -421,11 +421,10 @@ public class Parser {
      * statement node
      */
     public Node parseStmt() {
-        ArrayList<Node> children = new ArrayList<>();
-        int startLine = curToken.getLineNumber();
-        Node node = null;
         if (curToken.getType() == TokenType.LBRACE) {
-            return parseBlock();
+            Node node = parseBlock();
+            Printer.printSyntaxVarType(SyntaxVarType.STMT);
+            return node;
         }
         else if (curToken.getType() == TokenType.IFTK) {
             return parseIfStmt();
