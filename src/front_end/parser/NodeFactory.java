@@ -23,6 +23,7 @@ import front_end.AST.InitVal;
 import front_end.AST.MainFuncDef;
 import front_end.AST.Node;
 import front_end.AST.Stmt.AssignStmt;
+import front_end.AST.Stmt.BlockStmt;
 import front_end.AST.Stmt.BreakStmt;
 import front_end.AST.Stmt.ContinueStmt;
 import front_end.AST.Stmt.ExpStmt;
@@ -71,6 +72,7 @@ public class NodeFactory {
             case RETURN_STMT:           return new ReturnStmt(startLine, endLine, type, children);
             case GETINT_STMT:           return new GetIntStmt(startLine, endLine, type, children);
             case PRINTF_STMT:           return new PrintfStmt(startLine, endLine, type, children);
+            case BLOCK_STMT:            return new BlockStmt(startLine, endLine, type, children);
 
             case LVAL_EXP:              return new LValExp(startLine, endLine, type, children);
             case PRIMARY_EXP:           return new PrimaryExp(startLine, endLine, type, children);

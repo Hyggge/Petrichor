@@ -422,9 +422,7 @@ public class Parser {
      */
     public Node parseStmt() {
         if (curToken.getType() == TokenType.LBRACE) {
-            Node node = parseBlock();
-            Printer.printSyntaxVarType(SyntaxVarType.STMT);
-            return node;
+            return parseBlockStmt();
         }
         else if (curToken.getType() == TokenType.IFTK) {
             return parseIfStmt();
@@ -467,6 +465,16 @@ public class Parser {
             curToken = tokenStream.backToWatchPoint();
             return parseExpStmt();
         }
+    }
+    public Node parseBlockStmt() {
+        ArrayList<Node> children = new ArrayList<>();
+        int startLine = curToken.getLineNumber();
+        // parse Block
+        Node node = parseBlock();
+        children.add(node);
+        // create a node
+        int endLine = tokenStream.look(-1).getLineNumber();
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.ASSIGN_STMT, children);
     }
 
     public Node parseAssignStmt() {

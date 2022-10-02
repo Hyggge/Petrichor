@@ -29,6 +29,7 @@ public enum SyntaxVarType {
     RETURN_STMT("Stmt"),
     GETINT_STMT("Stmt"),
     PRINTF_STMT("Stmt"),
+    BLOCK_STMT("Stmt"),
 
 
     LVAL_EXP("LVal"),
