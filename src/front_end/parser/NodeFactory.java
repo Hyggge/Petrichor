@@ -1,8 +1,9 @@
 package front_end.parser;
 import front_end.AST.Block;
 import front_end.AST.CompUnit;
-import front_end.AST.ConstDecl;
-import front_end.AST.ConstDef;
+import front_end.AST.Var.ConstInitVal;
+import front_end.AST.Var.ConstDecl;
+import front_end.AST.Var.ConstDef;
 import front_end.AST.Exp.AddExp;
 import front_end.AST.Exp.CondExp;
 import front_end.AST.Exp.ConstExp;
@@ -15,15 +16,15 @@ import front_end.AST.Exp.MulExp;
 import front_end.AST.Exp.PrimaryExp;
 import front_end.AST.Exp.RelExp;
 import front_end.AST.Exp.UnaryExp;
-import front_end.AST.FuncDef;
-import front_end.AST.FuncFormalParam;
-import front_end.AST.FuncFormalParams;
-import front_end.AST.FuncRealParams;
-import front_end.AST.FuncType;
-import front_end.AST.InitVal;
-import front_end.AST.MainFuncDef;
+import front_end.AST.Func.FuncDef;
+import front_end.AST.Func.FuncFormalParam;
+import front_end.AST.Func.FuncFormalParams;
+import front_end.AST.Func.FuncRealParams;
+import front_end.AST.Func.FuncType;
+import front_end.AST.Var.InitVal;
+import front_end.AST.Func.MainFuncDef;
 import front_end.AST.Node;
-import front_end.AST.Number;
+import front_end.AST.Exp.Number;
 import front_end.AST.Stmt.AssignStmt;
 import front_end.AST.Stmt.BlockStmt;
 import front_end.AST.Stmt.BreakStmt;
@@ -36,9 +37,9 @@ import front_end.AST.Stmt.ReturnStmt;
 import front_end.AST.Stmt.Stmt;
 import front_end.AST.Stmt.WhileStmt;
 import front_end.AST.TokenNode;
-import front_end.AST.UnaryOp;
-import front_end.AST.VarDecl;
-import front_end.AST.VarDef;
+import front_end.AST.Exp.UnaryOp;
+import front_end.AST.Var.VarDecl;
+import front_end.AST.Var.VarDef;
 import front_end.lexer.Token;
 import utils.Printer;
 
@@ -52,7 +53,7 @@ public class NodeFactory {
 
             case CONST_DECL:            return new ConstDecl(startLine, endLine, type, children);
             case CONST_DEF:             return new ConstDef(startLine, endLine, type, children);
-            case CONST_INITVAL:         return new InitVal(startLine, endLine, type, children);
+            case CONST_INITVAL:         return new ConstInitVal(startLine, endLine, type, children);
 
             case VAR_DECL:              return new VarDecl(startLine, endLine, type, children);
             case VAR_DEF:               return new VarDef(startLine, endLine, type, children);
