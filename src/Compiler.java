@@ -11,7 +11,7 @@ import java.io.PushbackInputStream;
 
 public class Compiler {
     public static void main(String[] args) throws Exception {
-        String arg = "-sa";
+        String arg = args[0];
 
         PushbackInputStream input = new PushbackInputStream(new FileInputStream("testfile.txt"), 16);
         FileOutputStream output = new FileOutputStream("output.txt");

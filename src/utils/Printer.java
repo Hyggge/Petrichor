@@ -36,27 +36,17 @@ public class Printer {
 
     public static void printToken(Token token){
         if (onOff) {
-            if (mode == 0) System.out.println(token.getType() + " " + token.getName());
-            else {
-                try {
-                    fileOutputStream.write((token.getType() + " " + token.getName() + "\n").getBytes());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            String content = token.toString();
+            if (mode == 0) System.out.println(content);
+            else try {fileOutputStream.write(content.getBytes());} catch (IOException e) {throw new RuntimeException(e);}
         }
     }
 
     public static void printSyntaxVarType(SyntaxVarType type) {
         if (onOff) {
-            if (mode == 0) System.out.println("<" + type.toString() + ">");
-            else {
-                try {
-                    fileOutputStream.write(("<" + type.toString() + ">\n").getBytes());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            String content = "<" + type.toString() + ">\n";
+            if (mode == 0) System.out.println(content);
+            else try {fileOutputStream.write((content).getBytes());} catch (IOException e) {throw new RuntimeException(e);}
         }
 
     }

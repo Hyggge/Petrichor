@@ -2,12 +2,12 @@ package front_end.lexer;
 
 public class Token {
     private TokenType type;
-    private String name;
+    private String value;
     private int lineNumber;
 
     public Token(TokenType type, String name, int lineNumber) {
         this.type = type;
-        this.name = name;
+        this.value = name;
         this.lineNumber = lineNumber;
     }
 
@@ -15,8 +15,8 @@ public class Token {
         return type;
     }
 
-    public String getName() {
-        return name;
+    public String getValue() {
+        return value;
     }
 
     public int getLineNumber() {
@@ -25,6 +25,6 @@ public class Token {
 
     @Override
     public String toString() {
-        return type.toString() + " " + name + "\n";
+        return type.toString() + " " + value + "\n";
     }
 }
