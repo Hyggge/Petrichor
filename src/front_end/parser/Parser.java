@@ -299,7 +299,7 @@ public class Parser {
         children.add(node); read();
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
-        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.FUNC_DEF, children);
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.FUNC_TYPE, children);
     }
 
     public Node parseMainFuncDef() {
@@ -940,7 +940,7 @@ public class Parser {
         children.add(node); read();
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
-        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.EXP, children);
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.NUMBER, children);
     }
 
 
@@ -952,7 +952,7 @@ public class Parser {
         children.add(node); read();
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
-        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.EXP, children);
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.UNARY_OP, children);
     }
 
 }
