@@ -19,9 +19,11 @@ import front_end.AST.FuncDef;
 import front_end.AST.FuncFormalParam;
 import front_end.AST.FuncFormalParams;
 import front_end.AST.FuncRealParams;
+import front_end.AST.FuncType;
 import front_end.AST.InitVal;
 import front_end.AST.MainFuncDef;
 import front_end.AST.Node;
+import front_end.AST.Number;
 import front_end.AST.Stmt.AssignStmt;
 import front_end.AST.Stmt.BlockStmt;
 import front_end.AST.Stmt.BreakStmt;
@@ -34,6 +36,7 @@ import front_end.AST.Stmt.ReturnStmt;
 import front_end.AST.Stmt.Stmt;
 import front_end.AST.Stmt.WhileStmt;
 import front_end.AST.TokenNode;
+import front_end.AST.UnaryOp;
 import front_end.AST.VarDecl;
 import front_end.AST.VarDef;
 import front_end.lexer.Token;
@@ -56,6 +59,7 @@ public class NodeFactory {
             case INIT_VAL:              return new InitVal(startLine, endLine, type, children);
 
             case FUNC_DEF:              return new FuncDef(startLine, endLine, type, children);
+            case FUNC_TYPE:             return new FuncType(startLine, endLine, type, children);
             case MAIN_FUNC_DEF:         return new MainFuncDef(startLine, endLine, type, children);
             case FUNC_FORMAL_PARAMS:    return new FuncFormalParams(startLine, endLine, type, children);
             case FUNC_FORMAL_PARAM:     return new FuncFormalParam(startLine, endLine, type, children);
@@ -86,6 +90,9 @@ public class NodeFactory {
             case CONST_EXP:             return new ConstExp(startLine, endLine, type, children);
             case EXP:                   return new Exp(startLine, endLine, type, children);
             case COND_EXP:              return new CondExp(startLine, endLine, type, children);
+
+            case NUMBER:                return new Number(startLine, endLine, type, children);
+            case UNARY_OP:              return new UnaryOp(startLine, endLine, type, children);
             default: return null;// TODO: error
         }
     }

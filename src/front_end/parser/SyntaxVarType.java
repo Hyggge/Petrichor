@@ -14,6 +14,7 @@ public enum SyntaxVarType {
     INIT_VAL("InitVal"),
 
     FUNC_DEF("FuncDef"),
+    FUNC_TYPE("FuncType"),
     FUNC_FORMAL_PARAMS("FuncFParams"),
     FUNC_FORMAL_PARAM("FuncFParam"),
     FUNC_REAL_PARAMS("FuncRParams"),
@@ -46,7 +47,6 @@ public enum SyntaxVarType {
     COND_EXP("Cond"),
 
     // reserved
-    FUNC_TYPE("FuncType"),
     NUMBER("Number"),
     UNARY_OP("UnaryOp"),
 
