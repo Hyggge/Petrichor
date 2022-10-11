@@ -11,14 +11,14 @@ import java.io.PushbackInputStream;
 
 public class Compiler {
     public static void main(String[] args) throws Exception {
-        // String arg = "-sa";
-        String arg = args[0];
+         String arg = "-ce";
+//        String arg = args[0];
 
         PushbackInputStream input = new PushbackInputStream(new FileInputStream("testfile.txt"), 16);
         FileOutputStream output = new FileOutputStream("output.txt");
+        FileOutputStream error = new FileOutputStream("error.txt");
         // set Printer
-        Printer.setFileOutputStream(output);
-        Printer.fileOutMode();
+        Printer.init(output, error);
         Printer.open();
 
         if (arg.equals("-la")) {
@@ -40,6 +40,15 @@ public class Compiler {
             Parser parser = new Parser(tokenStream);
             Node AST = parser.parseCompUnit();
 
+        }
+
+        else if (arg.equals("-ce")) {
+            // token analyse
+            Lexer lexer = new Lexer(input);
+            TokenStream tokenStream = lexer.getTokenStream();
+            // syntax analyse
+            Parser parser = new Parser(tokenStream);
+            Node AST = parser.parseCompUnit();
         }
 
         // close all streams

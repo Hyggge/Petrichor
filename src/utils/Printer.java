@@ -7,12 +7,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Printer {
-    public static boolean onOff = false;
-    public static int mode = 0;
-    public static FileOutputStream fileOutputStream = null;
+    public static final boolean FILE_OUT = true;
+    public static final boolean FILE_ERR = true;
 
-    public static void setFileOutputStream(FileOutputStream fileOutputStream) {
-        Printer.fileOutputStream = fileOutputStream;
+    public static boolean onOff = false;
+    public static FileOutputStream fileOut = null;
+    public static FileOutputStream fileErr = null;
+
+    public static void init(FileOutputStream out, FileOutputStream err) {
+        Printer.fileOut = out;
+        Printer.fileErr = err;
     }
 
     public static void open() {
@@ -23,31 +27,22 @@ public class Printer {
         onOff = false;
     }
 
-    public static void stdOutMode() {
-        mode = 0;
-    }
-
-    public static void fileOutMode() throws Exception {
-        if (fileOutputStream == null) {
-            throw new Exception("No FileOutputStream");
-        }
-        mode = 1;
-    }
-
     public static void printToken(Token token){
-        if (onOff) {
-            String content = token.toString();
-            if (mode == 0) System.out.println(content);
-            else try {fileOutputStream.write(content.getBytes());} catch (IOException e) {throw new RuntimeException(e);}
+        String content = token.toString();
+        if (onOff & FILE_OUT) {
+            try {fileOut.write(content.getBytes());} catch (IOException e) {throw new RuntimeException(e);}
         }
     }
 
     public static void printSyntaxVarType(SyntaxVarType type) {
-        if (onOff) {
-            String content = "<" + type.toString() + ">\n";
-            if (mode == 0) System.out.println(content);
-            else try {fileOutputStream.write((content).getBytes());} catch (IOException e) {throw new RuntimeException(e);}
+        String content = "<" + type.toString() + ">\n";
+        if (onOff & FILE_ERR) {
+            try {fileOut.write((content).getBytes());} catch (IOException e) {throw new RuntimeException(e);}
         }
+    }
+
+    public static void printErrorMsg() {
+
 
     }
 }
