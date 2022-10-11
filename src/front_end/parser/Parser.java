@@ -110,8 +110,11 @@ public class Parser {
             node = parseConstExp();
             children.add(node);
             // parse ']'
-            node = NodeFactory.createNode(curToken);
-            children.add(node); read();
+            if (curToken.getType() == TokenType.RBRACK) {
+                node = NodeFactory.createNode(curToken);
+                children.add(node); read();
+            }
+            else Printer.printErrorMsg(node.getEndLine(), ErrorType.k);
         }
         // parse ['='  InitVal]
         if (curToken.getType() == TokenType.ASSIGN) {
@@ -215,8 +218,11 @@ public class Parser {
             node = parseConstExp();
             children.add(node);
             // parse ']'
-            node = NodeFactory.createNode(curToken);
-            children.add(node); read();
+            if (curToken.getType() == TokenType.RBRACK) {
+                node = NodeFactory.createNode(curToken);
+                children.add(node); read();
+            }
+            else Printer.printErrorMsg(node.getEndLine(), ErrorType.k);
         }
         // parse ['='  ConstInitVal]
         if (curToken.getType() == TokenType.ASSIGN) {
@@ -373,8 +379,11 @@ public class Parser {
             node = NodeFactory.createNode(curToken);
             children.add(node); read();
             // parse ']'
-            node = NodeFactory.createNode(curToken);
-            children.add(node); read();
+            if (curToken.getType() == TokenType.RBRACK) {
+                node = NodeFactory.createNode(curToken);
+                children.add(node); read();
+            }
+            else Printer.printErrorMsg(node.getEndLine(), ErrorType.k);
             // parse {'[' ConstExp ']'}
             while (curToken.getType() == TokenType.LBRACK) {
                 // parse '['
@@ -384,8 +393,11 @@ public class Parser {
                 node = parseConstExp();
                 children.add(node);
                 // parse ']'
-                node = NodeFactory.createNode(curToken);
-                children.add(node); read();
+                if (curToken.getType() == TokenType.RBRACK) {
+                    node = NodeFactory.createNode(curToken);
+                    children.add(node); read();
+                }
+                else Printer.printErrorMsg(node.getEndLine(), ErrorType.k);
             }
         }
         // create a node
@@ -747,8 +759,11 @@ public class Parser {
             node = parseExp();
             children.add(node);
             // parse ']'
-            node = NodeFactory.createNode(curToken);
-            children.add(node); read();
+            if (curToken.getType() == TokenType.RBRACK) {
+                node = NodeFactory.createNode(curToken);
+                children.add(node); read();
+            }
+            else Printer.printErrorMsg(node.getEndLine(), ErrorType.k);
         }
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
