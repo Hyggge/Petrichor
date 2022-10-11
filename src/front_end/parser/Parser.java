@@ -3,7 +3,8 @@ package front_end.parser;
 import front_end.AST.Node;
 import front_end.lexer.Token;
 import front_end.lexer.TokenStream;
-import front_end.lexer.TokenType;
+import utils.SyntaxVarType;
+import utils.TokenType;
 import utils.Printer;
 
 import java.util.ArrayList;

@@ -42,6 +42,7 @@ import front_end.AST.Var.VarDecl;
 import front_end.AST.Var.VarDef;
 import front_end.lexer.Token;
 import utils.Printer;
+import utils.SyntaxVarType;
 
 import java.util.ArrayList;
 

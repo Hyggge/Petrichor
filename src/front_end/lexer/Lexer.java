@@ -1,5 +1,7 @@
 package front_end.lexer;
 
+import utils.TokenType;
+
 import java.io.IOException;
 import java.io.PushbackInputStream;
 import java.util.ArrayList;

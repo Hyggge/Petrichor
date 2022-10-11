@@ -1,7 +1,7 @@
 package front_end.AST.Exp;
 
 import front_end.AST.Node;
-import front_end.parser.SyntaxVarType;
+import utils.SyntaxVarType;
 import java.util.ArrayList;
 
 public class Number extends Node {

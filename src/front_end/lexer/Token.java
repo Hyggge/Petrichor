@@ -1,5 +1,7 @@
 package front_end.lexer;
 
+import utils.TokenType;
+
 public class Token {
     private TokenType type;
     private String value;

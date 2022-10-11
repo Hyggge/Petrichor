@@ -1,4 +1,4 @@
-package front_end.parser;
+package utils;
 
 public enum SyntaxVarType {
     COMP_UNIT("CompUnit"),

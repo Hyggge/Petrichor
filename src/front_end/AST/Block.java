@@ -1,6 +1,6 @@
 package front_end.AST;
 
-import front_end.parser.SyntaxVarType;
+import utils.SyntaxVarType;
 
 import java.util.ArrayList;
 

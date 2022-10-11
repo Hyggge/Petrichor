@@ -1,7 +1,6 @@
 package utils;
 
 import front_end.lexer.Token;
-import front_end.parser.SyntaxVarType;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,7 +40,11 @@ public class Printer {
         }
     }
 
-    public static void printErrorMsg() {
+    public static void printErrorMsg(Integer lineNumber, ErrorType errorType) {
+        String content = lineNumber + " " + errorType + "\n";
+        if (onOff & FILE_ERR) {
+            try {fileErr.write((content).getBytes());} catch (IOException e) {throw new RuntimeException(e);}
+        }
 
 
     }

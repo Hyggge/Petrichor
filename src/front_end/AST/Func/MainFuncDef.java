@@ -1,7 +1,7 @@
 package front_end.AST.Func;
 
 import front_end.AST.Node;
-import front_end.parser.SyntaxVarType;
+import utils.SyntaxVarType;
 
 import java.util.ArrayList;
 
