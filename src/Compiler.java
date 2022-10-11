@@ -48,7 +48,8 @@ public class Compiler {
             TokenStream tokenStream = lexer.getTokenStream();
             // syntax analyse
             Parser parser = new Parser(tokenStream);
-            Node AST = parser.parseCompUnit();
+            Node compUnit = parser.parseCompUnit();
+            compUnit.checkError();
         }
 
         // close all streams

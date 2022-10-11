@@ -11,4 +11,8 @@ public class TokenNode extends Node{
         super(startLine, endLine, type, children);
         this.token = token;
     }
+
+    public Token getToken() {
+        return token;
+    }
 }
