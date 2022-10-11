@@ -290,8 +290,11 @@ public class Parser {
             children.add(node);
         }
         // parse ')'
-        node = NodeFactory.createNode(curToken);
-        children.add(node); read();
+        if (curToken.getType() == TokenType.RPARENT) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.j);
         // parse Block
         node = parseBlock();
         children.add(node);
@@ -315,11 +318,17 @@ public class Parser {
         ArrayList<Node> children = new ArrayList<>();
         int startLine = curToken.getLineNumber();
         Node node = null;
-        // parse 'int', 'main', '(', ')'
-        for (int i = 0; i < 4; i++) {
+        // parse 'int', 'main', '('
+        for (int i = 0; i < 3; i++) {
             node = NodeFactory.createNode(curToken);
             children.add(node); read();
         }
+        // parse ')'
+        if (curToken.getType() == TokenType.RPARENT) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.j);
         // parse Block
         node = parseBlock();
         children.add(node);
@@ -552,8 +561,11 @@ public class Parser {
         node = parseCondExp();
         children.add(node);
         // parse ')'
-        node = NodeFactory.createNode(curToken);
-        children.add(node); read();
+        if (curToken.getType() == TokenType.RPARENT) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.j);
         // parse Stmt
         node = parseStmt();
         children.add(node);
@@ -584,8 +596,11 @@ public class Parser {
         node = parseCondExp();
         children.add(node);
         // parse ')'
-        node = NodeFactory.createNode(curToken);
-        children.add(node); read();
+        if (curToken.getType() == TokenType.RPARENT) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.j);
         // parse Stmt
         node = parseStmt();
         children.add(node);
@@ -656,11 +671,17 @@ public class Parser {
         // parse LValExp;
         Node node = parseLValExp();
         children.add(node);
-        // parse '=', 'getint', '(', ')'
-        for (int i = 0; i < 4; i++) {
+        // parse '=', 'getint', '('
+        for (int i = 0; i < 3; i++) {
             node = NodeFactory.createNode(curToken);
             children.add(node); read();
         }
+        // parse ')'
+        if (curToken.getType() == TokenType.RPARENT) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.j);
         // parse ';'
         if (curToken.getType() == TokenType.SEMICN) {
             node = NodeFactory.createNode(curToken);
@@ -691,8 +712,11 @@ public class Parser {
             children.add(node);
         }
         // parse ')'
-        node = NodeFactory.createNode(curToken);
-        children.add(node); read();
+        if (curToken.getType() == TokenType.RPARENT) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.j);
         // parse ';'
         if (curToken.getType() == TokenType.SEMICN) {
             node = NodeFactory.createNode(curToken);
@@ -780,8 +804,11 @@ public class Parser {
                 children.add(node);
             }
             // parse ')'
-            node = NodeFactory.createNode(curToken);
-            children.add(node); read();
+            if (curToken.getType() == TokenType.RPARENT) {
+                node = NodeFactory.createNode(curToken);
+                children.add(node); read();
+            }
+            else Printer.printErrorMsg(node.getEndLine(), ErrorType.j);
         }
         // parse ('+' | '-' | '!') UnaryExp
         else if (curToken.getType() == TokenType.PLUS || curToken.getType() == TokenType.MINU || curToken.getType() == TokenType.NOT) {
