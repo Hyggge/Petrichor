@@ -3,6 +3,7 @@ package front_end.parser;
 import front_end.AST.Node;
 import front_end.lexer.Token;
 import front_end.lexer.TokenStream;
+import utils.ErrorType;
 import utils.SyntaxVarType;
 import utils.TokenType;
 import utils.Printer;
@@ -84,8 +85,11 @@ public class Parser {
             children.add(node);
         }
         // parse ';'
-        node = NodeFactory.createNode(curToken);
-        children.add(node); read();
+        if (curToken.getType() == TokenType.SEMICN) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.i);
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
         return  NodeFactory.createNode(startLine, endLine, SyntaxVarType.VAR_DECL, children);
@@ -185,8 +189,12 @@ public class Parser {
             children.add(node);
         }
         // parse ';'
-        node = NodeFactory.createNode(curToken);
-        children.add(node); read();
+        if (curToken.getType() == TokenType.SEMICN) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.i);
+
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
         return NodeFactory.createNode(startLine, endLine, SyntaxVarType.CONST_DECL, children);
@@ -501,8 +509,11 @@ public class Parser {
         node = parseExp();
         children.add(node);
         // parse ';'
-        node = NodeFactory.createNode(curToken);
-        children.add(node); read();
+        if (curToken.getType() == TokenType.SEMICN) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.i);
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
         return NodeFactory.createNode(startLine, endLine, SyntaxVarType.ASSIGN_STMT, children);
@@ -518,8 +529,11 @@ public class Parser {
             children.add(node);
         }
         // parse ';'
-        node = NodeFactory.createNode(curToken);
-        children.add(node); read();
+        if (curToken.getType() == TokenType.SEMICN) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.i);
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
         return NodeFactory.createNode(startLine, endLine, SyntaxVarType.EXP_STMT, children);
@@ -587,8 +601,11 @@ public class Parser {
         Node node = NodeFactory.createNode(curToken);
         children.add(node); read();
         // parse ';'
-        node = NodeFactory.createNode(curToken);
-        children.add(node); read();
+        if (curToken.getType() == TokenType.SEMICN) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.i);
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
         return NodeFactory.createNode(startLine, endLine, SyntaxVarType.CONTINUE_STMT, children);
@@ -601,8 +618,11 @@ public class Parser {
         Node node = NodeFactory.createNode(curToken);
         children.add(node); read();
         // parse ';'
-        node = NodeFactory.createNode(curToken);
-        children.add(node); read();
+        if (curToken.getType() == TokenType.SEMICN) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.i);
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
         return NodeFactory.createNode(startLine, endLine, SyntaxVarType.BREAK_STMT, children);
@@ -620,8 +640,11 @@ public class Parser {
             children.add(node);
         }
         // parse ';'
-        node = NodeFactory.createNode(curToken);
-        children.add(node); read();
+        if (curToken.getType() == TokenType.SEMICN) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.i);
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
         return NodeFactory.createNode(startLine, endLine, SyntaxVarType.RETURN_STMT, children);
@@ -633,11 +656,17 @@ public class Parser {
         // parse LValExp;
         Node node = parseLValExp();
         children.add(node);
-        // parse '=', 'getint', '(', ')', ';'
-        for (int i = 0; i < 5; i++) {
+        // parse '=', 'getint', '(', ')'
+        for (int i = 0; i < 4; i++) {
             node = NodeFactory.createNode(curToken);
             children.add(node); read();
         }
+        // parse ';'
+        if (curToken.getType() == TokenType.SEMICN) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.i);
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
         return NodeFactory.createNode(startLine, endLine, SyntaxVarType.GETINT_STMT, children);
@@ -665,8 +694,11 @@ public class Parser {
         node = NodeFactory.createNode(curToken);
         children.add(node); read();
         // parse ';'
-        node = NodeFactory.createNode(curToken);
-        children.add(node); read();
+        if (curToken.getType() == TokenType.SEMICN) {
+            node = NodeFactory.createNode(curToken);
+            children.add(node); read();
+        }
+        else Printer.printErrorMsg(node.getEndLine(), ErrorType.i);
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
         return NodeFactory.createNode(startLine, endLine, SyntaxVarType.PRINTF_STMT, children);

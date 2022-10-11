@@ -16,4 +16,16 @@ public class Node {
         this.type = type;
         this.children = children;
     }
+
+    public int getStartLine() {
+        return startLine;
+    }
+
+    public int getEndLine() {
+        return endLine;
+    }
+
+    public SyntaxVarType getType() {
+        return type;
+    }
 }

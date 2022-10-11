@@ -9,9 +9,9 @@ public class Printer {
     public static final boolean FILE_OUT = true;
     public static final boolean FILE_ERR = true;
 
-    public static boolean onOff = false;
-    public static FileOutputStream fileOut = null;
-    public static FileOutputStream fileErr = null;
+    private static boolean onOff = false;
+    private static FileOutputStream fileOut = null;
+    private static FileOutputStream fileErr = null;
 
     public static void init(FileOutputStream out, FileOutputStream err) {
         Printer.fileOut = out;
