@@ -21,13 +21,14 @@ public class UnaryExp extends Node {
 
     @Override
     public void checkError() {
+        super.checkError();
         if (children.get(0) instanceof TokenNode) {
             // check Error c
             Token ident = ((TokenNode)children.get(0)).getToken();
             FuncSymbol funcSymbol = (FuncSymbol)SymbolManager.getInstance().getSymbolByName(ident.getValue());
             if (funcSymbol == null) {
                 Printer.printErrorMsg(ident.getLineNumber(), ErrorType.c);
-                super.checkError(); return;
+                return;
             }
 
             if (children.get(2) instanceof FuncRealParams) {
@@ -39,7 +40,7 @@ public class UnaryExp extends Node {
                 ArrayList<Integer> FParamDims = funcSymbol.getFParamDims();
                 if (RParamTypes.size() != FParamTypes.size()) {
                     Printer.printErrorMsg(ident.getLineNumber(), ErrorType.d);
-                    super.checkError(); return;
+                    return;
                 }
 
                 // check Error e
@@ -51,6 +52,6 @@ public class UnaryExp extends Node {
                 }
             }
         }
-        super.checkError();
+
     }
 }
