@@ -29,6 +29,10 @@ public class Node {
         return type;
     }
 
+    public ArrayList<Node> getChildren() {
+        return children;
+    }
+
     public void checkError() {
         // for token nodes
         if (children == null) return;

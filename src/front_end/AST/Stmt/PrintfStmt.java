@@ -39,6 +39,7 @@ public class PrintfStmt extends Stmt {
         // check Error a
         if (!checkFormatString(s)) {
             Printer.printErrorMsg(formatString.getLineNumber(), ErrorType.a);
+            super.checkError(); return;
         }
         // check Error l
         for (int i = 0; i < s.length(); i++) {
