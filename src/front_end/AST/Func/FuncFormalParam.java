@@ -16,10 +16,12 @@ public class FuncFormalParam extends Node {
     public FuncFormalParam(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {
         super(startLine, endLine, type, children);
         this.symbol = createSymbol();
+        System.out.println(this.symbol);
     }
 
     public VarSymbol createSymbol() {
-        String symbolName = ((TokenNode)children.get(0)).getToken().getValue();
+        // FuncFormalParam  ==> 'int' Indent ['[' ']'  {'[' ConstExp ']'}]
+        String symbolName = ((TokenNode)children.get(1)).getToken().getValue();
         SymbolType symbolType = SymbolType.SYMBOL_VAR;
         ValueType FParamType = null;
         int dim = 0;
