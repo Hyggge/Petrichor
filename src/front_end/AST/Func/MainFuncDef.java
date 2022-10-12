@@ -1,6 +1,7 @@
 package front_end.AST.Func;
 
 import front_end.AST.Node;
+import front_end.AST.Stmt.ReturnStmt;
 import front_end.AST.TokenNode;
 import front_end.symbol.FuncSymbol;
 import front_end.symbol.SymbolManager;
@@ -42,10 +43,19 @@ public class MainFuncDef extends Node {
 
     @Override
     public void checkError() {
+        // check Error b
         boolean res = SymbolManager.getInstance().addSymbol(symbol);
         if (! res) Printer.printErrorMsg(children.get(1).getStartLine(), ErrorType.b);
         SymbolManager.getInstance().enterFunc(symbol);
         super.checkError();
+        // check Error g
+        Node block = children.get(children.size() - 1); // Block ==> '{' {VarDecl | ConstDecl | Stmt} '}'
+        int senNum = block.getChildren().size();
+        Node lastSentence = block.getChildren().get(senNum - 2);
+        // the last sentence is not return sentence
+        if (! (lastSentence instanceof ReturnStmt) && symbol.getReturnType() != ValueType.VOID) {
+            Printer.printErrorMsg(endLine, ErrorType.g);
+        }
         SymbolManager.getInstance().leaveFunc();
     }
 }

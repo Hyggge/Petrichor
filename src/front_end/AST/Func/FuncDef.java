@@ -43,8 +43,9 @@ public class FuncDef extends Node {
 
     @Override
     public void checkError() {
+        // check Error b
         boolean res = SymbolManager.getInstance().addSymbol(symbol);
-        if (! res) Printer.printErrorMsg(children.get(1).getStartLine(), ErrorType.b);
+        if (! res) Printer.printErrorMsg(children.get(1).getEndLine(), ErrorType.b);
         SymbolManager.getInstance().enterFunc(symbol);
         super.checkError();
         // check Error g

@@ -19,6 +19,7 @@ public class ReturnStmt extends Stmt {
 
     @Override
     public void checkError() {
+        // check Error f
         if (children.get(1) instanceof Exp) {
             FuncSymbol func = SymbolManager.getInstance().getLatestFunc();
             if (func.getReturnType() == ValueType.VOID) {
