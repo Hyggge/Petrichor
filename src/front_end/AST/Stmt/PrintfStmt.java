@@ -35,6 +35,7 @@ public class PrintfStmt extends Stmt {
     public void checkError() {
         int cnt = 0;
         String s = formatString.getValue();
+        s = s.substring(1, s.length()-1); // remove " "
         // check Error a
         if (!checkFormatString(s)) {
             Printer.printErrorMsg(formatString.getLineNumber(), ErrorType.a);
@@ -53,9 +54,9 @@ public class PrintfStmt extends Stmt {
     private boolean checkFormatString(String s) {
         for (int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
-            if (ch == ' ' || ch == '!' || ch >= 40 && ch <= 126 && ch != 92) continue;
-            // deal with '\'
-            else if (ch == 92 && i+1 < s.length() && s.charAt(i+1) == '\n') continue;
+            if (ch == ' ' || ch == '!' || ch >= 40 && ch <= 126 && ch != '\\') continue;
+            // deal with '\' (92)
+            else if (ch == '\\' && i+1 < s.length() && s.charAt(i+1) == 'n') continue;
             else if (ch == '%' && i+1 < s.length() && s.charAt(i+1) == 'd') continue;
             else return false;
         }
