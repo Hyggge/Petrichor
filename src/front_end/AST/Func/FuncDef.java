@@ -3,6 +3,7 @@ package front_end.AST.Func;
 import front_end.AST.Node;
 import front_end.AST.TokenNode;
 import front_end.symbol.FuncSymbol;
+import front_end.symbol.SymbolManager;
 import utils.SymbolType;
 import utils.SyntaxVarType;
 import utils.ValueType;
@@ -34,5 +35,13 @@ public class FuncDef extends Node {
         }
 
         return new FuncSymbol(symbolName, symbolType, returnType, FParamTypes, FParamDims);
+    }
+
+    @Override
+    public void checkError() {
+        SymbolManager.getInstance().addSymbol(symbol);
+        SymbolManager.getInstance().enterFunc(symbol);
+        super.checkError();
+        SymbolManager.getInstance().leaveFunc();
     }
 }

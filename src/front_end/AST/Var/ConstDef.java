@@ -3,6 +3,7 @@ package front_end.AST.Var;
 import front_end.AST.Node;
 import front_end.AST.TokenNode;
 import front_end.symbol.ConstSymbol;
+import front_end.symbol.SymbolManager;
 import utils.SymbolType;
 import utils.SyntaxVarType;
 import utils.TokenType;
@@ -35,4 +36,9 @@ public class ConstDef extends Node {
         return new ConstSymbol(symbolName, symbolType, valueType, dim);
     }
 
+    @Override
+    public void checkError() {
+        SymbolManager.getInstance().addSymbol(symbol);
+        super.checkError();
+    }
 }

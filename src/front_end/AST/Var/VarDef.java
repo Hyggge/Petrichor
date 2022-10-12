@@ -2,6 +2,7 @@ package front_end.AST.Var;
 
 import front_end.AST.Node;
 import front_end.AST.TokenNode;
+import front_end.symbol.SymbolManager;
 import front_end.symbol.VarSymbol;
 import utils.SymbolType;
 import utils.SyntaxVarType;
@@ -33,5 +34,11 @@ public class VarDef extends Node {
             }
         }
         return new VarSymbol(symbolName, symbolType, valueType, dim);
+    }
+
+    @Override
+    public void checkError() {
+        SymbolManager.getInstance().addSymbol(symbol);
+        super.checkError();
     }
 }

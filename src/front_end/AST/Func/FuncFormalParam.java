@@ -2,6 +2,7 @@ package front_end.AST.Func;
 
 import front_end.AST.Node;
 import front_end.AST.TokenNode;
+import front_end.symbol.SymbolManager;
 import front_end.symbol.VarSymbol;
 import utils.SymbolType;
 import utils.SyntaxVarType;
@@ -43,6 +44,12 @@ public class FuncFormalParam extends Node {
 
     public int getFParamDim() {
         return symbol.getDim();
+    }
+
+    @Override
+    public void checkError() {
+        SymbolManager.getInstance().addSymbol(symbol);
+        super.checkError();
     }
 
 }
