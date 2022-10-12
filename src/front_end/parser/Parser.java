@@ -514,7 +514,7 @@ public class Parser {
         children.add(node);
         // create a node
         int endLine = tokenStream.look(-1).getLineNumber();
-        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.ASSIGN_STMT, children);
+        return NodeFactory.createNode(startLine, endLine, SyntaxVarType.BLOCK_STMT, children);
     }
 
     public Node parseAssignStmt() {

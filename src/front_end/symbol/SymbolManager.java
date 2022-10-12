@@ -60,10 +60,12 @@ public class SymbolManager {
 
     public void enterFunc(Symbol symbol) {
         this.latestFunc = symbol;
+        enterBlock();
     }
 
     public void leaveFunc() {
         this.latestFunc = null;
+        leaveBlock();
     }
 
     public void enterLoop() {
