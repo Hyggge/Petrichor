@@ -16,6 +16,7 @@ public class AssignStmt extends Stmt {
 
     @Override
     public void checkError() {
+        // check Error h
         LValExp lValExp = (LValExp) children.get(0);
         if (lValExp.isConst()) {
             Printer.printErrorMsg(lValExp.getEndLine(), ErrorType.h);
