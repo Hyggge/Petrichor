@@ -10,14 +10,15 @@ public class SymbolTable {
         this.symbols = new HashSet<>();
     }
 
-    public boolean has(String name) {
+    public Symbol getSymbolByName(String name) {
         Iterator<Symbol> iterator = symbols.iterator();
         while (iterator.hasNext()) {
-            if (iterator.next().getSymbolName().equals(name)) {
-                return true;
+            Symbol symbol = iterator.next();
+            if (symbol.getSymbolName().equals(name)) {
+                return symbol;
             }
         }
-        return false;
+        return null;
     }
 
     public HashSet<String> getNames() {

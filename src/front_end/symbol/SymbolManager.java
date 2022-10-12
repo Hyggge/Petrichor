@@ -25,7 +25,7 @@ public class SymbolManager {
     public boolean addSymbol(Symbol symbol) {
         SymbolTable topTable = this.symbolTables.peek();
         // insert failed
-        if (topTable.has(symbol.getSymbolName())) return false;
+        if (topTable.getSymbolByName(symbol.getSymbolName()) != null) return false;
         // insert success
         topTable.addSymbol(symbol);
         // maintain symbolNameMap
@@ -37,9 +37,10 @@ public class SymbolManager {
         return true;
     }
 
-    public boolean checkDef (String name) {
-        if (symbolNameMap.get(name) == null) return false;
-        return !symbolNameMap.get(name).isEmpty();
+    public Symbol getSymbolByName (String name) {
+        if (symbolNameMap.get(name) == null || symbolNameMap.get(name).isEmpty()) return null;
+        SymbolTable targetTable = symbolNameMap.get(name).peek();
+        return targetTable.getSymbolByName(name);
     }
 
 
