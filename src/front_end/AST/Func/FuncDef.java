@@ -25,6 +25,7 @@ public class FuncDef extends Node {
         ArrayList<ValueType> FParamTypes = new ArrayList<>();
         ArrayList<Integer> FParamDims = new ArrayList<>();
 
+        // get FParamTypes and FParamDims
         if (children.get(3) instanceof FuncFormalParams) {
             FuncFormalParams funcFormalParams = (FuncFormalParams)children.get(3);
             FParamTypes = funcFormalParams.getFParamTypes();

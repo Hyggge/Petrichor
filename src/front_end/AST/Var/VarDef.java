@@ -24,6 +24,8 @@ public class VarDef extends Node {
         SymbolType symbolType = SymbolType.SYMBOL_VAR;
         ValueType valueType = ValueType.INT;
         int dim = 0;
+
+        // get dim
         for (Node child : children) {
             if (child instanceof TokenNode && ((TokenNode)child).getToken().getType() == TokenType.LBRACK) {
                 dim++;

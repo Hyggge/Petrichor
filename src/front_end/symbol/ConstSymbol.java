@@ -10,10 +10,18 @@ public class ConstSymbol extends Symbol {
     private int dim;
     private ArrayList<Integer> lenList;
 
-    public ConstSymbol(String symbolName, SymbolType symbolType, ValueType valueType, int dim, ArrayList<Integer> lenList) {
+    public ConstSymbol(String symbolName, SymbolType symbolType, ValueType valueType, int dim) {
         super(symbolName, symbolType);
         this.valueType = valueType;
         this.dim = dim;
-        this.lenList = lenList;
+        this.lenList = null; // TODO
+    }
+
+    public ValueType getValueType() {
+        return valueType;
+    }
+
+    public int getDim() {
+        return dim;
     }
 }

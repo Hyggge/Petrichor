@@ -15,31 +15,32 @@ public class FuncFormalParam extends Node {
 
     public FuncFormalParam(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {
         super(startLine, endLine, type, children);
-        this.symbol = null;
         this.symbol = createSymbol();
     }
 
     public VarSymbol createSymbol() {
         String symbolName = ((TokenNode)children.get(0)).getToken().getValue();
         SymbolType symbolType = SymbolType.SYMBOL_VAR;
-        return new VarSymbol(symbolName, symbolType, getFParamType(), getFParamDim());
-    }
-
-    public ValueType getFParamType() {
-        if (symbol != null) return symbol.get
-        TokenType tokenType = ((TokenNode)children.get(0)).getToken().getType();
-        if (tokenType == TokenType.INTTK) return ValueType.INT;
-        return null;
-    }
-
-    public int getFParamDim() {
+        ValueType FParamType = null;
         int dim = 0;
+        // getFParamType
+        TokenType tokenType = ((TokenNode)children.get(0)).getToken().getType();
+        if (tokenType == TokenType.INTTK) FParamType = ValueType.INT;
+        // getFParamDim
         for (Node child : children) {
             if (child instanceof TokenNode && ((TokenNode)child).getToken().getType() == TokenType.LBRACK) {
                 dim++;
             }
         }
-        return dim;
+        return new VarSymbol(symbolName, symbolType, FParamType, dim);
+    }
+
+    public ValueType getFParamType() {
+        return symbol.getValueType();
+    }
+
+    public int getFParamDim() {
+        return symbol.getDim();
     }
 
 }

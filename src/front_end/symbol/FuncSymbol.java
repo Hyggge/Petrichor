@@ -17,4 +17,16 @@ public class FuncSymbol extends Symbol {
         this.FParamTypes = FParamTypes;
         this.FParamDims = FParamDims;
     }
+
+    public ValueType getReturnType() {
+        return returnType;
+    }
+
+    public ArrayList<ValueType> getFParamTypes() {
+        return FParamTypes;
+    }
+
+    public ArrayList<Integer> getFParamDims() {
+        return FParamDims;
+    }
 }
