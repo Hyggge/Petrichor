@@ -80,4 +80,11 @@ public class SymbolManager {
         return loopDepth;
     }
 
+
+    public Symbol getLatestFunc() {
+        return latestFunc;
+    }
+
+
+
 }
