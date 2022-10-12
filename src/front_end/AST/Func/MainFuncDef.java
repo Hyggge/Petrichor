@@ -4,6 +4,8 @@ import front_end.AST.Node;
 import front_end.AST.TokenNode;
 import front_end.symbol.FuncSymbol;
 import front_end.symbol.SymbolManager;
+import utils.ErrorType;
+import utils.Printer;
 import utils.SymbolType;
 import utils.SyntaxVarType;
 import utils.ValueType;
@@ -20,7 +22,7 @@ public class MainFuncDef extends Node {
     }
 
     private FuncSymbol createSymbol() {
-        // FuncType Ident '(' [FuncFormalParams] ')' Block
+        // 'int' 'main' '('  ')' Block
         String symbolName = ((TokenNode)children.get(1)).getToken().getValue();
         SymbolType symbolType = SymbolType.SYMBOL_FUNC;
         ValueType returnType = ValueType.INT;
@@ -40,7 +42,8 @@ public class MainFuncDef extends Node {
 
     @Override
     public void checkError() {
-        SymbolManager.getInstance().addSymbol(symbol);
+        boolean res = SymbolManager.getInstance().addSymbol(symbol);
+        if (! res) Printer.printErrorMsg(children.get(1).getStartLine(), ErrorType.b);
         SymbolManager.getInstance().enterFunc(symbol);
         super.checkError();
         SymbolManager.getInstance().leaveFunc();
