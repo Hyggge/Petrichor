@@ -49,6 +49,13 @@ public class LValExp extends Node {
         return dim - cnt;
     }
 
+    public boolean isConst() {
+        String name = ((TokenNode)children.get(0)).getToken().getValue();
+        Symbol symbol = SymbolManager.getInstance().getSymbolByName(name);
+        if (symbol instanceof ConstSymbol) return true;
+        return false;
+    }
+
     @Override
     public void checkError() {
         Token ident = ((TokenNode)children.get(0)).getToken();
