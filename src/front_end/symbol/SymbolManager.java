@@ -8,7 +8,7 @@ public class SymbolManager {
     private static final SymbolManager MANAGER = new SymbolManager();
     private Stack<SymbolTable> symbolTables;
     private HashMap<String, Stack<SymbolTable>> symbolNameMap;
-    private Symbol latestFunc; // for check return sentence
+    private FuncSymbol latestFunc; // for check return sentence
     private int loopDepth; // for check continue and break
 
     private SymbolManager() {
@@ -58,7 +58,7 @@ public class SymbolManager {
         }
     }
 
-    public void enterFunc(Symbol symbol) {
+    public void enterFunc(FuncSymbol symbol) {
         this.latestFunc = symbol;
         enterBlock();
     }
@@ -81,7 +81,7 @@ public class SymbolManager {
     }
 
 
-    public Symbol getLatestFunc() {
+    public FuncSymbol getLatestFunc() {
         return latestFunc;
     }
 

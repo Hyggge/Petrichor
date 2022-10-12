@@ -20,7 +20,7 @@ public class ReturnStmt extends Stmt {
     @Override
     public void checkError() {
         if (children.get(1) instanceof Exp) {
-            FuncSymbol func = (FuncSymbol) SymbolManager.getInstance().getLatestFunc();
+            FuncSymbol func = SymbolManager.getInstance().getLatestFunc();
             if (func.getReturnType() == ValueType.VOID) {
                 Printer.printErrorMsg(children.get(0).getStartLine(), ErrorType.f);
             }
