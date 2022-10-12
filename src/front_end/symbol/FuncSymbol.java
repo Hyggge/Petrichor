@@ -29,4 +29,14 @@ public class FuncSymbol extends Symbol {
     public ArrayList<Integer> getFParamDims() {
         return FParamDims;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "  >>>  " +
+                "FuncSymbol{" +
+                "returnType=" + returnType +
+                ", FParamTypes=" + FParamTypes +
+                ", FParamDims=" + FParamDims +
+                '}';
+    }
 }

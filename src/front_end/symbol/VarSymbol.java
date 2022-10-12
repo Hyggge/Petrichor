@@ -24,4 +24,14 @@ public class VarSymbol extends Symbol {
     public int getDim() {
         return dim;
     }
+
+    @Override
+    public String toString() {
+        return  super.toString() + "  >>>  " +
+                "VarSymbol{" +
+                "valueType=" + valueType +
+                ", dim=" + dim +
+                ", lenList=" + lenList +
+                '}';
+    }
 }

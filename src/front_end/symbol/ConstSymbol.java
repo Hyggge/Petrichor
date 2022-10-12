@@ -24,4 +24,14 @@ public class ConstSymbol extends Symbol {
     public int getDim() {
         return dim;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "  >>>  " +
+                "ConstSymbol{" +
+                "valueType=" + valueType +
+                ", dim=" + dim +
+                ", lenList=" + lenList +
+                '}';
+    }
 }

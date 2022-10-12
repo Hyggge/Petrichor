@@ -16,6 +16,7 @@ public class VarDef extends Node {
     public VarDef(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {
         super(startLine, endLine, type, children);
         this.symbol = createSymbol();
+        System.out.println(this.symbol);
     }
 
     private VarSymbol createSymbol() {

@@ -16,6 +16,7 @@ public class ConstDef extends Node {
     public ConstDef(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {
         super(startLine, endLine, type, children);
         this.symbol = createSymbol();
+        System.out.println(this.symbol);
     }
 
     private ConstSymbol createSymbol() {

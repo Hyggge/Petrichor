@@ -4,8 +4,8 @@ package front_end.symbol;
 import utils.SymbolType;
 
 public class Symbol {
-    private String symbolName;
-    private SymbolType symbolType;
+    protected String symbolName;
+    protected SymbolType symbolType;
 
     public Symbol(String symbolName, SymbolType symbolType) {
         this.symbolName = symbolName;
@@ -18,5 +18,13 @@ public class Symbol {
 
     public SymbolType getSymbolType() {
         return symbolType;
+    }
+
+    @Override
+    public String toString() {
+        return "Symbol{" +
+                "symbolName='" + symbolName + '\'' +
+                ", symbolType=" + symbolType +
+                '}';
     }
 }
