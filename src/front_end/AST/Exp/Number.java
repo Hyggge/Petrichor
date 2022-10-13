@@ -1,9 +1,7 @@
 package front_end.AST.Exp;
 
 import front_end.AST.Node;
-import front_end.symbol.SymbolManager;
 import utils.SyntaxVarType;
-import utils.ValueType;
 
 import java.util.ArrayList;
 
@@ -13,14 +11,9 @@ public class Number extends Node {
     }
 
     @Override
-    public void checkError() {
-        // get RParam's type and dim
-        if (SymbolManager.getInstance().getCalledFunc() != null) {
-            SymbolManager.getInstance().addRParamInfo(ValueType.INT, 0);
-        }
-        super.checkError();
+    public Integer getDim() {
+        return 0;
     }
-
 
     // checkError d
 

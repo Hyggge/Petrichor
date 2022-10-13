@@ -11,7 +11,6 @@ import utils.ErrorType;
 import utils.Printer;
 import utils.SyntaxVarType;
 import utils.TokenType;
-import utils.ValueType;
 
 import java.util.ArrayList;
 
@@ -21,15 +20,8 @@ public class LValExp extends Node {
         super(startLine, endLine, type, children);
     }
 
-    private ValueType getValueType() {
-        Token ident = ((TokenNode)children.get(0)).getToken();
-        Symbol symbol = SymbolManager.getInstance().getSymbolByName(ident.getValue());
-        if (symbol instanceof VarSymbol) return ((VarSymbol)symbol).getValueType();
-        else if (symbol instanceof ConstSymbol) return ((ConstSymbol)symbol).getValueType();
-        return null;
-    }
-
-    private Integer getDim()  {
+    @Override
+    public Integer getDim()  {
         Token ident = ((TokenNode)children.get(0)).getToken();
         Symbol symbol = SymbolManager.getInstance().getSymbolByName(ident.getValue());
         if (symbol == null) return null;
@@ -63,10 +55,6 @@ public class LValExp extends Node {
         if (SymbolManager.getInstance().getSymbolByName(ident.getValue()) == null) {
             Printer.printErrorMsg(ident.getLineNumber(), ErrorType.c);
             super.checkError();
-        }
-        // get RParam's type and dim
-        if (SymbolManager.getInstance().getCalledFunc() != null) {
-            SymbolManager.getInstance().addRParamInfo(this.getValueType(), this.getDim());
         }
         super.checkError();
     }

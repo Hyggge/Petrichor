@@ -2,7 +2,6 @@ package front_end.AST.Func;
 
 import front_end.AST.Exp.Exp;
 import front_end.AST.Node;
-import front_end.symbol.SymbolManager;
 import utils.SyntaxVarType;
 
 import java.util.ArrayList;
@@ -13,14 +12,14 @@ public class FuncRealParams extends Node {
         super(startLine, endLine, type, children);
     }
 
-    @Override
-    public void checkError() {
+    public ArrayList<Integer> getRParamDims() {
+        ArrayList<Integer> RParamDims = new ArrayList<>();
         for (Node child : children) {
-            child.checkError();
             if (child instanceof Exp) {
-                SymbolManager.getInstance().addRecvParamNum();
+                RParamDims.add(child.getDim());
             }
         }
+        return RParamDims;
     }
 
 }

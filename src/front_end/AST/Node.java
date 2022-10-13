@@ -33,6 +33,10 @@ public class Node {
         return children;
     }
 
+    public Integer getDim() {
+        return null;
+    }
+
     public void checkError() {
         // for token nodes
         if (children == null) return;
