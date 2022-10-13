@@ -291,7 +291,8 @@ public class Parser {
         node = NodeFactory.createNode(curToken);
         children.add(node); read();
         // parse ['FuncFormalParams']
-        if (curToken.getType() != TokenType.RPARENT) {
+        // the first set of 'FuncFormalParams' is [int]
+        if (curToken.getType() == TokenType.INTTK) {
             node = parseFuncFormalParams();
             children.add(node);
         }
@@ -814,7 +815,10 @@ public class Parser {
             node = NodeFactory.createNode(curToken);
             children.add(node); read();
             // parse [FuncRealParams]
-            if (curToken.getType() != TokenType.RPARENT) {
+            // the first set of FuncRealParams is ['+', '-', '!', ident, '(', IntConst]
+            if (curToken.getType() == TokenType.PLUS || curToken.getType() == TokenType.MINU ||
+                curToken.getType() == TokenType.NOT || curToken.getType() == TokenType.IDENFR ||
+                curToken.getType() == TokenType.LPARENT || curToken.getType() == TokenType.INTCON) {
                 node = parseFuncRealParams();
                 children.add(node);
             }
