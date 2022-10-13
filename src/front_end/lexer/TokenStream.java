@@ -14,7 +14,10 @@ public class TokenStream {
     }
 
     public Token read() {
-        if (pos >= tokenList.size()) return null;
+        if (pos >= tokenList.size()) {
+            pos++;
+            return null;
+        }
         return tokenList.get(pos++);
     }
 
