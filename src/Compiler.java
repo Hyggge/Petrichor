@@ -19,7 +19,6 @@ public class Compiler {
         FileOutputStream error = new FileOutputStream("error.txt");
         // set Printer
         Printer.init(output, error);
-        Printer.open();
 
         if (arg.equals("-la")) {
             // token analyse

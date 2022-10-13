@@ -489,11 +489,9 @@ public class Parser {
         }
 
         tokenStream.setWatchPoint();
-        Printer.FILE_OUT = false;
-        Printer.FILE_ERR = false;
+        Printer.onOff = false;
         parseExp();
-        Printer.FILE_OUT = true;
-        Printer.FILE_ERR = true;
+        Printer.onOff = true;
 
 //        while (curToken.getType() != TokenType.ASSIGN && curToken.getType() != TokenType.SEMICN) {
 //            read();
@@ -512,6 +510,7 @@ public class Parser {
             return parseExpStmt();
         }
     }
+
     public Node parseBlockStmt() {
         ArrayList<Node> children = new ArrayList<>();
         int startLine = curToken.getLineNumber();

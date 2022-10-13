@@ -6,24 +6,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Printer {
-    public static boolean FILE_OUT = true;
+    public static boolean FILE_OUT = false;
     public static boolean FILE_ERR = true;
+    public static boolean onOff = true;
 
-    private static boolean onOff = false;
     private static FileOutputStream fileOut = null;
     private static FileOutputStream fileErr = null;
 
     public static void init(FileOutputStream out, FileOutputStream err) {
         Printer.fileOut = out;
         Printer.fileErr = err;
-    }
-
-    public static void open() {
-        onOff = true;
-    }
-
-    public static void close() {
-        onOff = false;
     }
 
     public static void printToken(Token token){
@@ -35,7 +27,7 @@ public class Printer {
 
     public static void printSyntaxVarType(SyntaxVarType type) {
         String content = "<" + type.toString() + ">\n";
-        if (onOff & FILE_ERR) {
+        if (onOff & FILE_OUT) {
             try {fileOut.write((content).getBytes());} catch (IOException e) {throw new RuntimeException(e);}
         }
     }
