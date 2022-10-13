@@ -204,7 +204,7 @@ public class Lexer {
             sb.append(curChar); read();
             if (curChar == '/') { // single-line comment
                 read();
-                while (! isNewLine()) read();
+                while (! isNewLine() && !isEOF()) read();
                 lineNumber++;
                 read(); // skip the newline character
                 return getToken();

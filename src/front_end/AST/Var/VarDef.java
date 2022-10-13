@@ -40,9 +40,9 @@ public class VarDef extends Node {
 
     @Override
     public void checkError() {
+        super.checkError();
         // check Error b
         boolean res = SymbolManager.getInstance().addSymbol(symbol);
         if (! res) Printer.printErrorMsg(children.get(0).getEndLine(), ErrorType.b);
-        super.checkError();
     }
 }

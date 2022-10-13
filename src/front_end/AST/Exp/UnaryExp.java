@@ -43,29 +43,30 @@ public class UnaryExp extends Node {
             // check Error c
             if (funcSymbol == null) {
                 Printer.printErrorMsg(ident.getLineNumber(), ErrorType.c);
+                super.checkError(); return;
             }
             // call the function
-            else if (children.get(2) instanceof FuncRealParams){
-                ArrayList<Integer> FParamDims = funcSymbol.getFParamDims();
-                ArrayList<Integer> RParamDims = ((FuncRealParams)children.get(2)).getRParamDims();
-                System.out.println(FParamDims);
-                System.out.println(RParamDims);
-                // check Error d
-                if (RParamDims.size() != FParamDims.size()) {
-                    Printer.printErrorMsg(ident.getLineNumber(), ErrorType.d);
-                    super.checkError(); return;
-                }
-                // check Error e
-                else {
-                    for (int i = 0; i < RParamDims.size(); i++) {
-                        if (! RParamDims.get(i).equals(FParamDims.get(i))) {
-                            Printer.printErrorMsg(ident.getLineNumber(), ErrorType.e);
-                            break; // only print once
-                        }
-                    }
-                }
-
+            ArrayList<Integer> FParamDims = funcSymbol.getFParamDims();
+            ArrayList<Integer> RParamDims = new ArrayList<>();
+            if (children.size() > 2 &&  children.get(2) instanceof FuncRealParams) {
+                RParamDims = ((FuncRealParams) children.get(2)).getRParamDims();
             }
+
+            System.out.println(FParamDims);
+            System.out.println(RParamDims);
+            // check Error d
+            if (RParamDims.size() != FParamDims.size()) {
+                Printer.printErrorMsg(ident.getLineNumber(), ErrorType.d);
+                super.checkError(); return;
+            }
+            // check Error e
+            for (int i = 0; i < RParamDims.size(); i++) {
+                if (! FParamDims.get(i).equals(RParamDims.get(i))) {
+                    Printer.printErrorMsg(ident.getLineNumber(), ErrorType.e);
+                    super.checkError(); return; // only print once
+                }
+            }
+
         }
         super.checkError();
     }
