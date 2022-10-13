@@ -549,7 +549,9 @@ public class Parser {
         int startLine = curToken.getLineNumber();
         Node node = null;
         // parse Exp
-        if (curToken.getType() != TokenType.SEMICN) {
+        if (curToken.getType() == TokenType.PLUS || curToken.getType() == TokenType.MINU ||
+                curToken.getType() == TokenType.NOT || curToken.getType() == TokenType.IDENFR ||
+                curToken.getType() == TokenType.LPARENT || curToken.getType() == TokenType.INTCON) {
             node = parseExp();
             children.add(node);
         }
@@ -666,7 +668,9 @@ public class Parser {
         Node node = NodeFactory.createNode(curToken);
         children.add(node); read();
         // parse [Exp]
-        if (curToken.getType() != TokenType.SEMICN) {
+        if (curToken.getType() == TokenType.PLUS || curToken.getType() == TokenType.MINU ||
+                curToken.getType() == TokenType.NOT || curToken.getType() == TokenType.IDENFR ||
+                curToken.getType() == TokenType.LPARENT || curToken.getType() == TokenType.INTCON) {
             node = parseExp();
             children.add(node);
         }
