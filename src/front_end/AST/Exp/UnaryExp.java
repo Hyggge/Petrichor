@@ -1,6 +1,5 @@
 package front_end.AST.Exp;
 
-import front_end.AST.Func.FuncRealParams;
 import front_end.AST.Node;
 import front_end.AST.TokenNode;
 import front_end.lexer.Token;
@@ -21,22 +20,30 @@ public class UnaryExp extends Node {
 
     @Override
     public void checkError() {
+        // function call
         if (children.get(0) instanceof TokenNode) {
-            // check Error c
             Token ident = ((TokenNode)children.get(0)).getToken();
             FuncSymbol funcSymbol = (FuncSymbol)SymbolManager.getInstance().getSymbolByName(ident.getValue());
+            // check Error c
             if (funcSymbol == null) {
                 Printer.printErrorMsg(ident.getLineNumber(), ErrorType.c);
-                super.checkError(); return;
+                super.checkError();
             }
+            // call the function
+            else {
+                SymbolManager.getInstance().enterFuncCall(funcSymbol);
+                super.checkError();
 
-            if (children.get(2) instanceof FuncRealParams) {
-                // check Error d
-                FuncRealParams funcRealParams = (FuncRealParams)children.get(2);
-                ArrayList<ValueType> RParamTypes = funcRealParams.getRParamTypes();
-                ArrayList<Integer> RParamDims = funcRealParams.getRParamDims();
+                ArrayList<ValueType> RParamTypes = SymbolManager.getInstance().getRParamTypes();
+                ArrayList<Integer> RParamDims = SymbolManager.getInstance().getRParamDims();
                 ArrayList<ValueType> FParamTypes = funcSymbol.getFParamTypes();
                 ArrayList<Integer> FParamDims = funcSymbol.getFParamDims();
+                System.out.println(FParamTypes);
+                System.out.println(FParamDims);
+
+                System.out.println(RParamTypes);
+                System.out.println(RParamDims);
+                // check Error d
                 if (RParamTypes.size() != FParamTypes.size()) {
                     Printer.printErrorMsg(ident.getLineNumber(), ErrorType.d);
                     super.checkError(); return;
@@ -49,8 +56,9 @@ public class UnaryExp extends Node {
                         break; // only print once
                     }
                 }
+
             }
         }
-        super.checkError();
+        else super.checkError();
     }
 }

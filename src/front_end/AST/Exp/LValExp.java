@@ -21,7 +21,7 @@ public class LValExp extends Node {
         super(startLine, endLine, type, children);
     }
 
-    public ValueType getValueType() {
+    private ValueType getValueType() {
         Token ident = ((TokenNode)children.get(0)).getToken();
         Symbol symbol = SymbolManager.getInstance().getSymbolByName(ident.getValue());
         if (symbol instanceof VarSymbol) return ((VarSymbol)symbol).getValueType();
@@ -29,7 +29,7 @@ public class LValExp extends Node {
         return null;
     }
 
-    public Integer getDim()  {
+    private Integer getDim()  {
         Token ident = ((TokenNode)children.get(0)).getToken();
         Symbol symbol = SymbolManager.getInstance().getSymbolByName(ident.getValue());
         if (symbol == null) return null;
@@ -62,6 +62,11 @@ public class LValExp extends Node {
         Token ident = ((TokenNode)children.get(0)).getToken();
         if (SymbolManager.getInstance().getSymbolByName(ident.getValue()) == null) {
             Printer.printErrorMsg(ident.getLineNumber(), ErrorType.c);
+            super.checkError();
+        }
+        // get RParam's type and dim
+        if (SymbolManager.getInstance().getCalledFunc() != null) {
+            SymbolManager.getInstance().addRParamInfo(this.getValueType(), this.getDim());
         }
         super.checkError();
     }

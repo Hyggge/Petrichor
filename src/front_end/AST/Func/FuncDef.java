@@ -46,7 +46,7 @@ public class FuncDef extends Node {
         // check Error b
         boolean res = SymbolManager.getInstance().addSymbol(symbol);
         if (! res) Printer.printErrorMsg(children.get(1).getEndLine(), ErrorType.b);
-        SymbolManager.getInstance().enterFunc(symbol);
+        SymbolManager.getInstance().enterFuncDef(symbol);
         super.checkError();
         // check Error g
         Node block = children.get(children.size() - 1); // Block ==> '{' {VarDecl | ConstDecl | Stmt} '}'
@@ -56,6 +56,6 @@ public class FuncDef extends Node {
         if (! (lastSentence instanceof ReturnStmt) && symbol.getReturnType() != ValueType.VOID) {
             Printer.printErrorMsg(endLine, ErrorType.g);
         }
-        SymbolManager.getInstance().leaveFunc();
+        SymbolManager.getInstance().leaveFuncDef();
     }
 }

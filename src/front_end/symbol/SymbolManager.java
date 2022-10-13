@@ -1,5 +1,8 @@
 package front_end.symbol;
 
+import utils.ValueType;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
@@ -11,11 +14,22 @@ public class SymbolManager {
     private FuncSymbol latestFunc; // for check return sentence
     private int loopDepth; // for check continue and break
 
+    // for check match of FParam and RParam
+    private FuncSymbol calledFunc;
+    private int recvParamNum;
+    private ArrayList<ValueType> RParamTypes;
+    private ArrayList<Integer> RParamDims;
+
     private SymbolManager() {
         this.symbolTables = new Stack<>();
         this.symbolNameMap = new HashMap<>();
         this.latestFunc = null;
         this.loopDepth = 0;
+
+        this.calledFunc = null;
+        this.recvParamNum = 0;
+        this.RParamTypes = new ArrayList<>();
+        this.RParamDims = new ArrayList<>();
     }
 
     public static SymbolManager getInstance() {
@@ -58,14 +72,25 @@ public class SymbolManager {
         }
     }
 
-    public void enterFunc(FuncSymbol symbol) {
+    public void enterFuncDef(FuncSymbol symbol) {
         this.latestFunc = symbol;
         enterBlock();
     }
 
-    public void leaveFunc() {
+    public void leaveFuncDef() {
         this.latestFunc = null;
         leaveBlock();
+    }
+
+    public void enterFuncCall(FuncSymbol funcSymbol) {
+        this.calledFunc = funcSymbol;
+        this.recvParamNum = 0;
+        this.RParamTypes = new ArrayList<>();
+        this.RParamDims = new ArrayList<>();
+    }
+
+    public void leaveFuncCall() {
+        this.calledFunc = null;
     }
 
     public void enterLoop() {
@@ -76,15 +101,39 @@ public class SymbolManager {
         this.loopDepth--;
     }
 
+    // getter and setter
     public int getLoopDepth() {
         return loopDepth;
     }
-
 
     public FuncSymbol getLatestFunc() {
         return latestFunc;
     }
 
+    public FuncSymbol getCalledFunc() {
+        return calledFunc;
+    }
 
+    public int getRecvParamNum() {
+        return this.recvParamNum;
+    }
 
+    public ArrayList<ValueType> getRParamTypes() {
+        return RParamTypes;
+    }
+
+    public ArrayList<Integer> getRParamDims() {
+        return RParamDims;
+    }
+
+    public void addRParamInfo(ValueType valueType, Integer dim) {
+        if (recvParamNum >= RParamTypes.size()) {
+            this.RParamTypes.add(valueType);
+            this.RParamDims.add(dim);
+        }
+    }
+
+    public void addRecvParamNum () {
+        this.recvParamNum++;
+    }
 }
