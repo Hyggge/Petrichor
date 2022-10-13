@@ -489,10 +489,13 @@ public class Parser {
         }
 
         tokenStream.setWatchPoint();
-//        parseExp();
-        while (curToken.getType() != TokenType.ASSIGN && curToken.getType() != TokenType.SEMICN) {
-            read();
-        }
+        Printer.FILE_OUT = false;
+        parseExp();
+        Printer.FILE_OUT = true;
+
+//        while (curToken.getType() != TokenType.ASSIGN && curToken.getType() != TokenType.SEMICN) {
+//            read();
+//        }
         if (curToken.getType() == TokenType.ASSIGN) {
             if (tokenStream.look(1).getType() == TokenType.GETINTTK) {
                 curToken = tokenStream.backToWatchPoint();

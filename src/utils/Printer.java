@@ -6,8 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Printer {
-    public static final boolean FILE_OUT = true;
-    public static final boolean FILE_ERR = true;
+    public static boolean FILE_OUT = true;
+    public static boolean FILE_ERR = true;
 
     private static boolean onOff = false;
     private static FileOutputStream fileOut = null;
