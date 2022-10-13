@@ -490,8 +490,10 @@ public class Parser {
 
         tokenStream.setWatchPoint();
         Printer.FILE_OUT = false;
+        Printer.FILE_ERR = false;
         parseExp();
         Printer.FILE_OUT = true;
+        Printer.FILE_ERR = true;
 
 //        while (curToken.getType() != TokenType.ASSIGN && curToken.getType() != TokenType.SEMICN) {
 //            read();
