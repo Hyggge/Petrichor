@@ -47,6 +47,7 @@ public class PrintfStmt extends Stmt {
         }
         if (cnt != expList.size()) {
             Printer.addErrorMsg(startLine, ErrorType.l);
+            super.checkError(); return;
         }
         // check child
         super.checkError();

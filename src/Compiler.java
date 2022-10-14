@@ -48,6 +48,7 @@ public class Compiler {
             // syntax analyse
             Parser parser = new Parser(tokenStream);
             Node compUnit = parser.parseCompUnit();
+            // check error
             compUnit.checkError();
             Printer.printAllErrorMsg();
         }
