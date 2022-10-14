@@ -43,6 +43,6 @@ public class VarDef extends Node {
         super.checkError();
         // check Error b
         boolean res = SymbolManager.getInstance().addSymbol(symbol);
-        if (! res) Printer.printErrorMsg(children.get(0).getEndLine(), ErrorType.b);
+        if (! res) Printer.addErrorMsg(children.get(0).getEndLine(), ErrorType.b);
     }
 }

@@ -18,7 +18,7 @@ public class GetIntStmt extends Stmt {
         // check Error h
         LValExp lValExp = (LValExp) children.get(0);
         if (lValExp.isConst()) {
-            Printer.printErrorMsg(lValExp.getEndLine(), ErrorType.h);
+            Printer.addErrorMsg(lValExp.getEndLine(), ErrorType.h);
         }
         super.checkError();
     }

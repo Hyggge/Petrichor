@@ -45,7 +45,7 @@ public class FuncDef extends Node {
     public void checkError() {
         // check Error b
         boolean res = SymbolManager.getInstance().addSymbol(symbol);
-        if (! res) Printer.printErrorMsg(children.get(1).getEndLine(), ErrorType.b);
+        if (! res) Printer.addErrorMsg(children.get(1).getEndLine(), ErrorType.b);
         SymbolManager.getInstance().enterFuncDef(symbol);
         super.checkError();
         // check Error g
@@ -54,7 +54,7 @@ public class FuncDef extends Node {
         Node lastSentence = block.getChildren().get(senNum - 2);
         // the last sentence is not return sentence
         if (! (lastSentence instanceof ReturnStmt) && symbol.getReturnType() != ValueType.VOID) {
-            Printer.printErrorMsg(endLine, ErrorType.g);
+            Printer.addErrorMsg(endLine, ErrorType.g);
         }
         SymbolManager.getInstance().leaveFuncDef();
     }

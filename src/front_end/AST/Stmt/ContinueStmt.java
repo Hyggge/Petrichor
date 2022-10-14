@@ -17,7 +17,7 @@ public class ContinueStmt extends Stmt {
     public void checkError() {
         // check Error m
         if (SymbolManager.getInstance().getLoopDepth() <= 0) {
-            Printer.printErrorMsg(startLine, ErrorType.m);
+            Printer.addErrorMsg(startLine, ErrorType.m);
         }
         super.checkError();
     }

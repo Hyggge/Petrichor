@@ -53,7 +53,7 @@ public class LValExp extends Node {
         // check Error c
         Token ident = ((TokenNode)children.get(0)).getToken();
         if (SymbolManager.getInstance().getSymbolByName(ident.getValue()) == null) {
-            Printer.printErrorMsg(ident.getLineNumber(), ErrorType.c);
+            Printer.addErrorMsg(ident.getLineNumber(), ErrorType.c);
             super.checkError();
         }
         super.checkError();

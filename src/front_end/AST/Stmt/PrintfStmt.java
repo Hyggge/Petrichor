@@ -38,7 +38,7 @@ public class PrintfStmt extends Stmt {
         s = s.substring(1, s.length()-1); // remove " "
         // check Error a
         if (!checkFormatString(s)) {
-            Printer.printErrorMsg(formatString.getLineNumber(), ErrorType.a);
+            Printer.addErrorMsg(formatString.getLineNumber(), ErrorType.a);
             super.checkError(); return;
         }
         // check Error l
@@ -46,7 +46,7 @@ public class PrintfStmt extends Stmt {
             if (s.charAt(i) == '%' && i+1 < s.length() && s.charAt(i+1) == 'd') cnt++;
         }
         if (cnt != expList.size()) {
-            Printer.printErrorMsg(startLine, ErrorType.l);
+            Printer.addErrorMsg(startLine, ErrorType.l);
         }
         // check child
         super.checkError();

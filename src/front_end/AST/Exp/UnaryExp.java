@@ -42,7 +42,7 @@ public class UnaryExp extends Node {
             FuncSymbol funcSymbol = (FuncSymbol)SymbolManager.getInstance().getSymbolByName(ident.getValue());
             // check Error c
             if (funcSymbol == null) {
-                Printer.printErrorMsg(ident.getLineNumber(), ErrorType.c);
+                Printer.addErrorMsg(ident.getLineNumber(), ErrorType.c);
                 super.checkError(); return;
             }
             // call the function
@@ -56,13 +56,13 @@ public class UnaryExp extends Node {
             System.out.println(RParamDims);
             // check Error d
             if (RParamDims.size() != FParamDims.size()) {
-                Printer.printErrorMsg(ident.getLineNumber(), ErrorType.d);
+                Printer.addErrorMsg(ident.getLineNumber(), ErrorType.d);
                 super.checkError(); return;
             }
             // check Error e
             for (int i = 0; i < RParamDims.size(); i++) {
                 if (! FParamDims.get(i).equals(RParamDims.get(i))) {
-                    Printer.printErrorMsg(ident.getLineNumber(), ErrorType.e);
+                    Printer.addErrorMsg(ident.getLineNumber(), ErrorType.e);
                     super.checkError(); return; // only print once
                 }
             }

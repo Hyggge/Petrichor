@@ -49,6 +49,7 @@ public class Compiler {
             Parser parser = new Parser(tokenStream);
             Node compUnit = parser.parseCompUnit();
             compUnit.checkError();
+            Printer.printAllErrorMsg();
         }
 
         // close all streams

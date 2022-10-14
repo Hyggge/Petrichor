@@ -23,7 +23,7 @@ public class ReturnStmt extends Stmt {
         if (children.size() >= 2 && children.get(1) instanceof Exp) {
             FuncSymbol func = SymbolManager.getInstance().getLatestFunc();
             if (func.getReturnType() == ValueType.VOID) {
-                Printer.printErrorMsg(children.get(0).getStartLine(), ErrorType.f);
+                Printer.addErrorMsg(children.get(0).getStartLine(), ErrorType.f);
             }
         }
 

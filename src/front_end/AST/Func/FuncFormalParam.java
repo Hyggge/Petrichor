@@ -52,7 +52,7 @@ public class FuncFormalParam extends Node {
     public void checkError() {
         // check Error b
         boolean res = SymbolManager.getInstance().addSymbol(symbol);
-        if (! res) Printer.printErrorMsg(children.get(1).getEndLine(), ErrorType.b);
+        if (! res) Printer.addErrorMsg(children.get(1).getEndLine(), ErrorType.b);
         super.checkError();
     }
 
