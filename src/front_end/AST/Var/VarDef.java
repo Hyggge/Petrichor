@@ -13,6 +13,7 @@ import utils.ValueType;
 
 import java.util.ArrayList;
 
+// VarDef  ==>  Ident {'['  Exp  ']'} ['='  InitVal]
 public class VarDef extends Node {
     private VarSymbol symbol;
 

@@ -8,6 +8,7 @@ import utils.SyntaxVarType;
 
 import java.util.ArrayList;
 
+// ContinueStmt ==> 'continue' ';'
 public class ContinueStmt extends Stmt {
     public ContinueStmt(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {
         super(startLine, endLine, type, children);

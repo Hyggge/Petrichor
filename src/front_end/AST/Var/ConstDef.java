@@ -13,6 +13,7 @@ import utils.ValueType;
 
 import java.util.ArrayList;
 
+// ConstDef ==> Indent {'[' ConstExp ']'} '=' ConstInitVal
 public class ConstDef extends Node {
     private ConstSymbol symbol;
 

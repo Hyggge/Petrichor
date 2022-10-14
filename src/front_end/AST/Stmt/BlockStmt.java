@@ -6,6 +6,7 @@ import utils.SyntaxVarType;
 
 import java.util.ArrayList;
 
+// BlockStmt ==> block
 public class BlockStmt extends Node {
     public BlockStmt(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {
         super(startLine, endLine, type, children);

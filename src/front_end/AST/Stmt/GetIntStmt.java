@@ -8,6 +8,7 @@ import utils.SyntaxVarType;
 
 import java.util.ArrayList;
 
+// GetIntStmt ==> LVal '=' 'getint''('')'';'
 public class GetIntStmt extends Stmt {
     public GetIntStmt(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {
         super(startLine, endLine, type, children);

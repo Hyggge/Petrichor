@@ -8,6 +8,7 @@ import utils.ValueType;
 
 import java.util.ArrayList;
 
+// FuncType ==> 'void' | 'int'
 public class FuncType extends Node {
 
     public FuncType(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {

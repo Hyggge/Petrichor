@@ -6,6 +6,7 @@ import utils.SyntaxVarType;
 
 import java.util.ArrayList;
 
+// WhileStmt ==> 'while' '(' Cond ')' Stmt
 public class WhileStmt extends Stmt {
     public WhileStmt(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {
         super(startLine, endLine, type, children);

@@ -5,6 +5,7 @@ import utils.SyntaxVarType;
 
 import java.util.ArrayList;
 
+// MulExp ==> UnaryExp {('*' | '/' | '%') UnaryExp}
 public class MulExp extends Node {
     public MulExp(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {
         super(startLine, endLine, type, children);

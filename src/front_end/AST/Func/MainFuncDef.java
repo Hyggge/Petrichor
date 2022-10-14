@@ -13,6 +13,7 @@ import utils.ValueType;
 
 import java.util.ArrayList;
 
+// MainFuncDef  ==>  'int' 'main' '('  ')' Block
 public class MainFuncDef extends Node {
     private FuncSymbol symbol;
 

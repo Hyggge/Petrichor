@@ -1,7 +1,6 @@
 package front_end.AST;
 
 import utils.SyntaxVarType;
-
 import java.util.ArrayList;
 
 public class Node {

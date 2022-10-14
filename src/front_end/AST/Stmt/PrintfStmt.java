@@ -11,6 +11,7 @@ import utils.TokenType;
 
 import java.util.ArrayList;
 
+// PrintfStmt ==> 'printf''('FormatString{','Exp}')'';'
 public class PrintfStmt extends Stmt {
     private Token formatString;
     private ArrayList<Exp> expList;
