@@ -17,8 +17,10 @@ public class Compiler {
         PushbackInputStream input = new PushbackInputStream(new FileInputStream("testfile.txt"), 16);
         FileOutputStream output = new FileOutputStream("output.txt");
         FileOutputStream error = new FileOutputStream("error.txt");
+        FileOutputStream llvm = new FileOutputStream("llvm.txt");
+        FileOutputStream mips = new FileOutputStream("mips.txt");
         // set Printer
-        Printer.init(output, error);
+        Printer.init(output, error, llvm, mips);
 
         if (arg.equals("-la")) {
             // token analyse
