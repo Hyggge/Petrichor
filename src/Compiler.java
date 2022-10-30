@@ -3,6 +3,8 @@ import front_end.lexer.Lexer;
 import front_end.lexer.Token;
 import front_end.lexer.TokenStream;
 import front_end.parser.Parser;
+import llvm_ir.IRBuilder;
+import llvm_ir.Module;
 import utils.Printer;
 
 import java.io.FileInputStream;
@@ -11,7 +13,7 @@ import java.io.PushbackInputStream;
 
 public class Compiler {
     public static void main(String[] args) throws Exception {
-         String arg = "-ce";
+         String arg = "-ge";
 //        String arg = args[0];
 
         PushbackInputStream input = new PushbackInputStream(new FileInputStream("testfile.txt"), 16);
@@ -54,6 +56,23 @@ public class Compiler {
             compUnit.checkError();
             Printer.printAllErrorMsg();
         }
+
+        else if (arg.equals("-ge")) {
+            // token analyse
+            Lexer lexer = new Lexer(input);
+            TokenStream tokenStream = lexer.getTokenStream();
+            // syntax analyse
+            Parser parser = new Parser(tokenStream);
+            Node compUnit = parser.parseCompUnit();
+            // check error
+            compUnit.checkError();
+            Printer.printAllErrorMsg();
+            // generate IR
+            Module module = IRBuilder.getInstance().getModule();
+            compUnit.genIR();
+            System.out.println(module);
+        }
+
 
         // close all streams
         input.close();

@@ -1,5 +1,6 @@
 package front_end.AST;
 
+import llvm_ir.Value;
 import utils.SyntaxVarType;
 import java.util.ArrayList;
 
@@ -47,6 +48,15 @@ public class Node {
         for (Node child : children) {
             child.checkError();
         }
+    }
+
+    public Value genIR() {
+        // for token nodes
+        if (children == null) return null;
+        for (Node child : children) {
+            child.genIR();
+        }
+        return null;
     }
 
 

@@ -22,5 +22,13 @@ public class Type {
         return this instanceof PointerType;
     }
 
+    public boolean isBB() {
+        return this == OtherType.BB;
+    }
+
+    public boolean isFUNCTION() {
+        return this == OtherType.FUNCTION;
+    }
+
 
 }

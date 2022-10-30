@@ -2,6 +2,7 @@ package front_end.AST.Stmt;
 
 import front_end.AST.Node;
 import front_end.symbol.SymbolManager;
+import llvm_ir.Value;
 import utils.SyntaxVarType;
 
 import java.util.ArrayList;
@@ -17,5 +18,13 @@ public class BlockStmt extends Stmt {
         SymbolManager.getInstance().enterBlock();
         super.checkError();
         SymbolManager.getInstance().leaveBlock();
+    }
+
+    @Override
+    public Value genIR() {
+        SymbolManager.getInstance().enterBlock();
+        super.genIR();
+        SymbolManager.getInstance().leaveBlock();
+        return null;
     }
 }

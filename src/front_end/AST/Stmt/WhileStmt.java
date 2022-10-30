@@ -2,6 +2,7 @@ package front_end.AST.Stmt;
 
 import front_end.AST.Node;
 import front_end.symbol.SymbolManager;
+import llvm_ir.Value;
 import utils.SyntaxVarType;
 
 import java.util.ArrayList;
@@ -17,5 +18,13 @@ public class WhileStmt extends Stmt {
         SymbolManager.getInstance().enterLoop();
         super.checkError();
         SymbolManager.getInstance().leaveLoop();
+    }
+
+    @Override
+    public Value genIR() {
+        SymbolManager.getInstance().enterLoop();
+        super.genIR();
+        SymbolManager.getInstance().leaveLoop();
+        return null;
     }
 }

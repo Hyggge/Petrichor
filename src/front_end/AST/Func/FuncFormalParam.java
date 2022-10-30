@@ -5,6 +5,12 @@ import front_end.AST.Node;
 import front_end.AST.TokenNode;
 import front_end.symbol.SymbolManager;
 import front_end.symbol.VarSymbol;
+import llvm_ir.IRBuilder;
+import llvm_ir.Param;
+import llvm_ir.Value;
+import llvm_ir.type.BaseType;
+import llvm_ir.type.PointerType;
+import llvm_ir.type.Type;
 import utils.ErrorType;
 import utils.Printer;
 import utils.SymbolType;
@@ -63,4 +69,17 @@ public class FuncFormalParam extends Node {
         super.checkError();
     }
 
+    @Override
+    public Value genIR() {
+        SymbolManager.getInstance().addSymbol(symbol);
+        String name = symbol.getSymbolName();
+        Type type = symbol.getDim() == 0 ? BaseType.INT32 : new PointerType(BaseType.INT32);
+        Param param = new Param(type, name);
+        // 将value信息加入符号本身
+        symbol.setLlvmValue(param);
+        // 将Param加入curFunction
+        IRBuilder.getInstance().addParam(param);
+        super.genIR();
+        return null;
+    }
 }

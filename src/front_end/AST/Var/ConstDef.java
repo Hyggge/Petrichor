@@ -5,6 +5,9 @@ import front_end.AST.Node;
 import front_end.AST.TokenNode;
 import front_end.symbol.ConstSymbol;
 import front_end.symbol.SymbolManager;
+import llvm_ir.GlobalVar;
+import llvm_ir.IRBuilder;
+import llvm_ir.Value;
 import llvm_ir.initial.Initial;
 import llvm_ir.type.ArrayType;
 import llvm_ir.type.BaseType;
@@ -45,7 +48,6 @@ public class ConstDef extends Node {
             }
         }
 
-
         // 如果该常量是全局常量，我们可以直接求出对应的值
         if (SymbolManager.getInstance().isGlobal()) {
             Initial initial = null;
@@ -73,5 +75,22 @@ public class ConstDef extends Node {
         // check Error b
         boolean res = SymbolManager.getInstance().addSymbol(symbol);
         if (! res) Printer.addErrorMsg(children.get(0).getEndLine(), ErrorType.b);
+    }
+
+    @Override
+    public Value genIR() {
+        SymbolManager.getInstance().addSymbol(symbol);
+        // 生成global IR
+        if (symbol.isGlobal()) {
+            String name = IRBuilder.getInstance().genGlobalVarName();
+            Initial initial = symbol.getInitial();
+            GlobalVar globalVar = new GlobalVar(initial.getType(), name, initial);
+            // 将value信息加入符号
+            symbol.setLlvmValue(globalVar);
+            // 将golbalVar加入module
+            IRBuilder.getInstance().addGlobalVar(globalVar);
+        }
+        super.genIR();
+        return null;
     }
 }

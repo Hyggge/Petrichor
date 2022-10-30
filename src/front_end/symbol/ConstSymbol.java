@@ -1,5 +1,6 @@
 package front_end.symbol;
 
+import llvm_ir.Value;
 import llvm_ir.initial.Initial;
 import utils.SymbolType;
 import utils.ValueType;
@@ -11,6 +12,8 @@ public class ConstSymbol extends Symbol {
     private int dim;
     private ArrayList<Integer> lenList;
     private Initial initial;
+    private boolean isGlobal;
+    private Value llvmValue;
 
     public ConstSymbol(String symbolName, SymbolType symbolType, ValueType valueType, int dim, ArrayList<Integer> lenList) {
         super(symbolName, symbolType);
@@ -18,6 +21,8 @@ public class ConstSymbol extends Symbol {
         this.dim = dim;
         this.lenList = lenList;
         this.initial = null;
+        this.llvmValue = null;
+        this.isGlobal = SymbolManager.getInstance().isGlobal();
     }
 
     public ConstSymbol(String symbolName, SymbolType symbolType, ValueType valueType, int dim, ArrayList<Integer> lenList, Initial initial) {
@@ -26,6 +31,8 @@ public class ConstSymbol extends Symbol {
         this.dim = dim;
         this.lenList = lenList;
         this.initial = initial;
+        this.llvmValue = null;
+        this.isGlobal = SymbolManager.getInstance().isGlobal();
     }
 
     public int getDim() {
@@ -49,14 +56,28 @@ public class ConstSymbol extends Symbol {
         return initial.getValues().get(idx1 * lenList.get(0) + idx2);
     }
 
+    public boolean isGlobal() {
+        return isGlobal;
+    }
+
+    public Value getLlvmValue() {
+        return llvmValue;
+    }
+
+    public void setLlvmValue(Value llvmValue) {
+        this.llvmValue = llvmValue;
+    }
+
     @Override
     public String toString() {
         return super.toString() + "  >>>  " +
-                "ConstSymbol{" +
+                "VarSymbol{" +
                 "valueType=" + valueType +
                 ", dim=" + dim +
                 ", lenList=" + lenList +
                 ", initial=" + initial +
+                ", isGlobal=" + isGlobal +
+                ", llvmValue=" + llvmValue +
                 '}';
     }
 }

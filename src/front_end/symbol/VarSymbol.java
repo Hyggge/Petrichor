@@ -1,5 +1,6 @@
 package front_end.symbol;
 
+import llvm_ir.Value;
 import llvm_ir.initial.Initial;
 import utils.SymbolType;
 import utils.ValueType;
@@ -11,6 +12,8 @@ public class VarSymbol extends Symbol {
     private int dim;
     private ArrayList<Integer> lenList;
     private Initial initial;
+    private boolean isGlobal;
+    private Value llvmValue;
 
     public VarSymbol(String symbolName, SymbolType symbolType, ValueType valueType, int dim, ArrayList<Integer> lenList) {
         super(symbolName, symbolType);
@@ -18,6 +21,8 @@ public class VarSymbol extends Symbol {
         this.dim = dim;
         this.lenList = lenList;
         this.initial = null;
+        this.llvmValue = null;
+        this.isGlobal = SymbolManager.getInstance().isGlobal();
     }
 
     // 对于全局变量来说初始值是可以确定的
@@ -27,6 +32,8 @@ public class VarSymbol extends Symbol {
         this.dim = dim;
         this.lenList = lenList;
         this.initial = initial;
+        this.llvmValue = null;
+        this.isGlobal = SymbolManager.getInstance().isGlobal();
     }
 
     public ValueType getValueType() {
@@ -35,6 +42,10 @@ public class VarSymbol extends Symbol {
 
     public int getDim() {
         return dim;
+    }
+
+    public Initial getInitial() {
+        return initial;
     }
 
     public int getConstValue() {
@@ -50,14 +61,28 @@ public class VarSymbol extends Symbol {
         return initial.getValues().get(idx1 * lenList.get(0) + idx2);
     }
 
+    public boolean isGlobal() {
+        return isGlobal;
+    }
+
+    public Value getLlvmValue() {
+        return llvmValue;
+    }
+
+    public void setLlvmValue(Value llvmValue) {
+        this.llvmValue = llvmValue;
+    }
+
     @Override
     public String toString() {
-        return  super.toString() + "  >>>  " +
+        return super.toString() + "  >>>  " +
                 "VarSymbol{" +
                 "valueType=" + valueType +
                 ", dim=" + dim +
                 ", lenList=" + lenList +
                 ", initial=" + initial +
+                ", isGlobal=" + isGlobal +
+                ", llvmValue=" + llvmValue +
                 '}';
     }
 }

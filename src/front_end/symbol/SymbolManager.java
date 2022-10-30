@@ -100,4 +100,15 @@ public class SymbolManager {
     public void setGlobal(boolean global) {
         isGlobal = global;
     }
+
+    @Override
+    public String toString() {
+        return "SymbolManager{" +
+                "symbolTables=" + symbolTables +
+                ", symbolNameMap=" + symbolNameMap +
+                ", latestFunc=" + latestFunc +
+                ", loopDepth=" + loopDepth +
+                ", isGlobal=" + isGlobal +
+                '}';
+    }
 }

@@ -1,6 +1,7 @@
 package front_end.AST;
 
 import front_end.symbol.SymbolManager;
+import llvm_ir.Value;
 import utils.SyntaxVarType;
 
 import java.util.ArrayList;
@@ -13,8 +14,18 @@ public class CompUnit extends Node{
 
     @Override
     public void checkError() {
+        SymbolManager.getInstance().setGlobal(true);
         SymbolManager.getInstance().enterBlock();
         super.checkError();
         SymbolManager.getInstance().leaveBlock();
+    }
+
+    @Override
+    public Value genIR() {
+        SymbolManager.getInstance().setGlobal(true);
+        SymbolManager.getInstance().enterBlock();
+        super.genIR();
+        SymbolManager.getInstance().leaveBlock();
+        return null;
     }
 }

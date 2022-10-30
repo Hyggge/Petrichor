@@ -6,6 +6,12 @@ import front_end.AST.Stmt.ReturnStmt;
 import front_end.AST.TokenNode;
 import front_end.symbol.FuncSymbol;
 import front_end.symbol.SymbolManager;
+import llvm_ir.BasicBlock;
+import llvm_ir.Function;
+import llvm_ir.IRBuilder;
+import llvm_ir.Value;
+import llvm_ir.type.BaseType;
+import llvm_ir.type.Type;
 import utils.ErrorType;
 import utils.Printer;
 import utils.SymbolType;
@@ -46,6 +52,7 @@ public class FuncDef extends Node {
 
     @Override
     public void checkError() {
+        SymbolManager.getInstance().setGlobal(false); // 接下来不可能出现全局变量的定义
         this.symbol = createSymbol();
         // check Error b
         boolean res = SymbolManager.getInstance().addSymbol(symbol);
@@ -53,7 +60,6 @@ public class FuncDef extends Node {
 
         // set SymbolManager
         SymbolManager.getInstance().enterFuncDef(symbol);
-        SymbolManager.getInstance().setGlobal(false);
 
         // check children's error
         // 因为只有形参checkError之后，形参的symbol才能生成，然后函数symbol的参数类型、维度信息才能获得
@@ -65,6 +71,7 @@ public class FuncDef extends Node {
             child.checkError();
         }
 
+        // set SymbolManager
         SymbolManager.getInstance().leaveFuncDef();
 
         // check Error g
@@ -75,5 +82,29 @@ public class FuncDef extends Node {
         if (! (lastSentence instanceof ReturnStmt) && symbol.getReturnType() != ValueType.VOID) {
             Printer.addErrorMsg(endLine, ErrorType.g);
         }
+    }
+
+    @Override
+    public Value genIR() {
+        SymbolManager.getInstance().setGlobal(false); // 接下来不可能出现全局变量的定义，因此设为false
+        SymbolManager.getInstance().addSymbol(symbol);
+        SymbolManager.getInstance().enterFuncDef(symbol);
+        // 创建函数IR
+        String name = symbol.getSymbolName();
+        Type retType = symbol.getReturnType() == ValueType.INT ? BaseType.INT32 : BaseType.VOID;
+        Function function = new Function(name, retType);
+        // 将value加入符号本身
+        symbol.setLlvmValue(function);
+        // 将函数IR加入module, 并设置为curFunction
+        IRBuilder.getInstance().addFunction(function);
+        IRBuilder.getInstance().setCurFunction(function);
+        // 创建一个新的基本快，并加入curFunction
+        String bbName = IRBuilder.getInstance().getBBName();
+        BasicBlock bb = new BasicBlock(bbName);
+        IRBuilder.getInstance().addBB(bb);
+
+        super.genIR();
+        SymbolManager.getInstance().leaveFuncDef();
+        return null;
     }
 }
