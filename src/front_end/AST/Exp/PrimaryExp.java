@@ -18,4 +18,19 @@ public class PrimaryExp extends Node {
         }
         return null;
     }
+
+    @Override
+    public int execute() {
+        int ans = 0;
+        if (children.get(0) instanceof Number) {
+            ans = children.get(0).execute();
+        }
+        else if (children.get(0) instanceof LValExp) {
+            ans = children.get(0).execute();
+        }
+        else {
+            ans = children.get(1).execute(); // '(' Exp ')'
+        }
+        return ans;
+    }
 }

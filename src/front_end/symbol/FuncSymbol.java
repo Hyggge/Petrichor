@@ -10,10 +10,22 @@ public class FuncSymbol extends Symbol {
     private ArrayList<ValueType> FParamTypes;
     private ArrayList<Integer> FParamDims;
 
+    public FuncSymbol(String symbolName, SymbolType symbolType, ValueType returnType) {
+        super(symbolName, symbolType);
+        this.returnType = returnType;
+        this.FParamDims = null;
+        this.FParamTypes = null;
+    }
+
     public FuncSymbol(String symbolName, SymbolType symbolType, ValueType returnType,
                       ArrayList<ValueType> FParamTypes, ArrayList<Integer> FParamDims) {
         super(symbolName, symbolType);
         this.returnType = returnType;
+        this.FParamTypes = FParamTypes;
+        this.FParamDims = FParamDims;
+    }
+
+    public void setParamInfo(ArrayList<ValueType> FParamTypes, ArrayList<Integer> FParamDims) {
         this.FParamTypes = FParamTypes;
         this.FParamDims = FParamDims;
     }

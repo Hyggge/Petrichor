@@ -10,13 +10,16 @@ public class SymbolManager {
     private HashMap<String, Stack<SymbolTable>> symbolNameMap;
     private FuncSymbol latestFunc; // for check return sentence
     private int loopDepth; // for check continue and break
+    private boolean isGlobal;
 
     private SymbolManager() {
         this.symbolTables = new Stack<>();
         this.symbolNameMap = new HashMap<>();
         this.latestFunc = null;
         this.loopDepth = 0;
+        this.isGlobal = true;
     }
+
 
     public static SymbolManager getInstance() {
         return MANAGER;
@@ -28,6 +31,7 @@ public class SymbolManager {
         if (topTable.getSymbolByName(symbol.getSymbolName()) != null) return false;
         // insert success
         topTable.addSymbol(symbol);
+        System.out.println(symbol);
         // maintain symbolNameMap
         symbolNameMap.compute(symbol.getSymbolName(), (k, v) -> {
             if (v == null) v = new Stack<>();
@@ -83,5 +87,17 @@ public class SymbolManager {
 
     public FuncSymbol getLatestFunc() {
         return latestFunc;
+    }
+
+    public void setNotGlobal() {
+        isGlobal = false;
+    }
+
+    public boolean isGlobal() {
+        return isGlobal;
+    }
+
+    public void setGlobal(boolean global) {
+        isGlobal = global;
     }
 }

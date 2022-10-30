@@ -36,6 +36,10 @@ public class Node {
         return null;
     }
 
+    public int execute() {
+        return 0;
+    }
+
     public void checkError() {
         // for token nodes
         if (children == null) return;

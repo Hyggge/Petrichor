@@ -1,14 +1,18 @@
 package front_end.AST.Var;
 
+import front_end.AST.Exp.ConstExp;
 import front_end.AST.Node;
 import front_end.AST.TokenNode;
 import front_end.symbol.ConstSymbol;
 import front_end.symbol.SymbolManager;
+import llvm_ir.initial.Initial;
+import llvm_ir.type.ArrayType;
+import llvm_ir.type.BaseType;
+import llvm_ir.type.Type;
 import utils.ErrorType;
 import utils.Printer;
 import utils.SymbolType;
 import utils.SyntaxVarType;
-import utils.TokenType;
 import utils.ValueType;
 
 import java.util.ArrayList;
@@ -19,8 +23,6 @@ public class ConstDef extends Node {
 
     public ConstDef(int startLine, int endLine, SyntaxVarType type, ArrayList<Node> children) {
         super(startLine, endLine, type, children);
-        this.symbol = createSymbol();
-        System.out.println(this.symbol);
     }
 
     private ConstSymbol createSymbol() {
@@ -28,19 +30,45 @@ public class ConstDef extends Node {
         String symbolName = ((TokenNode)children.get(0)).getToken().getValue();
         SymbolType symbolType = SymbolType.SYMBOL_CONST;
         ValueType valueType = ValueType.INT;
-        int dim = 0;
+        int num = children.size();
+        int dim = 0; // 数组维度
+        int totLen = 1; // 数组总长度 = 数组各维度长度乘积
+        ArrayList<Integer> lenList = new ArrayList<>();
 
         // get dim
         for (Node child : children) {
-            if (child instanceof TokenNode && ((TokenNode)child).getToken().getType() == TokenType.LBRACK) {
+            if (child instanceof ConstExp) {
                 dim++;
+                int tempLen = child.execute();
+                totLen *= tempLen;
+                lenList.add(tempLen);
             }
         }
-        return new ConstSymbol(symbolName, symbolType, valueType, dim);
+
+
+        // 如果该常量是全局常量，我们可以直接求出对应的值
+        if (SymbolManager.getInstance().isGlobal()) {
+            Initial initial = null;
+            Type initialType = null;
+            // 判断是整数型常量还是数组型常量
+            if (dim == 0) initialType = BaseType.INT32;
+            else initialType = new ArrayType(totLen, BaseType.INT32);
+            // 获得初始值
+            if (children.get(num-1).getType() != SyntaxVarType.CONST_INITVAL) {
+                initial = new Initial(initialType, null);
+            } else {
+                ArrayList<Integer> values = ((ConstInitVal)children.get(num-1)).execute(dim);
+                initial = new Initial(initialType, values);
+            }
+            return new ConstSymbol(symbolName, symbolType, valueType, dim, lenList, initial);
+        }
+
+        return new ConstSymbol(symbolName, symbolType, valueType, dim, lenList);
     }
 
     @Override
     public void checkError() {
+        this.symbol = createSymbol();
         super.checkError();
         // check Error b
         boolean res = SymbolManager.getInstance().addSymbol(symbol);

@@ -9,6 +9,7 @@ import front_end.symbol.SymbolManager;
 import utils.ErrorType;
 import utils.Printer;
 import utils.SyntaxVarType;
+import utils.TokenType;
 import utils.ValueType;
 
 import java.util.ArrayList;
@@ -32,6 +33,28 @@ public class UnaryExp extends Node {
             if (child.getDim() != null) return child.getDim();
         }
         return null;
+    }
+
+    @Override
+    public int execute() {
+        int ans = 0;
+        if (children.get(0) instanceof UnaryOp) {
+            TokenNode tokenNode = (TokenNode) children.get(0).getChildren().get(0);
+            UnaryExp unaryExp = ((UnaryExp)children.get(1));
+            if (tokenNode.getToken().getType() == TokenType.PLUS) {
+                ans = unaryExp.execute();
+            }
+            else if (tokenNode.getToken().getType() == TokenType.MINU) {
+                ans = -unaryExp.execute();
+            }
+            else {
+                ans = unaryExp.execute() == 0 ? 1 : 0;
+            }
+        }
+        else if (children.get(0) instanceof PrimaryExp) {
+            ans = children.get(0).execute();
+        }
+        return ans;
     }
 
     @Override

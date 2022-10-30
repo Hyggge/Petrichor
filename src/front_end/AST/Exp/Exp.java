@@ -18,4 +18,9 @@ public class Exp extends Node {
         }
         return null;
     }
+
+    @Override
+    public int execute() {
+        return children.get(0).execute();
+    }
 }

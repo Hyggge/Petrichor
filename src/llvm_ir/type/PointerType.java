@@ -1,6 +1,6 @@
 package llvm_ir.type;
 
-public class PointerType {
+public class PointerType extends Type{
     private Type targetType;
 
     @Override
