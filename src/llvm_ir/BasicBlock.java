@@ -3,6 +3,7 @@ package llvm_ir;
 import llvm_ir.type.OtherType;
 
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class BasicBlock extends Value {
     private LinkedList<Instr> instrList;
@@ -20,5 +21,13 @@ public class BasicBlock extends Value {
 
     public void setParentFunction(Function parentFunction) {
         this.parentFunction = parentFunction;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(name + ":\n\t");
+        sb.append(instrList.stream().map(instr -> instr.toString()).collect(Collectors.joining("\n\t")));
+        return sb.toString();
     }
 }

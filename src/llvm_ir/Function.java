@@ -5,6 +5,7 @@ import llvm_ir.type.Type;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class Function extends User{
     private ArrayList<Param> paramList;
@@ -12,7 +13,7 @@ public class Function extends User{
     private Type retType;
 
     public Function(String name, Type retType) {
-        super(OtherType.FUNCTION, name);
+        super(OtherType.FUNCTION, "@" + name);
         this.retType = retType;
         this.paramList = new ArrayList<>();
         this.BBList = new LinkedList<>();
@@ -26,4 +27,17 @@ public class Function extends User{
         BBList.add(bb);
     }
 
+    public Type getRetType() {
+        return retType;
+    }
+
+    @Override
+    public String toString() {
+        String paramInfo = paramList.stream().map(param -> param.toString()).collect(Collectors.joining(", "));
+        StringBuilder sb = new StringBuilder();
+        sb.append("define dso_local " + retType + " " + name + "(" + paramInfo + ") {\n");
+        sb.append(BBList.stream().map(block -> block.toString()).collect(Collectors.joining("\n")));
+        sb.append("\n}");
+        return sb.toString();
+    }
 }

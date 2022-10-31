@@ -21,5 +21,11 @@ public class Value {
         useList.add(use);
     }
 
+    public Type getType() {
+        return type;
+    }
 
+    public String getName() {
+        return name;
+    }
 }

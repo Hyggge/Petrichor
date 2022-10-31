@@ -7,6 +7,10 @@ public class PointerType extends Type{
         this.targetType = targetType;
     }
 
+    public Type getTargetType() {
+        return targetType;
+    }
+
     @Override
     public String toString() {
         return targetType.toString() + "*";

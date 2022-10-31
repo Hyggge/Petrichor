@@ -11,6 +11,6 @@ public class ArrayType extends Type{
 
     @Override
     public String toString() {
-        return "[" + length + " * " + eleType + "]";
+        return "[" + length + " x " + eleType + "]";
     }
 }

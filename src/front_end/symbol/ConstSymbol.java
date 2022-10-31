@@ -39,6 +39,18 @@ public class ConstSymbol extends Symbol {
         return dim;
     }
 
+    public ArrayList<Integer> getLenList() {
+        return lenList;
+    }
+
+    public int getTotLen() {
+        int totLen = 1;
+        for (int i = 0; i < dim; i++) {
+            totLen *= lenList.get(i);
+        }
+        return totLen;
+    }
+
     public Initial getInitial() {
         return initial;
     }
@@ -53,7 +65,7 @@ public class ConstSymbol extends Symbol {
 
     public int getConstValue(int idx1, int idx2) {
         if (idx1 == 0) return initial.getValues().get(idx2);
-        return initial.getValues().get(idx1 * lenList.get(0) + idx2);
+        return initial.getValues().get(idx1 * lenList.get(1) + idx2);
     }
 
     public boolean isGlobal() {

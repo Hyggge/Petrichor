@@ -70,6 +70,7 @@ public class Compiler {
             // generate IR
             Module module = IRBuilder.getInstance().getModule();
             compUnit.genIR();
+            Printer.printLLVM(module);
             System.out.println(module);
         }
 

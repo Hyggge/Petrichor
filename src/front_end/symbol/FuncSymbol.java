@@ -1,6 +1,6 @@
 package front_end.symbol;
 
-import llvm_ir.Value;
+import llvm_ir.Function;
 import utils.SymbolType;
 import utils.ValueType;
 
@@ -10,7 +10,7 @@ public class FuncSymbol extends Symbol {
     private ValueType returnType;
     private ArrayList<ValueType> FParamTypes;
     private ArrayList<Integer> FParamDims;
-    private Value llvmValue;
+    private Function llvmValue;
 
     public FuncSymbol(String symbolName, SymbolType symbolType, ValueType returnType) {
         super(symbolName, symbolType);
@@ -46,11 +46,11 @@ public class FuncSymbol extends Symbol {
         return FParamDims;
     }
 
-    public Value getLlvmValue() {
+    public Function getLlvmValue() {
         return llvmValue;
     }
 
-    public void setLlvmValue(Value llvmValue) {
+    public void setLlvmValue(Function llvmValue) {
         this.llvmValue = llvmValue;
     }
 

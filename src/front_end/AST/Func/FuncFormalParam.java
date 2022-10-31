@@ -6,8 +6,11 @@ import front_end.AST.TokenNode;
 import front_end.symbol.SymbolManager;
 import front_end.symbol.VarSymbol;
 import llvm_ir.IRBuilder;
+import llvm_ir.Instr;
 import llvm_ir.Param;
 import llvm_ir.Value;
+import llvm_ir.instr.AllocaInstr;
+import llvm_ir.instr.StoreInstr;
 import llvm_ir.type.BaseType;
 import llvm_ir.type.PointerType;
 import llvm_ir.type.Type;
@@ -72,13 +75,24 @@ public class FuncFormalParam extends Node {
     @Override
     public Value genIR() {
         SymbolManager.getInstance().addSymbol(symbol);
-        String name = symbol.getSymbolName();
-        Type type = symbol.getDim() == 0 ? BaseType.INT32 : new PointerType(BaseType.INT32);
-        Param param = new Param(type, name);
-        // 将value信息加入符号本身
-        symbol.setLlvmValue(param);
+        Type type = symbol.getDim() == 0 ? BaseType.INT32 : new PointerType(BaseType.INT32); // 只要是数组一律将类型变为i32，然后按照一维数组取值。
+        Param param = new Param(type, IRBuilder.getInstance().genParamName());
         // 将Param加入curFunction
         IRBuilder.getInstance().addParam(param);
+        // 如果参数是整数类型，为了防止被修改，需要在函数体为其创建一个指针
+        if (param.getType().isInt32()) {
+            // 我们需要使用alloc为参数创建一个指针，然后通过指针来访问形参，以满足SSA要求
+            Instr instr = new AllocaInstr(IRBuilder.getInstance().genLocalVarName(), param.getType());
+            IRBuilder.getInstance().addInstr(instr);
+            symbol.setLlvmValue(instr); // 将value信息加入符号本身
+            instr = new StoreInstr(IRBuilder.getInstance().genLocalVarName(), param, instr);
+            IRBuilder.getInstance().addInstr(instr);
+        }
+        // 如果参数是数组类型（传入的是i32*）则不需要，因为我们不会修改指针的值
+        else {
+            symbol.setLlvmValue(param);
+        }
+
         super.genIR();
         return null;
     }

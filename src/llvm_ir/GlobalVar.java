@@ -10,4 +10,9 @@ public class GlobalVar extends User{
         super(type, name);
         this.initial = initial;
     }
+
+    @Override
+    public String toString() {
+        return name + " = dso_local global " + initial;
+    }
 }

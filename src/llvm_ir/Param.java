@@ -12,4 +12,9 @@ public class Param extends Value{
     public void setParentFunction(Function parentFunction) {
         this.parentFunction = parentFunction;
     }
+
+    @Override
+    public String toString() {
+        return type + " " + name;
+    }
 }

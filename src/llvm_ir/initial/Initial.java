@@ -3,6 +3,7 @@ package llvm_ir.initial;
 import llvm_ir.type.Type;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Initial {
     private Type type;
@@ -24,9 +25,12 @@ public class Initial {
 
     @Override
     public String toString() {
-        return "Initial{" +
-                "type=" + type +
-                ", values=" + values +
-                '}';
+        if (type.isInt32()) {
+            return type + " " + values.get(0);
+        }
+        else {
+            String valueInfo = values.stream().map(number -> "i32 " + number).collect(Collectors.joining(", "));
+            return type + " [" + valueInfo + "]";
+        }
     }
 }

@@ -4,27 +4,27 @@ import llvm_ir.type.Type;
 
 public class Instr extends User{
     public static enum InstrType {
-        Alu,
-        Alloca,
-        Branch,
-        Call,
+        ALU,
+        ALLOCA,
+        BRANCH,
+        CALL,
         GEP,
-        Icmp,
-        Jump,
-        Load,
-        Phi,
-        Return,
-        Store,
-        Zext
+        ICMP,
+        JUMP,
+        LOAD,
+        PHI,
+        RETURN,
+        STORE,
+        ZEXT
     }
 
     private InstrType instrType;
     private BasicBlock parentBB;
 
-    public Instr(Type type, String name, InstrType instrType, BasicBlock parentBB) {
+    public Instr(Type type, String name, InstrType instrType) {
         super(type, name);
         this.instrType = instrType;
-        this.parentBB = parentBB;
+        this.parentBB = null;
     }
 
     public void setParentBB(BasicBlock parentBB) {

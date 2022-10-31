@@ -7,6 +7,13 @@ import front_end.symbol.ConstSymbol;
 import front_end.symbol.Symbol;
 import front_end.symbol.SymbolManager;
 import front_end.symbol.VarSymbol;
+import llvm_ir.Constant;
+import llvm_ir.IRBuilder;
+import llvm_ir.Instr;
+import llvm_ir.Value;
+import llvm_ir.instr.AluInstr;
+import llvm_ir.instr.GEPInstr;
+import llvm_ir.instr.LoadInstr;
 import utils.ErrorType;
 import utils.Printer;
 import utils.SyntaxVarType;
@@ -93,4 +100,182 @@ public class LValExp extends Node {
         }
         super.checkError();
     }
+
+    @Override
+    public Value genIR() {
+        // get num of '[]'
+        int num = 0;
+        ArrayList<Value> expIRList = new ArrayList<>();
+        for (Node child : children) {
+            if (child instanceof Exp) {
+                num++;
+                expIRList.add(child.genIR());
+            }
+        }
+        // get the Symbol
+        String symbolName = ((TokenNode)children.get(0)).getToken().getValue();
+        Symbol symbol = SymbolManager.getInstance().getSymbolByName(symbolName);
+        Instr instr = null;
+        int dim = 0;
+        ArrayList<Integer> lenList = null;
+
+        // 如果是常量 TODO: 优化思路——可以直接把常量“取值“后的结果封装成Constant形式
+        if (symbol instanceof ConstSymbol) {
+            ConstSymbol constSymbol = (ConstSymbol) symbol;
+            dim = constSymbol.getDim();
+            lenList = constSymbol.getLenList();
+            // 如果ident不是数组
+            if (dim == 0) {
+                instr = new LoadInstr(IRBuilder.getInstance().genLocalVarName(), constSymbol.getLlvmValue());
+                IRBuilder.getInstance().addInstr(instr);
+                return instr;
+            }
+            // 如果ident是一维数组
+            else if (dim == 1) {
+                // num < dim 则传地址
+                if (num == 0) {
+                    instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), constSymbol.getLlvmValue(), new Constant(0));
+                    IRBuilder.getInstance().addInstr(instr);
+                    return instr;
+                }
+                // num == dim == 1 则取值
+                else {
+                    instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), constSymbol.getLlvmValue(), expIRList.get(0));
+                    IRBuilder.getInstance().addInstr(instr);
+                    instr = new LoadInstr(IRBuilder.getInstance().genLocalVarName(), instr);
+                    IRBuilder.getInstance().addInstr(instr);
+                    return instr;
+                }
+            }
+            // 如果ident是二维数组
+            else {
+                // num < dim 则传地址
+                if (num == 0) {
+                    instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), constSymbol.getLlvmValue(), new Constant(0));
+                    IRBuilder.getInstance().addInstr(instr);
+                    return instr;
+                }
+                else if (num == 1) {
+                    instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.MUL, new Constant(lenList.get(1)), expIRList.get(0));
+                    IRBuilder.getInstance().addInstr(instr);
+                    instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), constSymbol.getLlvmValue(), instr);
+                    IRBuilder.getInstance().addInstr(instr);
+                    return instr;
+                }
+                // num == dim == 2 则取值
+                else {
+                    instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.MUL, new Constant(lenList.get(1)), expIRList.get(0));
+                    IRBuilder.getInstance().addInstr(instr);
+                    instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.ADD, instr, expIRList.get(1));
+                    IRBuilder.getInstance().addInstr(instr);
+                    instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), constSymbol.getLlvmValue(), instr);
+                    IRBuilder.getInstance().addInstr(instr);
+                    instr = new LoadInstr(IRBuilder.getInstance().genLocalVarName(), instr);
+                    IRBuilder.getInstance().addInstr(instr);
+                    return instr;
+                }
+            }
+        }
+
+        // 如果是变量
+        else {
+            VarSymbol varSymbol = (VarSymbol) symbol;
+            dim = varSymbol.getDim();
+            lenList = varSymbol.getLenList();
+            // 如果ident不是数组
+            if (dim == 0) {
+                instr = new LoadInstr(IRBuilder.getInstance().genLocalVarName(), varSymbol.getLlvmValue());
+                IRBuilder.getInstance().addInstr(instr);
+                return instr;
+            }
+            // 如果ident是一维数组
+            else if (dim == 1) {
+                // num < dim 则传地址
+                if (num == 0) {
+                    instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), varSymbol.getLlvmValue(), new Constant(0));
+                    IRBuilder.getInstance().addInstr(instr);
+                    return instr;
+                }
+                // num == dim == 1 则取值
+                else {
+                    instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), varSymbol.getLlvmValue(), expIRList.get(0));
+                    IRBuilder.getInstance().addInstr(instr);
+                    instr = new LoadInstr(IRBuilder.getInstance().genLocalVarName(), instr);
+                    IRBuilder.getInstance().addInstr(instr);
+                    return instr;
+                }
+            }
+            // 如果ident是二维数组
+            else {
+                // num < dim 则传地址
+                if (num == 0) {
+                    instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), varSymbol.getLlvmValue(), new Constant(0));
+                    IRBuilder.getInstance().addInstr(instr);
+                    return instr;
+                }
+                else if (num == 1) {
+                    instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.MUL, new Constant(lenList.get(1)), expIRList.get(0));
+                    IRBuilder.getInstance().addInstr(instr);
+                    instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), varSymbol.getLlvmValue(), instr);
+                    IRBuilder.getInstance().addInstr(instr);
+                    return instr;
+                }
+                // num == dim == 2 则取值
+                else {
+                    instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.MUL, new Constant(lenList.get(1)), expIRList.get(0));
+                    IRBuilder.getInstance().addInstr(instr);
+                    instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.ADD, instr, expIRList.get(1));
+                    IRBuilder.getInstance().addInstr(instr);
+                    instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), varSymbol.getLlvmValue(), instr);
+                    IRBuilder.getInstance().addInstr(instr);
+                    instr = new LoadInstr(IRBuilder.getInstance().genLocalVarName(), instr);
+                    IRBuilder.getInstance().addInstr(instr);
+                    return instr;
+                }
+            }
+        }
+    }
+
+    /**
+     * 该函数只能用在Assign语句中
+     * 此时LVal只能是变量
+     * 而且只能返回指向某一个i32的地址，用于定位那块内存
+     * @return
+     */
+    public Value getIRForAssign() {
+        ArrayList<Value> expIRList = new ArrayList<>();
+        for (Node child : children) {
+            if (child instanceof Exp) {
+                expIRList.add(child.genIR());
+            }
+        }
+        // get the Symbol
+        String symbolName = ((TokenNode)children.get(0)).getToken().getValue();
+        VarSymbol symbol = (VarSymbol) SymbolManager.getInstance().getSymbolByName(symbolName);
+        Instr instr = null;
+        int dim = symbol.getDim();
+        ArrayList<Integer> lenList = symbol.getLenList();
+
+        if (dim == 0) {
+            return symbol.getLlvmValue();
+        }
+        else if (dim == 1) {
+            instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), symbol.getLlvmValue(), expIRList.get(0));
+            IRBuilder.getInstance().addInstr(instr);
+            return instr;
+        }
+        else {
+            instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.MUL, new Constant(lenList.get(1)), expIRList.get(0));
+            IRBuilder.getInstance().addInstr(instr);
+            instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.ADD, instr, expIRList.get(1));
+            IRBuilder.getInstance().addInstr(instr);
+            instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), symbol.getLlvmValue(), instr);
+            IRBuilder.getInstance().addInstr(instr);
+            return instr;
+        }
+    }
+
+
+
+
 }

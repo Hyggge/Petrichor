@@ -1,6 +1,8 @@
 package front_end.AST.Exp;
 
 import front_end.AST.Node;
+import front_end.AST.TokenNode;
+import llvm_ir.Value;
 import utils.SyntaxVarType;
 
 import java.util.ArrayList;
@@ -32,5 +34,15 @@ public class PrimaryExp extends Node {
             ans = children.get(1).execute(); // '(' Exp ')'
         }
         return ans;
+    }
+
+    @Override
+    public Value genIR() {
+        // '(' Exp ')'
+        if (children.get(0) instanceof TokenNode) {
+            return children.get(1).genIR();
+        }
+        // LValExp | Number
+        return children.get(0).genIR();
     }
 }

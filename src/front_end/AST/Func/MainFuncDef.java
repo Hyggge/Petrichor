@@ -98,9 +98,10 @@ public class MainFuncDef extends Node {
         IRBuilder.getInstance().addFunction(function);
         IRBuilder.getInstance().setCurFunction(function);
         // 创建一个新的基本快，并加入curFunction
-        String bbName = IRBuilder.getInstance().getBBName();
+        String bbName = IRBuilder.getInstance().genBBName();
         BasicBlock bb = new BasicBlock(bbName);
         IRBuilder.getInstance().addBB(bb);
+        IRBuilder.getInstance().setCurBB(bb);
 
         super.genIR();
         SymbolManager.getInstance().leaveFuncDef();

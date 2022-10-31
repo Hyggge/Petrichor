@@ -5,10 +5,15 @@ import front_end.AST.Node;
 import front_end.AST.TokenNode;
 import front_end.symbol.ConstSymbol;
 import front_end.symbol.SymbolManager;
+import llvm_ir.Constant;
 import llvm_ir.GlobalVar;
 import llvm_ir.IRBuilder;
+import llvm_ir.Instr;
 import llvm_ir.Value;
 import llvm_ir.initial.Initial;
+import llvm_ir.instr.AllocaInstr;
+import llvm_ir.instr.GEPInstr;
+import llvm_ir.instr.StoreInstr;
 import llvm_ir.type.ArrayType;
 import llvm_ir.type.BaseType;
 import llvm_ir.type.Type;
@@ -48,24 +53,19 @@ public class ConstDef extends Node {
             }
         }
 
-        // 如果该常量是全局常量，我们可以直接求出对应的值
-        if (SymbolManager.getInstance().isGlobal()) {
-            Initial initial = null;
-            Type initialType = null;
-            // 判断是整数型常量还是数组型常量
-            if (dim == 0) initialType = BaseType.INT32;
-            else initialType = new ArrayType(totLen, BaseType.INT32);
-            // 获得初始值
-            if (children.get(num-1).getType() != SyntaxVarType.CONST_INITVAL) {
-                initial = new Initial(initialType, null);
-            } else {
-                ArrayList<Integer> values = ((ConstInitVal)children.get(num-1)).execute(dim);
-                initial = new Initial(initialType, values);
-            }
-            return new ConstSymbol(symbolName, symbolType, valueType, dim, lenList, initial);
+        Initial initial = null;
+        Type initialType = null;
+        // 判断是整数型常量还是数组型常量
+        if (dim == 0) initialType = BaseType.INT32;
+        else initialType = new ArrayType(totLen, BaseType.INT32);
+        // 获得初始值
+        if (children.get(num-1).getType() != SyntaxVarType.CONST_INITVAL) {
+            initial = new Initial(initialType, null);
+        } else {
+            ArrayList<Integer> values = ((ConstInitVal)children.get(num-1)).execute(dim);
+            initial = new Initial(initialType, values);
         }
-
-        return new ConstSymbol(symbolName, symbolType, valueType, dim, lenList);
+        return new ConstSymbol(symbolName, symbolType, valueType, dim, lenList, initial);
     }
 
     @Override
@@ -80,17 +80,50 @@ public class ConstDef extends Node {
     @Override
     public Value genIR() {
         SymbolManager.getInstance().addSymbol(symbol);
+        Initial initial = symbol.getInitial();
         // 生成global IR
         if (symbol.isGlobal()) {
             String name = IRBuilder.getInstance().genGlobalVarName();
-            Initial initial = symbol.getInitial();
             GlobalVar globalVar = new GlobalVar(initial.getType(), name, initial);
             // 将value信息加入符号
             symbol.setLlvmValue(globalVar);
             // 将golbalVar加入module
             IRBuilder.getInstance().addGlobalVar(globalVar);
         }
-        super.genIR();
+        // 如果生成局部常量
+        else {
+            Instr instr = null;
+            // 如果是非数组类型
+            if (symbol.getDim() == 0) {
+                // 生成alloc指令
+                Type allocType = BaseType.INT32;
+                instr = new AllocaInstr(IRBuilder.getInstance().genLocalVarName(), allocType);
+                symbol.setLlvmValue(instr);
+                IRBuilder.getInstance().addInstr(instr);
+                // 生成store指令，将初始值存入常量
+                int value = initial.getValues().get(0);
+                instr = new StoreInstr(IRBuilder.getInstance().genLocalVarName(), new Constant(value), instr);
+                IRBuilder.getInstance().addInstr(instr);
+            }
+            // 如果是数组类型
+            else {
+                // 生成alloc指令
+                Type allocType = new ArrayType(symbol.getTotLen(), BaseType.INT32);
+                instr = new AllocaInstr(IRBuilder.getInstance().genLocalVarName(), allocType);
+                symbol.setLlvmValue(instr);
+                IRBuilder.getInstance().addInstr(instr);
+                // 生成一系列GEP+store指令，将初始值存入常量
+                Value pointer = instr;
+                int offset = 0;
+                for (Integer value : initial.getValues()) {
+                    instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), pointer, new Constant(offset));
+                    IRBuilder.getInstance().addInstr(instr);
+                    instr = new StoreInstr(IRBuilder.getInstance().genLocalVarName(), new Constant(value), instr);
+                    IRBuilder.getInstance().addInstr(instr);
+                    offset++;
+                }
+            }
+        }
         return null;
     }
 }

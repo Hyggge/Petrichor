@@ -2,6 +2,7 @@ package front_end.AST.Var;
 
 import front_end.AST.Exp.Exp;
 import front_end.AST.Node;
+import llvm_ir.Value;
 import utils.SyntaxVarType;
 
 import java.util.ArrayList;
@@ -18,18 +19,28 @@ public class InitVal extends Node {
             Exp exp = (Exp) children.get(0);
             ans.add(exp.execute());
         }
-        else if (dim == 1) {
+        else {
             for (Node child : children) {
-                if (child.getType() == SyntaxVarType.INIT_VAL) {
-                    ArrayList<Integer> temp = ((InitVal) child).execute(0);
+                if (child instanceof InitVal) {
+                    ArrayList<Integer> temp = ((InitVal) child).execute(dim - 1);
                     ans.addAll(temp);
                 }
             }
         }
+        return ans;
+    }
+
+
+    public ArrayList<Value> genIRList(int dim) {
+        ArrayList<Value> ans = new ArrayList<>();
+        if (dim == 0) {
+            Value value = children.get(0).genIR();
+            ans.add(value);
+        }
         else {
             for (Node child : children) {
-                if (child.getType() == SyntaxVarType.INIT_VAL) {
-                    ArrayList<Integer> temp = ((InitVal) child).execute(1);
+                if (child instanceof InitVal) {
+                    ArrayList<Value> temp = ((InitVal)child).genIRList(dim - 1);
                     ans.addAll(temp);
                 }
             }

@@ -17,18 +17,10 @@ public class ConstInitVal extends Node {
             ConstExp constExp = (ConstExp) children.get(0);
             ans.add(constExp.execute());
         }
-        else if (dim == 1) {
-            for (Node child : children) {
-                if (child.getType() == SyntaxVarType.CONST_INITVAL) {
-                    ArrayList<Integer> temp = ((ConstInitVal) child).execute(0);
-                    ans.addAll(temp);
-                }
-            }
-        }
         else {
             for (Node child : children) {
-                if (child.getType() == SyntaxVarType.CONST_INITVAL) {
-                    ArrayList<Integer> temp = ((ConstInitVal) child).execute(1);
+                if (child instanceof ConstInitVal) {
+                    ArrayList<Integer> temp = ((ConstInitVal) child).execute(dim - 1);
                     ans.addAll(temp);
                 }
             }

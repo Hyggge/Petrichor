@@ -1,6 +1,7 @@
 package llvm_ir;
 
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class Module {
 
@@ -20,4 +21,12 @@ public class Module {
         functionList.add(function);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(globalVarList.stream().map(globalVar -> globalVar.toString()).collect(Collectors.joining("\n")));
+        sb.append("\n\n");
+        sb.append(functionList.stream().map(function -> function.toString()).collect(Collectors.joining("\n\n")));
+        return sb.toString();
+    }
 }

@@ -1,6 +1,7 @@
 package utils;
 
 import front_end.lexer.Token;
+import llvm_ir.Module;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -47,18 +48,20 @@ public class Printer {
     }
 
     public static void printAllErrorMsg() {
-        Object[] lineNumbers = errorMap.keySet().toArray();
-        Arrays.sort(lineNumbers);
-        for (Object lineNumber : lineNumbers) {
-            String content = lineNumber + " " + errorMap.get((Integer)lineNumber) + "\n";
-            if (onOff & ERR_PERM) {
+        if (onOff & ERR_PERM) {
+            Object[] lineNumbers = errorMap.keySet().toArray();
+            Arrays.sort(lineNumbers);
+            for (Object lineNumber : lineNumbers) {
+                String content = lineNumber + " " + errorMap.get((Integer)lineNumber) + "\n";
                 try {errFile.write((content).getBytes());} catch (IOException e) {throw new RuntimeException(e);}
             }
         }
     }
 
-    public static void printLLVM() {
-
+    public static void printLLVM(Module module) {
+        if (onOff & LLVM_PERM) {
+            try {llvmFile.write(module.toString().getBytes());} catch (IOException e) {throw new RuntimeException(e);}
+        }
     }
 
 }

@@ -6,6 +6,16 @@ import front_end.AST.TokenNode;
 import front_end.lexer.Token;
 import front_end.symbol.FuncSymbol;
 import front_end.symbol.SymbolManager;
+import llvm_ir.Constant;
+import llvm_ir.Function;
+import llvm_ir.IRBuilder;
+import llvm_ir.Instr;
+import llvm_ir.Value;
+import llvm_ir.instr.AluInstr;
+import llvm_ir.instr.CallInstr;
+import llvm_ir.instr.IcmpInstr;
+import llvm_ir.instr.ZextInstr;
+import llvm_ir.type.BaseType;
 import utils.ErrorType;
 import utils.Printer;
 import utils.SyntaxVarType;
@@ -92,5 +102,50 @@ public class UnaryExp extends Node {
 
         }
         super.checkError();
+    }
+
+    @Override
+    public Value genIR() {
+        if (children.get(0) instanceof PrimaryExp) {
+            return children.get(0).genIR();
+        }
+        else if (children.get(0) instanceof UnaryOp) {
+            TokenNode tokenNode = (TokenNode) children.get(0).getChildren().get(0);
+            Value operand1 = children.get(1).genIR();
+            Value operand2 = new Constant(0);
+            Instr instr = null;
+            if (tokenNode.getToken().getType() == TokenType.PLUS) {
+                return operand1;
+            }
+            else if (tokenNode.getToken().getType() == TokenType.MINU) {
+                instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.SUB, operand2, operand1);
+                IRBuilder.getInstance().addInstr(instr);
+                return instr;
+            }
+            else {
+                instr = new IcmpInstr(IRBuilder.getInstance().genLocalVarName(), IcmpInstr.Op.EQ, operand2, operand1);
+                IRBuilder.getInstance().addInstr(instr);
+                instr = new ZextInstr(IRBuilder.getInstance().genLocalVarName(), instr, BaseType.INT32);
+                IRBuilder.getInstance().addInstr(instr);
+                return instr;
+            }
+        }
+        else { // 函数调用
+            // 获得函数对应的Value
+            Token ident = ((TokenNode)children.get(0)).getToken();
+            FuncSymbol funcSymbol = (FuncSymbol)SymbolManager.getInstance().getSymbolByName(ident.getValue());
+            Function function = funcSymbol.getLlvmValue();
+            // 获得函数的参数
+            ArrayList<Value> params = new ArrayList<>();
+            if (children.get(2) instanceof FuncRealParams) {
+                for (Node child : children.get(2).getChildren()) {
+                    if (child instanceof Exp)
+                        params.add(child.genIR());
+                }
+            }
+            Instr instr = new CallInstr(IRBuilder.getInstance().genLocalVarName(), function, params);
+            IRBuilder.getInstance().addInstr(instr);
+            return instr;
+        }
     }
 }

@@ -2,6 +2,10 @@ package front_end.AST.Stmt;
 
 import front_end.AST.Exp.LValExp;
 import front_end.AST.Node;
+import llvm_ir.IRBuilder;
+import llvm_ir.Instr;
+import llvm_ir.Value;
+import llvm_ir.instr.StoreInstr;
 import utils.ErrorType;
 import utils.Printer;
 import utils.SyntaxVarType;
@@ -22,5 +26,14 @@ public class AssignStmt extends Stmt {
             Printer.addErrorMsg(lValExp.getEndLine(), ErrorType.h);
         }
         super.checkError();
+    }
+
+    @Override
+    public Value genIR() {
+        Value lVal = ((LValExp) children.get(0)).getIRForAssign();
+        Value exp = children.get(2).genIR();
+        Instr instr = new StoreInstr(IRBuilder.getInstance().genLocalVarName(), exp, lVal);
+        IRBuilder.getInstance().addInstr(instr);
+        return instr;
     }
 }
