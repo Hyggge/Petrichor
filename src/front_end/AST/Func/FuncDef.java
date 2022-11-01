@@ -93,16 +93,18 @@ public class FuncDef extends Node {
         String name = symbol.getSymbolName();
         Type retType = symbol.getReturnType() == ValueType.INT ? BaseType.INT32 : BaseType.VOID;
         Function function = new Function(name, retType);
-        // 将value加入符号本身
+        // 将函数IR加入符号本身
         symbol.setLlvmValue(function);
-        // 将函数IR加入module, 并设置为curFunction
+        // 将函数IR设置为curFunction
         IRBuilder.getInstance().setCurFunction(function);
         // 创建一个新的基本快作为curBB，并加入curFunction
         String bbName = IRBuilder.getInstance().genBBName();
         BasicBlock bb = new BasicBlock(bbName);
         IRBuilder.getInstance().setCurBB(bb);
-
+        // 解析函数参数和函数体
         super.genIR();
+        // 退出函数, 检查IR的最后一个BB是否为空
+        function.checkEmptyBB();
         SymbolManager.getInstance().leaveFuncDef();
         return null;
     }

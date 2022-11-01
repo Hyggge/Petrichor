@@ -1,5 +1,6 @@
 package llvm_ir;
 
+import llvm_ir.instr.ReturnInstr;
 import llvm_ir.type.OtherType;
 import llvm_ir.type.Type;
 
@@ -30,6 +31,14 @@ public class Function extends User{
 
     public Type getRetType() {
         return retType;
+    }
+
+    public void checkEmptyBB() {
+        BasicBlock lastBB = BBList.getLast();
+        if (lastBB.isEmpty()) {
+            if (retType.isInt32()) new ReturnInstr(IRBuilder.getInstance().genLocalVarName(), new Constant(0));
+            else new ReturnInstr(IRBuilder.getInstance().genLocalVarName(), null);
+        }
     }
 
     @Override

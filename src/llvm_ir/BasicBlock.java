@@ -24,6 +24,10 @@ public class BasicBlock extends Value {
         this.parentFunction = parentFunction;
     }
 
+    public boolean isEmpty() {
+        return instrList.isEmpty();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
