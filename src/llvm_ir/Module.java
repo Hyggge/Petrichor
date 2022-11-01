@@ -53,6 +53,14 @@ public class Module extends Value{
 
     @Override
     public void toAssembly() {
-
+        for (StringLiteral stringLiteral : stringLiterals) {
+            stringLiteral.toAssembly();
+        }
+        for (GlobalVar globalVar : globalVarList) {
+            globalVar.toAssembly();
+        }
+        for (Function function : functionList) {
+            function.toAssembly();
+        }
     }
 }

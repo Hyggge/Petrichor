@@ -7,7 +7,9 @@ public class Param extends Value{
 
     public Param(Type type, String name) {
         super(type, name);
-        if (IRBuilder.mode == IRBuilder.AUTO_INSERT_MODE) IRBuilder.getInstance().addParam(this);
+        if (IRBuilder.mode == IRBuilder.AUTO_INSERT_MODE) {
+            IRBuilder.getInstance().addParam(this);
+        }
     }
 
     public void setParentFunction(Function parentFunction) {

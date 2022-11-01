@@ -1,0 +1,14 @@
+.data
+g0: .word 1
+g1: .space 16
+
+
+.text
+li $t0 1
+sw $t0 g1+0
+li $t0 2
+sw $t0 g1+4
+li $t0 3
+sw $t0 g1+8
+li $t0 4
+sw $t0 g1+12

@@ -40,6 +40,7 @@ public class MipsBuilder {
         assemblyTable.addAssembly(assembly);
     }
 
+
     public AssemblyTable getAssemblyTable() {
         return assemblyTable;
     }

@@ -1,3 +1,5 @@
+import back_end.mips.AssemblyTable;
+import back_end.mips.MipsBuilder;
 import front_end.AST.Node;
 import front_end.lexer.Lexer;
 import front_end.lexer.Token;
@@ -72,7 +74,10 @@ public class Compiler {
             Module module = IRBuilder.getInstance().getModule();
             compUnit.genIR();
             Printer.printLLVM(module);
-            System.out.println(module);
+            // generate MIPS
+            AssemblyTable assemblyTable = MipsBuilder.getInstance().getAssemblyTable();
+            module.toAssembly();
+            Printer.printMIPS(assemblyTable);
         }
 
 

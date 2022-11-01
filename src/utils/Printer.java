@@ -1,5 +1,6 @@
 package utils;
 
+import back_end.mips.AssemblyTable;
 import front_end.lexer.Token;
 import llvm_ir.Module;
 
@@ -61,6 +62,12 @@ public class Printer {
     public static void printLLVM(Module module) {
         if (onOff & LLVM_PERM) {
             try {llvmFile.write(module.toString().getBytes());} catch (IOException e) {throw new RuntimeException(e);}
+        }
+    }
+
+    public static void printMIPS(AssemblyTable assemblyTable) {
+        if (onOff & MIPS_PERM) {
+            try {mipsFile.write(assemblyTable.toString().getBytes());} catch (IOException e) {throw new RuntimeException(e);}
         }
     }
 

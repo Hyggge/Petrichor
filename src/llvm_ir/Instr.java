@@ -26,7 +26,9 @@ public class Instr extends User{
         super(type, name);
         this.instrType = instrType;
         this.parentBB = null;
-        if (IRBuilder.mode == IRBuilder.AUTO_INSERT_MODE) IRBuilder.getInstance().addInstr(this);
+        if (IRBuilder.mode == IRBuilder.AUTO_INSERT_MODE) {
+            IRBuilder.getInstance().addInstr(this);
+        }
     }
 
     public void setParentBB(BasicBlock parentBB) {
