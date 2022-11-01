@@ -12,3 +12,4 @@ li $t0 3
 sw $t0 g1+8
 li $t0 4
 sw $t0 g1+12
+jal main

@@ -1,5 +1,6 @@
 package llvm_ir;
 
+import back_end.mips.assembly.JumpAsm;
 import llvm_ir.instr.IOInstr;
 import llvm_ir.type.OtherType;
 
@@ -59,6 +60,9 @@ public class Module extends Value{
         for (GlobalVar globalVar : globalVarList) {
             globalVar.toAssembly();
         }
+
+        new JumpAsm(JumpAsm.Op.JAL, "main");
+
         for (Function function : functionList) {
             function.toAssembly();
         }

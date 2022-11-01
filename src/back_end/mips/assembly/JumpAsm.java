@@ -29,6 +29,6 @@ public class JumpAsm extends Assembly {
         if (op.ordinal() == Op.JR.ordinal()) {
             return op.toString().toLowerCase() + " " + rd;
         }
-        return op.toString().toString() + " " + target;
+        return op.toString().toLowerCase() + " " + target;
     }
 }
