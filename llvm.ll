@@ -4,8 +4,12 @@ declare void @putstr(i8* )
 
 @s0 = constant [2 x i8] c"
 \00"
+@s1 = constant [2 x i8] c"
+\00"
+@s2 = constant [2 x i8] c"
+\00"
 
-
+@g0 = dso_local global i32 1
 
 define dso_local i32 @func(i32* %a0, i32 %a1) {
 b0:
@@ -62,8 +66,14 @@ b8:
 	ret i32 %v1
 }
 
-define dso_local i32 @main() {
+define dso_local void @change() {
 b9:
+	store i32 2, i32* @g0
+	ret void
+}
+
+define dso_local i32 @main() {
+b10:
 	%v0 = alloca i32
 	%v1 = call i32 (...) @getint()
 	store i32 %v1, i32* %v0
@@ -92,5 +102,10 @@ b9:
 	store i32 %v24, i32* %v21
 	%v26 = load i32, i32* %v21
 	call void @putint(i32 %v26)
+	call void @putstr(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @s1, i64 0, i64 0))
+	call void @change()
+	%v30 = load i32, i32* @g0
+	call void @putint(i32 %v30)
+	call void @putstr(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @s2, i64 0, i64 0))
 	ret i32 0
 }

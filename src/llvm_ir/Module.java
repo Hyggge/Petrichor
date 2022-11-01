@@ -1,18 +1,20 @@
 package llvm_ir;
 
 import llvm_ir.instr.IOInstr;
+import llvm_ir.type.OtherType;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
-public class Module {
+public class Module extends Value{
     private final ArrayList<String> declareList;
     private final LinkedList<StringLiteral> stringLiterals;
     private final LinkedList<GlobalVar> globalVarList;
     private final LinkedList<Function> functionList;
 
     public Module() {
+        super(OtherType.MODULE, "module");
         this.globalVarList = new LinkedList<>();
         this.functionList = new LinkedList<>();
         this.stringLiterals = new LinkedList<>();
@@ -47,5 +49,10 @@ public class Module {
         sb.append("\n\n");
         sb.append(functionList.stream().map(function -> function.toString()).collect(Collectors.joining("\n\n")));
         return sb.toString();
+    }
+
+    @Override
+    public void toAssembly() {
+
     }
 }
