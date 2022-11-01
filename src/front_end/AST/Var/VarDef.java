@@ -62,7 +62,7 @@ public class VarDef extends Node {
             else initialType = new ArrayType(totLen, BaseType.INT32);
             // 获得初始值
             if (children.get(children.size()-1).getType() != SyntaxVarType.INIT_VAL) {
-                initial = new Initial(initialType, null);
+                initial = new Initial(initialType, null); // 没有初始值
             } else {
                 ArrayList<Integer> values = ((InitVal)children.get(children.size()-1)).execute(dim);
                 initial = new Initial(initialType, values);
