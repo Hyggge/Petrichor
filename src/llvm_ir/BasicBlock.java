@@ -28,6 +28,10 @@ public class BasicBlock extends Value {
         return instrList.isEmpty();
     }
 
+    public Instr getLastInstr() {
+        return instrList.getLast();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

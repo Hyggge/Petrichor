@@ -10,7 +10,9 @@ public class ReturnInstr extends Instr {
     public ReturnInstr(String name, Value retValue) {
         super(BaseType.VOID, name, InstrType.RETURN);
         this.retValue = retValue;
-        addOperands(retValue);
+        // 如果retValue != null, 也就是非"ret void"时候，需要记录def-use关系。
+        if(retValue != null) addOperands(retValue);
+
     }
 
     @Override

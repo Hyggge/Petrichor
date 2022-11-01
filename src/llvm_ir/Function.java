@@ -33,10 +33,13 @@ public class Function extends User{
         return retType;
     }
 
+    // 我们需要保证函数最后一个BB一定有一个ret语句
     public void checkEmptyBB() {
         BasicBlock lastBB = BBList.getLast();
-        if (lastBB.isEmpty()) {
+        if (lastBB.isEmpty() || ! (lastBB.getLastInstr() instanceof ReturnInstr)) {
+            // int类型函数, 默认最后一句为'ret i32 0'
             if (retType.isInt32()) new ReturnInstr(IRBuilder.getInstance().genLocalVarName(), new Constant(0));
+            // void 类型函数，默认最后一句为'ret void'
             else new ReturnInstr(IRBuilder.getInstance().genLocalVarName(), null);
         }
     }
