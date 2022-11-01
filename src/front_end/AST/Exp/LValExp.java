@@ -169,6 +169,9 @@ public class LValExp extends Node {
         // 如果是变量
         else {
             VarSymbol varSymbol = (VarSymbol) symbol;
+            if (varSymbol == null) {
+                int a = 0;
+            }
             dim = varSymbol.getDim();
             lenList = varSymbol.getLenList();
             // 如果ident不是数组
