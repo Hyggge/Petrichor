@@ -18,7 +18,7 @@ public class Function extends User{
         this.retType = retType;
         this.paramList = new ArrayList<>();
         this.BBList = new LinkedList<>();
-        IRBuilder.getInstance().addFunction(this);
+        if (IRBuilder.mode == IRBuilder.AUTO_INSERT_MODE) IRBuilder.getInstance().addFunction(this);
     }
 
     public void addParam(Param param) {

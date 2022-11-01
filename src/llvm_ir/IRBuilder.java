@@ -3,6 +3,11 @@ package llvm_ir;
 import java.util.Stack;
 
 public class IRBuilder {
+    // mode为AUTO_INSERT_MODE的时候，表示新建fucntion、globalVal、String、Param、BB、Instr时候会自动插入对应位置
+    public static final int AUTO_INSERT_MODE = 1;
+    public static final int DEFAULT_MODE = 0;
+    public static int mode = DEFAULT_MODE;
+
     // static attributes
     private static IRBuilder irBuilder = new IRBuilder();
     private static final String GLOBAL_VAR_NAME_PREFIX = "@g";

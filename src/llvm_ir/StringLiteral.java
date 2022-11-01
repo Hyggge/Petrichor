@@ -10,7 +10,7 @@ public class StringLiteral extends Value{
     public StringLiteral(String name, String content) {
         super(new PointerType(new ArrayType(content.length() + 1, BaseType.INT8)), name);
         this.content = content;
-        IRBuilder.getInstance().addStringLiteral(this);
+        if (IRBuilder.mode == IRBuilder.AUTO_INSERT_MODE) IRBuilder.getInstance().addStringLiteral(this);
     }
 
     @Override

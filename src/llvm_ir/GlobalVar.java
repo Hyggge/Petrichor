@@ -9,7 +9,7 @@ public class GlobalVar extends User{
     public GlobalVar(Type type, String name, Initial initial) {
         super(type, name);
         this.initial = initial;
-        IRBuilder.getInstance().addGlobalVar(this);
+        if (IRBuilder.mode == IRBuilder.AUTO_INSERT_MODE) IRBuilder.getInstance().addGlobalVar(this);
     }
 
     @Override

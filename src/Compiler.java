@@ -68,6 +68,7 @@ public class Compiler {
             compUnit.checkError();
             Printer.printAllErrorMsg();
             // generate IR
+            IRBuilder.mode = IRBuilder.AUTO_INSERT_MODE;
             Module module = IRBuilder.getInstance().getModule();
             compUnit.genIR();
             Printer.printLLVM(module);

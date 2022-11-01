@@ -77,8 +77,6 @@ public class FuncFormalParam extends Node {
         SymbolManager.getInstance().addSymbol(symbol);
         Type type = symbol.getDim() == 0 ? BaseType.INT32 : new PointerType(BaseType.INT32); // 只要是数组一律将类型变为i32，然后按照一维数组取值。
         Param param = new Param(type, IRBuilder.getInstance().genParamName());
-        // 将Param加入curFunction
-        IRBuilder.getInstance().addParam(param);
         // 如果参数是整数类型，为了防止被修改，需要在函数体为其创建一个指针
         if (param.getType().isInt32()) {
             // 我们需要使用alloc为参数创建一个指针，然后通过指针来访问形参，以满足SSA要求
