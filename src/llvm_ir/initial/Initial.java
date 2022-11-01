@@ -5,7 +5,9 @@ import llvm_ir.type.Type;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-// 只有GlobalVal才有Initial
+// 只有全局变量，全局常量，局部常量的Symbol中才有Initial（因为这些的初始值都可以计算出）
+// 对于全局变量和常量，Initial会直接加入对应的GlobalVal
+// 对于局部常量，Initial只是起到了优化作用，仍然需要通过store指令将初始值存入对应的位置
 public class Initial {
     private Type type;
     private ArrayList<Integer> values;

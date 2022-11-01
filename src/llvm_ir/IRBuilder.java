@@ -8,7 +8,7 @@ public class IRBuilder {
     private static final String GLOBAL_VAR_NAME_PREFIX = "@g";
     private static final String STRING_LITERAL_NAME_PREFIX = "@s";
     private static final String LOCAL_VAR_NAME_PREFIX = "%v";
-    private static final String PARAM_NAME_PREFIX = "a";
+    private static final String PARAM_NAME_PREFIX = "%a";
     private static final String BB_NAME_PREFIX = "b";
 
     public static IRBuilder getInstance() {
