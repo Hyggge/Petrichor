@@ -16,6 +16,7 @@ import llvm_ir.instr.GEPInstr;
 import llvm_ir.instr.StoreInstr;
 import llvm_ir.type.ArrayType;
 import llvm_ir.type.BaseType;
+import llvm_ir.type.PointerType;
 import llvm_ir.type.Type;
 import utils.ErrorType;
 import utils.Printer;
@@ -84,11 +85,9 @@ public class ConstDef extends Node {
         // 生成global IR
         if (symbol.isGlobal()) {
             String name = IRBuilder.getInstance().genGlobalVarName();
-            GlobalVar globalVar = new GlobalVar(initial.getType(), name, initial);
+            GlobalVar globalVar = new GlobalVar(new PointerType(initial.getType()), name, initial);
             // 将value信息加入符号
             symbol.setLlvmValue(globalVar);
-            // 将golbalVar加入module
-            IRBuilder.getInstance().addGlobalVar(globalVar);
         }
         // 如果生成局部常量
         else {
@@ -99,11 +98,9 @@ public class ConstDef extends Node {
                 Type allocType = BaseType.INT32;
                 instr = new AllocaInstr(IRBuilder.getInstance().genLocalVarName(), allocType);
                 symbol.setLlvmValue(instr);
-                IRBuilder.getInstance().addInstr(instr);
                 // 生成store指令，将初始值存入常量
                 int value = initial.getValues().get(0);
                 instr = new StoreInstr(IRBuilder.getInstance().genLocalVarName(), new Constant(value), instr);
-                IRBuilder.getInstance().addInstr(instr);
             }
             // 如果是数组类型
             else {
@@ -111,15 +108,12 @@ public class ConstDef extends Node {
                 Type allocType = new ArrayType(symbol.getTotLen(), BaseType.INT32);
                 instr = new AllocaInstr(IRBuilder.getInstance().genLocalVarName(), allocType);
                 symbol.setLlvmValue(instr);
-                IRBuilder.getInstance().addInstr(instr);
                 // 生成一系列GEP+store指令，将初始值存入常量
                 Value pointer = instr;
                 int offset = 0;
                 for (Integer value : initial.getValues()) {
                     instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), pointer, new Constant(offset));
-                    IRBuilder.getInstance().addInstr(instr);
                     instr = new StoreInstr(IRBuilder.getInstance().genLocalVarName(), new Constant(value), instr);
-                    IRBuilder.getInstance().addInstr(instr);
                     offset++;
                 }
             }

@@ -42,7 +42,11 @@ public class PrimaryExp extends Node {
         if (children.get(0) instanceof TokenNode) {
             return children.get(1).genIR();
         }
-        // LValExp | Number
+        // LValExp
+        else if (children.get(0) instanceof LValExp) {
+            return ((LValExp)children.get(0)).genIRForValue();
+        }
+        // Number
         return children.get(0).genIR();
     }
 }

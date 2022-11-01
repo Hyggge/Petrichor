@@ -16,6 +16,7 @@ import llvm_ir.instr.GEPInstr;
 import llvm_ir.instr.StoreInstr;
 import llvm_ir.type.ArrayType;
 import llvm_ir.type.BaseType;
+import llvm_ir.type.PointerType;
 import llvm_ir.type.Type;
 import utils.ErrorType;
 import utils.Printer;
@@ -88,11 +89,9 @@ public class VarDef extends Node {
         // 如果生成全局变量
         if (symbol.isGlobal()) {
             String name = IRBuilder.getInstance().genGlobalVarName();
-            GlobalVar globalVar = new GlobalVar(initial.getType(), name, initial);
+            GlobalVar globalVar = new GlobalVar(new PointerType(initial.getType()) , name, initial);
             // 将value信息加入符号
             symbol.setLlvmValue(globalVar);
-            // 将golbalVar加入module
-            IRBuilder.getInstance().addGlobalVar(globalVar);
         }
         // 如果生成局部变量
         else {
@@ -103,13 +102,11 @@ public class VarDef extends Node {
                 Type allocType = BaseType.INT32;
                 instr = new AllocaInstr(IRBuilder.getInstance().genLocalVarName(), allocType);
                 symbol.setLlvmValue(instr);
-                IRBuilder.getInstance().addInstr(instr);
                 // 生成 store指令，将初始值存入变量
                 if (children.get(children.size() - 1) instanceof InitVal) {
                     InitVal initVal = (InitVal) children.get(children.size() - 1);
                     Value value = initVal.genIRList(0).get(0);
                     instr = new StoreInstr(IRBuilder.getInstance().genLocalVarName(), value, instr);
-                    IRBuilder.getInstance().addInstr(instr);
                 }
 
             }
@@ -119,7 +116,6 @@ public class VarDef extends Node {
                 Type allocType = new ArrayType(symbol.getTotLen(), BaseType.INT32);
                 instr = new AllocaInstr(IRBuilder.getInstance().genLocalVarName(), allocType);
                 symbol.setLlvmValue(instr);
-                IRBuilder.getInstance().addInstr(instr);
                 // 生成一系列GEP+store指令，将初始值存入常量
                 if (children.get(children.size() - 1) instanceof InitVal) {
                     Value pointer = instr;
@@ -128,9 +124,7 @@ public class VarDef extends Node {
                     int offset = 0;
                     for (Value value : valueList) {
                         instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), pointer, new Constant(offset));
-                        IRBuilder.getInstance().addInstr(instr);
                         instr = new StoreInstr(IRBuilder.getInstance().genLocalVarName(), value, instr);
-                        IRBuilder.getInstance().addInstr(instr);
                         offset++;
                     }
                 }

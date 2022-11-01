@@ -101,8 +101,8 @@ public class LValExp extends Node {
         super.checkError();
     }
 
-    @Override
-    public Value genIR() {
+
+    public Value genIRForValue() {
         // get num of '[]'
         int num = 0;
         ArrayList<Value> expIRList = new ArrayList<>();
@@ -127,7 +127,6 @@ public class LValExp extends Node {
             // 如果ident不是数组
             if (dim == 0) {
                 instr = new LoadInstr(IRBuilder.getInstance().genLocalVarName(), constSymbol.getLlvmValue());
-                IRBuilder.getInstance().addInstr(instr);
                 return instr;
             }
             // 如果ident是一维数组
@@ -135,15 +134,12 @@ public class LValExp extends Node {
                 // num < dim 则传地址
                 if (num == 0) {
                     instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), constSymbol.getLlvmValue(), new Constant(0));
-                    IRBuilder.getInstance().addInstr(instr);
                     return instr;
                 }
                 // num == dim == 1 则取值
                 else {
                     instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), constSymbol.getLlvmValue(), expIRList.get(0));
-                    IRBuilder.getInstance().addInstr(instr);
                     instr = new LoadInstr(IRBuilder.getInstance().genLocalVarName(), instr);
-                    IRBuilder.getInstance().addInstr(instr);
                     return instr;
                 }
             }
@@ -152,26 +148,19 @@ public class LValExp extends Node {
                 // num < dim 则传地址
                 if (num == 0) {
                     instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), constSymbol.getLlvmValue(), new Constant(0));
-                    IRBuilder.getInstance().addInstr(instr);
                     return instr;
                 }
                 else if (num == 1) {
                     instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.MUL, new Constant(lenList.get(1)), expIRList.get(0));
-                    IRBuilder.getInstance().addInstr(instr);
                     instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), constSymbol.getLlvmValue(), instr);
-                    IRBuilder.getInstance().addInstr(instr);
                     return instr;
                 }
                 // num == dim == 2 则取值
                 else {
                     instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.MUL, new Constant(lenList.get(1)), expIRList.get(0));
-                    IRBuilder.getInstance().addInstr(instr);
                     instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.ADD, instr, expIRList.get(1));
-                    IRBuilder.getInstance().addInstr(instr);
                     instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), constSymbol.getLlvmValue(), instr);
-                    IRBuilder.getInstance().addInstr(instr);
                     instr = new LoadInstr(IRBuilder.getInstance().genLocalVarName(), instr);
-                    IRBuilder.getInstance().addInstr(instr);
                     return instr;
                 }
             }
@@ -185,7 +174,6 @@ public class LValExp extends Node {
             // 如果ident不是数组
             if (dim == 0) {
                 instr = new LoadInstr(IRBuilder.getInstance().genLocalVarName(), varSymbol.getLlvmValue());
-                IRBuilder.getInstance().addInstr(instr);
                 return instr;
             }
             // 如果ident是一维数组
@@ -193,15 +181,12 @@ public class LValExp extends Node {
                 // num < dim 则传地址
                 if (num == 0) {
                     instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), varSymbol.getLlvmValue(), new Constant(0));
-                    IRBuilder.getInstance().addInstr(instr);
                     return instr;
                 }
                 // num == dim == 1 则取值
                 else {
                     instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), varSymbol.getLlvmValue(), expIRList.get(0));
-                    IRBuilder.getInstance().addInstr(instr);
                     instr = new LoadInstr(IRBuilder.getInstance().genLocalVarName(), instr);
-                    IRBuilder.getInstance().addInstr(instr);
                     return instr;
                 }
             }
@@ -210,26 +195,19 @@ public class LValExp extends Node {
                 // num < dim 则传地址
                 if (num == 0) {
                     instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), varSymbol.getLlvmValue(), new Constant(0));
-                    IRBuilder.getInstance().addInstr(instr);
                     return instr;
                 }
                 else if (num == 1) {
                     instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.MUL, new Constant(lenList.get(1)), expIRList.get(0));
-                    IRBuilder.getInstance().addInstr(instr);
                     instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), varSymbol.getLlvmValue(), instr);
-                    IRBuilder.getInstance().addInstr(instr);
                     return instr;
                 }
                 // num == dim == 2 则取值
                 else {
                     instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.MUL, new Constant(lenList.get(1)), expIRList.get(0));
-                    IRBuilder.getInstance().addInstr(instr);
                     instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.ADD, instr, expIRList.get(1));
-                    IRBuilder.getInstance().addInstr(instr);
                     instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), varSymbol.getLlvmValue(), instr);
-                    IRBuilder.getInstance().addInstr(instr);
                     instr = new LoadInstr(IRBuilder.getInstance().genLocalVarName(), instr);
-                    IRBuilder.getInstance().addInstr(instr);
                     return instr;
                 }
             }
@@ -242,7 +220,7 @@ public class LValExp extends Node {
      * 而且只能返回指向某一个i32的地址，用于定位那块内存
      * @return
      */
-    public Value getIRForAssign() {
+    public Value genIRForAssign() {
         ArrayList<Value> expIRList = new ArrayList<>();
         for (Node child : children) {
             if (child instanceof Exp) {
@@ -261,16 +239,12 @@ public class LValExp extends Node {
         }
         else if (dim == 1) {
             instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), symbol.getLlvmValue(), expIRList.get(0));
-            IRBuilder.getInstance().addInstr(instr);
             return instr;
         }
         else {
             instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.MUL, new Constant(lenList.get(1)), expIRList.get(0));
-            IRBuilder.getInstance().addInstr(instr);
             instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.ADD, instr, expIRList.get(1));
-            IRBuilder.getInstance().addInstr(instr);
             instr = new GEPInstr(IRBuilder.getInstance().genLocalVarName(), symbol.getLlvmValue(), instr);
-            IRBuilder.getInstance().addInstr(instr);
             return instr;
         }
     }

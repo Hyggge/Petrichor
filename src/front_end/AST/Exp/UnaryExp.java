@@ -119,14 +119,11 @@ public class UnaryExp extends Node {
             }
             else if (tokenNode.getToken().getType() == TokenType.MINU) {
                 instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.SUB, operand2, operand1);
-                IRBuilder.getInstance().addInstr(instr);
                 return instr;
             }
             else {
                 instr = new IcmpInstr(IRBuilder.getInstance().genLocalVarName(), IcmpInstr.Op.EQ, operand2, operand1);
-                IRBuilder.getInstance().addInstr(instr);
                 instr = new ZextInstr(IRBuilder.getInstance().genLocalVarName(), instr, BaseType.INT32);
-                IRBuilder.getInstance().addInstr(instr);
                 return instr;
             }
         }
@@ -144,7 +141,6 @@ public class UnaryExp extends Node {
                 }
             }
             Instr instr = new CallInstr(IRBuilder.getInstance().genLocalVarName(), function, params);
-            IRBuilder.getInstance().addInstr(instr);
             return instr;
         }
     }

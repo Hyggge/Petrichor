@@ -96,12 +96,10 @@ public class FuncDef extends Node {
         // 将value加入符号本身
         symbol.setLlvmValue(function);
         // 将函数IR加入module, 并设置为curFunction
-        IRBuilder.getInstance().addFunction(function);
         IRBuilder.getInstance().setCurFunction(function);
         // 创建一个新的基本快作为curBB，并加入curFunction
         String bbName = IRBuilder.getInstance().genBBName();
         BasicBlock bb = new BasicBlock(bbName);
-        IRBuilder.getInstance().addBB(bb);
         IRBuilder.getInstance().setCurBB(bb);
 
         super.genIR();

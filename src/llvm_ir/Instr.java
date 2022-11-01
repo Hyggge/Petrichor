@@ -15,7 +15,8 @@ public class Instr extends User{
         PHI,
         RETURN,
         STORE,
-        ZEXT
+        ZEXT,
+        IO
     }
 
     private InstrType instrType;
@@ -25,6 +26,7 @@ public class Instr extends User{
         super(type, name);
         this.instrType = instrType;
         this.parentBB = null;
+        IRBuilder.getInstance().addInstr(this);
     }
 
     public void setParentBB(BasicBlock parentBB) {

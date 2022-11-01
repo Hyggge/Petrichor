@@ -7,8 +7,9 @@ import llvm_ir.type.BaseType;
 public class JumpInstr extends Instr {
     private BasicBlock targetBB;
 
-    public JumpInstr(String name) {
+    public JumpInstr(String name, BasicBlock targetBB) {
         super(BaseType.VOID, name, InstrType.JUMP);
+        this.targetBB = targetBB;
     }
 
     @Override

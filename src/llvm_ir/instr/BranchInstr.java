@@ -4,24 +4,23 @@ import llvm_ir.BasicBlock;
 import llvm_ir.Instr;
 import llvm_ir.Value;
 import llvm_ir.type.BaseType;
-import llvm_ir.type.Type;
 
 public class BranchInstr extends Instr {
     private Value con;
-    private BasicBlock trueTarget;
-    private BasicBlock falseTarget;
+    private BasicBlock thenBlock;
+    private BasicBlock elseBlock;
 
-    public BranchInstr(Type type, String name, Value con, BasicBlock tureTarget, BasicBlock falseTarget) {
+    public BranchInstr(String name, Value con, BasicBlock thenBlock, BasicBlock elseBlock) {
         super(BaseType.VOID, name, InstrType.BRANCH);
         this.con = con;
-        this.trueTarget = tureTarget;
-        this.falseTarget = falseTarget;
-        addOperands(tureTarget);
-        addOperands(falseTarget);
+        this.thenBlock = thenBlock;
+        this.elseBlock = elseBlock;
+        addOperands(thenBlock);
+        addOperands(elseBlock);
     }
 
     @Override
     public String toString() {
-        return "br i1 " + con.getName() + ", label %" + trueTarget.getName() + ", label %" + falseTarget.getName();
+        return "br i1 " + con.getName() + ", label %" + thenBlock.getName() + ", label %" + elseBlock.getName();
     }
 }

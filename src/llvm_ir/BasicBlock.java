@@ -13,6 +13,7 @@ public class BasicBlock extends Value {
         super(OtherType.FUNCTION, name);
         this.instrList = new LinkedList<>();
         this.parentFunction = null;
+        IRBuilder.getInstance().addBB(this);
     }
 
     public void addInstr(Instr instr) {

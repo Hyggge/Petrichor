@@ -51,13 +51,11 @@ public class AddExp extends Node {
             if (children.get(i) instanceof TokenNode && ((TokenNode)children.get(i)).getToken().getType() == TokenType.PLUS) {
                 operand2 = children.get(++i).genIR();
                 instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.ADD, operand1, operand2);
-                IRBuilder.getInstance().addInstr(instr);
                 operand1 = instr;
             }
             else {
                 operand2 = children.get(++i).genIR();
                 instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.SUB, operand1, operand2);
-                IRBuilder.getInstance().addInstr(instr);
                 operand1 = instr;
             }
         }

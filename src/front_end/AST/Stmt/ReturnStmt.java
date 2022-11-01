@@ -48,7 +48,6 @@ public class ReturnStmt extends Stmt {
             retValue = new Constant(0);
         }
         instr = new ReturnInstr(IRBuilder.getInstance().genLocalVarName(), retValue);
-        IRBuilder.getInstance().addInstr(instr);
         return instr;
     }
 }

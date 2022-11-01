@@ -2,6 +2,11 @@ package front_end.AST.Stmt;
 
 import front_end.AST.Exp.LValExp;
 import front_end.AST.Node;
+import llvm_ir.IRBuilder;
+import llvm_ir.Instr;
+import llvm_ir.Value;
+import llvm_ir.instr.IOInstr;
+import llvm_ir.instr.StoreInstr;
 import utils.ErrorType;
 import utils.Printer;
 import utils.SyntaxVarType;
@@ -22,5 +27,13 @@ public class GetIntStmt extends Stmt {
             Printer.addErrorMsg(lValExp.getEndLine(), ErrorType.h);
         }
         super.checkError();
+    }
+
+    @Override
+    public Value genIR() {
+        Value pointer = ((LValExp) children.get(0)).genIRForAssign();
+        IOInstr.GetInt value = new IOInstr.GetInt(IRBuilder.getInstance().genLocalVarName());
+        Instr instr = new StoreInstr(IRBuilder.getInstance().genLocalVarName(), value, pointer);
+        return instr;
     }
 }

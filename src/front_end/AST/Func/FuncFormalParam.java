@@ -83,10 +83,8 @@ public class FuncFormalParam extends Node {
         if (param.getType().isInt32()) {
             // 我们需要使用alloc为参数创建一个指针，然后通过指针来访问形参，以满足SSA要求
             Instr instr = new AllocaInstr(IRBuilder.getInstance().genLocalVarName(), param.getType());
-            IRBuilder.getInstance().addInstr(instr);
             symbol.setLlvmValue(instr); // 将value信息加入符号本身
             instr = new StoreInstr(IRBuilder.getInstance().genLocalVarName(), param, instr);
-            IRBuilder.getInstance().addInstr(instr);
         }
         // 如果参数是数组类型（传入的是i32*）则不需要，因为我们不会修改指针的值
         else {

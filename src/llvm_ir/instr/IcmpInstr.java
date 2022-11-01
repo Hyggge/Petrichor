@@ -7,7 +7,7 @@ import llvm_ir.type.BaseType;
 public class IcmpInstr extends Instr {
     public enum Op {
         EQ,
-        NEQ,
+        NE,
         SGT,
         SGE,
         SLT,
