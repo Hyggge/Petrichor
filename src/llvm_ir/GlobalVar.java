@@ -5,7 +5,6 @@ import back_end.mips.assembly.GlobalAsm;
 import back_end.mips.assembly.LiAsm;
 import back_end.mips.assembly.MemAsm;
 import llvm_ir.initial.Initial;
-import llvm_ir.type.BaseType;
 import llvm_ir.type.PointerType;
 import llvm_ir.type.Type;
 
@@ -27,14 +26,17 @@ public class GlobalVar extends User{
 
     @Override
     public void toAssembly() {
-        if (((PointerType)type).getTargetType() == BaseType.INT32) {
+        Type targetType = ((PointerType) type).getTargetType();
+        // 如果全局变量为非数组变量
+        if (targetType.isInt32()) {
             // 无初始值的情况
             if (initial.getValues() == null) new GlobalAsm.Word(name.substring(1), 0);
             // 有初始值的情况
             else new GlobalAsm.Word(name.substring(1), initial.getValues().get(0));
         }
+        // 如果全局变量是数组变量
         else {
-            new GlobalAsm.Space(name.substring(1), initial.getValues().size() * 4);
+            new GlobalAsm.Space(name.substring(1), targetType.getLength() * 4);
             // 有初始值的情况
             if (initial.getValues() != null) {
                 int offset = 0;
