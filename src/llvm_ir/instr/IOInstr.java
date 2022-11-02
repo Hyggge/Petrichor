@@ -1,5 +1,12 @@
 package llvm_ir.instr;
 
+import back_end.mips.MipsBuilder;
+import back_end.mips.Register;
+import back_end.mips.assembly.LaAsm;
+import back_end.mips.assembly.LiAsm;
+import back_end.mips.assembly.MemAsm;
+import back_end.mips.assembly.SyscallAsm;
+import llvm_ir.Constant;
 import llvm_ir.Instr;
 import llvm_ir.StringLiteral;
 import llvm_ir.Value;
@@ -24,6 +31,17 @@ public class IOInstr extends Instr {
         public String toString() {
             return name + " = call i32 (...) @getint()";
         }
+
+        @Override
+        public void toAssembly() {
+            new LiAsm(Register.V0, 5);
+            new SyscallAsm();
+            // 为当前value开辟栈空间，将v0中读取到的值存入
+            int curOffset = MipsBuilder.getInstance().getCurOffset();
+            MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
+            new MemAsm(MemAsm.Op.SW, Register.V0, Register.SP, curOffset);
+            MipsBuilder.getInstance().addCurOffset(4);
+        }
     }
 
     public static class PutInt extends IOInstr {
@@ -41,6 +59,19 @@ public class IOInstr extends Instr {
         @Override
         public String toString() {
             return "call void @putint(i32 " + target.getName() + ")";
+        }
+
+        @Override
+        public void toAssembly() {
+            // 将target的值保存到a0中
+            if (target instanceof Constant) {
+                new LiAsm(Register.A0, ((Constant)target).getValue());
+            } else {
+                int offset = MipsBuilder.getInstance().getOffsetOf(target);
+                new MemAsm(MemAsm.Op.LW, Register.A0, Register.SP, offset);
+            }
+            new LiAsm(Register.V0, 1);
+            new SyscallAsm();
         }
     }
 
@@ -63,6 +94,14 @@ public class IOInstr extends Instr {
                     pointerType.getTargetType() + ", " +
                     pointerType + " " +
                     stringLiteral.getName() +", i64 0, i64 0))";
+        }
+
+        @Override
+        public void toAssembly() {
+            // 将StringLateral的地址保存到a0中
+            new LaAsm(Register.A0, stringLiteral.getName().substring(1));
+            new LiAsm(Register.V0, 4);
+            new SyscallAsm();
         }
     }
 

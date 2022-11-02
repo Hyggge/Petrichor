@@ -4,7 +4,7 @@ public enum Register {
         ZERO("$zero"),
         V0("$v0"),
         V1("$v1"),
-        A0("$v2"),
+        A0("$a0"),
         A1("$a1"),
         A2("$a2"),
         A3("$a3"),

@@ -1,4 +1,5 @@
 .data
+s0: .asciiz "hello world!\n"
 g0: .word 1
 g1: .space 16
 
@@ -17,26 +18,28 @@ main:
 b0:
 addi $t0 $sp 0
 sw $t0 4($sp)
+li $v0 5
+syscall
+sw $v0 8($sp)
 lw $t0 4($sp)
+lw $t1 8($sp)
+sw $t1 0($t0)
+lw $t0 4($sp)
+lw $t1 0($t0)
+sw $t1 12($sp)
+lw $t0 12($sp)
 li $t1 1
+add $t2 $t0 $t1
+sw $t2 16($sp)
+lw $t0 4($sp)
+lw $t1 16($sp)
 sw $t1 0($t0)
-addi $t0 $sp 8
-sw $t0 12($sp)
-lw $t0 12($sp)
-li $t1 2
-sw $t1 0($t0)
-addi $t0 $sp 16
-sw $t0 20($sp)
+la $a0, s0
+li $v0 4
+syscall
 lw $t0 4($sp)
 lw $t1 0($t0)
-sw $t1 24($sp)
-lw $t0 12($sp)
-lw $t1 0($t0)
-sw $t1 28($sp)
-lw $t0 24($sp)
-lw $t1 28($sp)
-add $t2 $t0 $t1
-sw $t2 32($sp)
-lw $t0 20($sp)
-lw $t1 32($sp)
-sw $t1 0($t0)
+sw $t1 20($sp)
+lw $a0 20($sp)
+li $v0 1
+syscall
