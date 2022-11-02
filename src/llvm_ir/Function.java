@@ -16,7 +16,7 @@ public class Function extends User{
     private Type retType;
 
     public Function(String name, Type retType) {
-        super(OtherType.FUNCTION, "@" + name);
+        super(OtherType.FUNCTION, name);
         this.retType = retType;
         this.paramList = new ArrayList<>();
         this.BBList = new LinkedList<>();

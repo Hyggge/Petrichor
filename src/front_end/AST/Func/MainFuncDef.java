@@ -89,7 +89,7 @@ public class MainFuncDef extends Node {
         SymbolManager.getInstance().addSymbol(symbol);
         SymbolManager.getInstance().enterFuncDef(symbol);
         // 创建函数IR
-        String name = symbol.getSymbolName();
+        String name = IRBuilder.getInstance().genFuncName(symbol.getSymbolName());
         Type retType = symbol.getReturnType() == ValueType.INT ? BaseType.INT32 : BaseType.VOID;
         Function function = new Function(name, retType);
         // 将函数IR加入符号本身

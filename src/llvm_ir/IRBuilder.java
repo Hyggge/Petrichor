@@ -93,6 +93,11 @@ public class IRBuilder {
         return BB_NAME_PREFIX + bbCnt++;
     }
 
+    public String genFuncName(String name) {
+        if (name.equals("main")) return "@" + name;
+        return "@f_" + name;
+    }
+
 
     // loop stack relative
     public void pushLoop(Loop loop) {
