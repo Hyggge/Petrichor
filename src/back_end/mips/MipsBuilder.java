@@ -49,6 +49,11 @@ public class MipsBuilder {
         return assemblyTable;
     }
 
+    public void addCurStackOffset(int offset) {
+        curStackOffset += offset;
+        assert curStackOffset >= 0;
+    }
+
 
 
 

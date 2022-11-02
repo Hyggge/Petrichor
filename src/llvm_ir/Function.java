@@ -1,5 +1,7 @@
 package llvm_ir;
 
+import back_end.mips.MipsBuilder;
+import back_end.mips.assembly.LabelAsm;
 import llvm_ir.instr.ReturnInstr;
 import llvm_ir.type.OtherType;
 import llvm_ir.type.Type;
@@ -54,5 +56,17 @@ public class Function extends User{
         sb.append(BBList.stream().map(block -> block.toString()).collect(Collectors.joining("\n")));
         sb.append("\n}");
         return sb.toString();
+    }
+
+
+    @Override
+    public void toAssembly() {
+        new LabelAsm(name.substring(1));
+        // 为形参预留空间
+        MipsBuilder.getInstance().addCurStackOffset(paramList.size() * 4);
+        // 调用各个BB的toAssembly
+        for (BasicBlock block : BBList) {
+            block.toAssembly();
+        }
     }
 }
