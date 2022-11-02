@@ -36,8 +36,12 @@ public class MipsBuilder {
         return stackOffsetMap.get(value);
     }
 
-    public void addAssembly(Assembly assembly) {
-        assemblyTable.addAssembly(assembly);
+    public void addAssemblyToData(Assembly assembly) {
+        assemblyTable.addAssemblyToData(assembly);
+    }
+
+    public void addAssemblyToText(Assembly assembly) {
+        assemblyTable.addAssemblyToText(assembly);
     }
 
 

@@ -5,7 +5,11 @@ import back_end.mips.MipsBuilder;
 public class Assembly {
 
     public Assembly() {
-        MipsBuilder.getInstance().addAssembly(this);
+        if (this instanceof GlobalAsm) {
+            MipsBuilder.getInstance().addAssemblyToData(this);
+        } else {
+            MipsBuilder.getInstance().addAssemblyToText(this);
+        }
     }
 
 }

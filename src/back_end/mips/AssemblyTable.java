@@ -1,7 +1,6 @@
 package back_end.mips;
 
 import back_end.mips.assembly.Assembly;
-import back_end.mips.assembly.GlobalAsm;
 
 import java.util.LinkedList;
 import java.util.stream.Collectors;
@@ -15,13 +14,14 @@ public class AssemblyTable {
         this.textSegment = new LinkedList<>();
     }
 
-    public void addAssembly(Assembly assembly) {
-        if (assembly instanceof GlobalAsm) {
-            dataSegent.add(assembly);
-        } else {
-            textSegment.add(assembly);
-        }
+    public void addAssemblyToData(Assembly assembly) {
+       dataSegent.add(assembly);
     }
+
+    public void addAssemblyToText(Assembly assembly) {
+        textSegment.add(assembly);
+    }
+
 
     @Override
     public String toString() {
