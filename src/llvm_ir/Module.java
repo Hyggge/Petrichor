@@ -55,11 +55,12 @@ public class Module extends Value{
 
     @Override
     public void toAssembly() {
-        for (StringLiteral stringLiteral : stringLiterals) {
-            stringLiteral.toAssembly();
-        }
         for (GlobalVar globalVar : globalVarList) {
             globalVar.toAssembly();
+        }
+
+        for (StringLiteral stringLiteral : stringLiterals) {
+            stringLiteral.toAssembly();
         }
 
         new JumpAsm(JumpAsm.Op.JAL, "main");
