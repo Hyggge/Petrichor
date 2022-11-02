@@ -1,7 +1,4 @@
 .data
-s0: .asciiz "\n"
-s1: .asciiz "\n"
-s2: .asciiz "\n"
 g0: .word 1
 g1: .space 16
 
@@ -17,119 +14,26 @@ li $t0 4
 sw $t0 g1+12
 jal main
 j end
-func:
-b0:
-addi $t0 $sp 12
-sw $t0 16($sp)
-lw $t0 16($sp)
-lw $t1 0($sp)
-sw $t1 0($t0)
-addi $t0 $sp 20
-sw $t0 24($sp)
-lw $t0 24($sp)
-lw $t1 4($sp)
-sw $t1 0($t0)
-addi $t0 $sp 28
-sw $t0 32($sp)
-lw $t0 32($sp)
-lw $t1 8($sp)
-sw $t1 0($t0)
-lw $t0 16($sp)
-lw $t1 0($t0)
-sw $t1 36($sp)
-lw $a0 36($sp)
-li $v0 1
-syscall
-la $a0, s0
-li $v0 4
-syscall
-lw $t0 24($sp)
-lw $t1 0($t0)
-sw $t1 40($sp)
-lw $a0 40($sp)
-li $v0 1
-syscall
-la $a0, s1
-li $v0 4
-syscall
-lw $t0 32($sp)
-lw $t1 0($t0)
-sw $t1 44($sp)
-lw $a0 44($sp)
-li $v0 1
-syscall
-la $a0, s2
-li $v0 4
-syscall
-lw $t0 16($sp)
-lw $t1 0($t0)
-sw $t1 48($sp)
-lw $t0 24($sp)
-lw $t1 0($t0)
-sw $t1 52($sp)
-lw $t0 48($sp)
-lw $t1 52($sp)
-add $t2 $t0 $t1
-sw $t2 56($sp)
-lw $t0 32($sp)
-lw $t1 0($t0)
-sw $t1 60($sp)
-lw $t0 56($sp)
-lw $t1 60($sp)
-add $t2 $t0 $t1
-sw $t2 64($sp)
-lw $v0 64($sp)
-jr $ra
 main:
-b1:
-addi $t0 $sp 0
-sw $t0 4($sp)
-lw $t0 4($sp)
-li $t1 10
-sw $t1 0($t0)
-addi $t0 $sp 8
-sw $t0 12($sp)
-lw $t0 12($sp)
-li $t1 20
-sw $t1 0($t0)
-addi $t0 $sp 16
-sw $t0 20($sp)
-lw $t0 4($sp)
-lw $t1 0($t0)
-sw $t1 24($sp)
-lw $t0 12($sp)
-lw $t1 0($t0)
-sw $t1 28($sp)
-lw $t0 4($sp)
-lw $t1 0($t0)
-sw $t1 32($sp)
-lw $t0 12($sp)
-lw $t1 0($t0)
-sw $t1 36($sp)
-lw $t0 32($sp)
-lw $t1 36($sp)
+b0:
+li $t0 2
+li $t1 1
+mult $t0 $t1
+mflo $t2
+sw $t2 0($sp)
+lw $t0 0($sp)
+li $t1 1
 add $t2 $t0 $t1
-sw $t2 40($sp)
-sw $sp 44($sp)
-sw $ra 48($sp)
-lw $t0 24($sp)
-sw $t0 52($sp)
-lw $t0 28($sp)
-sw $t0 56($sp)
-lw $t0 40($sp)
-sw $t0 60($sp)
-addi $sp $sp 52
-jal func
-lw $ra -4($sp)
-lw $sp -8($sp)
-sw $v0 44($sp)
-lw $t0 20($sp)
-lw $t1 44($sp)
-sw $t1 0($t0)
-lw $t0 20($sp)
+sw $t2 4($sp)
+la $t0, g1
+lw $t1 4($sp)
+sll $t1 $t1 2
+add $t2 $t0 $t1
+sw $t2 8($sp)
+lw $t0 8($sp)
 lw $t1 0($t0)
-sw $t1 48($sp)
-lw $a0 48($sp)
+sw $t1 12($sp)
+lw $a0 12($sp)
 li $v0 1
 syscall
 li $v0 0

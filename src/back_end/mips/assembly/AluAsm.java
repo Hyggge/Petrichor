@@ -7,12 +7,12 @@ public class AluAsm extends Assembly {
     public enum Op {
         // calc_R
         ADD, SUB, ADDU, SUBU, AND, OR, NOR, XOR, SLT, SLTU,
+        // shiftv
+        SLLV, SRAV, SRLV,
         // calc_I
         ADDI, ADDIU, ANDI, ORI, XORI, SLTI, SLTIU,
         // shift
-        SLL, SRA, SRL,
-        // shiftv
-        SLLV, SRAV, SRLV
+        SLL, SRA, SRL
     }
 
     private Op op;
@@ -41,8 +41,7 @@ public class AluAsm extends Assembly {
 
     @Override
     public String toString() {
-        if (op.ordinal() >= Op.ADD.ordinal() && op.ordinal() <= Op.SLTU.ordinal() ||
-            op.ordinal() >= Op.SLL.ordinal() && op.ordinal() <= Op.SRL.ordinal()) {
+        if (op.ordinal() >= Op.ADD.ordinal() && op.ordinal() <= Op.SRLV.ordinal()) {
             return op.toString().toLowerCase() + " " + rd + " " + rs + " " + rt;
         }
         return op.toString().toLowerCase() + " " + rd + " " + rs + " " + number;

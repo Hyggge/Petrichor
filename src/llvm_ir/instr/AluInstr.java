@@ -43,6 +43,7 @@ public class AluInstr extends Instr {
 
     @Override
     public void toAssembly() {
+        // TODO: 优化思路——可以利用addi等进行优化
         // 将第一个操作数的值保存到t0
         if (operand1 instanceof Constant) {
             new LiAsm(Register.T0, ((Constant)operand1).getValue());
@@ -73,7 +74,7 @@ public class AluInstr extends Instr {
                 break;
             case MUL:
                 new MDAsm(MDAsm.Op.MULT, Register.T0, Register.T1);
-                new HiLoAsm(HiLoAsm.Op.MFHI, Register.T2);
+                new HiLoAsm(HiLoAsm.Op.MFLO, Register.T2);
                 break;
             case SDIV:
                 new MDAsm(MDAsm.Op.DIV, Register.T0, Register.T1);
