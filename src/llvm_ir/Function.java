@@ -37,8 +37,12 @@ public class Function extends User{
         return retType;
     }
 
+    public ArrayList<Param> getParamList() {
+        return paramList;
+    }
+
     // 我们需要保证函数最后一个BB一定有一个ret语句
-    public void checkEmptyBB() {
+    public void checkExistRet() {
         BasicBlock lastBB = BBList.getLast();
         if (lastBB.isEmpty() || ! (lastBB.getLastInstr() instanceof ReturnInstr)) {
             // int类型函数, 默认最后一句为'ret i32 0'
@@ -64,7 +68,11 @@ public class Function extends User{
         new LabelAsm(name.substring(1));
         // 进入一个新的函数定义，调用enterFunc方法，重置栈的offset，清空ValueOffsetMap
         MipsBuilder.getInstance().enterFunc(this);
-        // 为形参预留空间
+        // 建立形参和offset的映射关系
+        for (int i = 0; i < paramList.size(); i++) {
+            MipsBuilder.getInstance().addValueOffsetMap(paramList.get(i), 4 * i);
+        }
+        // 因为调用一个函数前，已经将函数的参数压入新栈的栈底了，所以curOffset不等于0
         MipsBuilder.getInstance().addCurOffset(paramList.size() * 4);
         // 调用各个BB的toAssembly
         for (BasicBlock block : BBList) {

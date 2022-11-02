@@ -40,4 +40,8 @@ public class GEPInstr extends Instr {
                     offset.getName();
         }
     }
+
+    @Override
+    public void toAssembly() {
+    }
 }

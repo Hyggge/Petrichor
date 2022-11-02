@@ -31,6 +31,10 @@ public class Instr extends User{
         }
     }
 
+    public BasicBlock getParentBB() {
+        return parentBB;
+    }
+
     public void setParentBB(BasicBlock parentBB) {
         this.parentBB = parentBB;
     }

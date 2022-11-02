@@ -27,6 +27,10 @@ public class BasicBlock extends Value {
         this.parentFunction = parentFunction;
     }
 
+    public Function getParentFunction() {
+        return parentFunction;
+    }
+
     public boolean isEmpty() {
         return instrList.isEmpty();
     }

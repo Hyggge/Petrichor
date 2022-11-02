@@ -1,6 +1,7 @@
 package llvm_ir;
 
 import back_end.mips.assembly.JumpAsm;
+import back_end.mips.assembly.LabelAsm;
 import llvm_ir.instr.IOInstr;
 import llvm_ir.type.OtherType;
 
@@ -62,9 +63,12 @@ public class Module extends Value{
         }
 
         new JumpAsm(JumpAsm.Op.JAL, "main");
+        new JumpAsm(JumpAsm.Op.J, "end");
 
         for (Function function : functionList) {
             function.toAssembly();
         }
+
+        new LabelAsm("end");
     }
 }
