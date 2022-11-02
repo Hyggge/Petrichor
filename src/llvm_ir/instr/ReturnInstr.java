@@ -38,7 +38,8 @@ public class ReturnInstr extends Instr {
                 int offset = MipsBuilder.getInstance().getOffsetOf(retValue);
                 new MemAsm(MemAsm.Op.LW, Register.V0, Register.SP, offset);
             }
-            new JumpAsm(JumpAsm.Op.JR, Register.RA);
         }
+        // 不管是ret void 还是 ret i32, 都需要jr $ra
+        new JumpAsm(JumpAsm.Op.JR, Register.RA);
     }
 }

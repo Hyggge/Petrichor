@@ -4,7 +4,9 @@ import back_end.mips.MipsBuilder;
 import back_end.mips.Register;
 import back_end.mips.assembly.AluAsm;
 import back_end.mips.assembly.JumpAsm;
+import back_end.mips.assembly.LiAsm;
 import back_end.mips.assembly.MemAsm;
+import llvm_ir.Constant;
 import llvm_ir.Function;
 import llvm_ir.Instr;
 import llvm_ir.Value;
@@ -48,7 +50,11 @@ public class CallInstr extends Instr {
         int paramOffset = 0;
         for (Value param : paramList) {
             // 将实参的值load到t0寄存器中
-            new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, MipsBuilder.getInstance().getOffsetOf(param));
+            if (param instanceof Constant) {
+                new LiAsm(Register.T0, ((Constant)param).getValue());
+            } else {
+                new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, MipsBuilder.getInstance().getOffsetOf(param));
+            }
             // 将t0中的值存入被调用函数的栈区域
             new MemAsm(MemAsm.Op.SW, Register.T0, Register.SP, curOffset + 8 + paramOffset);
             paramOffset += 4;

@@ -75,7 +75,7 @@ public class PrintfStmt extends Stmt {
 
     @Override
     public Value genIR() {
-        List<Exp> expList = children.stream().filter(child -> child instanceof Exp).map(child -> (Exp) child).collect(Collectors.toList());
+        List<Value> expValueList = children.stream().filter(child -> child instanceof Exp).map(Node::genIR).collect(Collectors.toList());
         String s = formatString.getValue().substring(1, formatString.getValue().length() - 1);
         StringBuilder sb = new StringBuilder();
         int expCnt = 0;
@@ -88,7 +88,7 @@ public class PrintfStmt extends Stmt {
                     sb.setLength(0);
                 }
                 // 输出%d所代表的exp值
-                Value value = expList.get(expCnt++).genIR();
+                Value value = expValueList.get(expCnt++);
                 Instr instr = new IOInstr.PutInt(IRBuilder.getInstance().genLocalVarName(), value);
                 // 跳过'd'
                 i = i + 1;
