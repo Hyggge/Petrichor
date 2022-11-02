@@ -9,4 +9,8 @@ public class Constant extends Value{
         super(BaseType.INT32, String.valueOf(value));
         this.value = value;
     }
+
+    public int getValue() {
+        return value;
+    }
 }

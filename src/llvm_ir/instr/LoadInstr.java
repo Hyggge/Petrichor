@@ -1,5 +1,8 @@
 package llvm_ir.instr;
 
+import back_end.mips.MipsBuilder;
+import back_end.mips.Register;
+import back_end.mips.assembly.MemAsm;
 import llvm_ir.Instr;
 import llvm_ir.Value;
 import llvm_ir.type.PointerType;
@@ -16,5 +19,19 @@ public class LoadInstr extends Instr {
     @Override
     public String toString() {
         return name + " = load " + type + ", " + pointer.getType() + " " + pointer.getName();
+    }
+
+    @Override
+    public void toAssembly() {
+        int addrOffset = MipsBuilder.getInstance().getOffsetOf(pointer);
+        // 获得address的值, 保存到t0中
+        new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, addrOffset);
+        // 取得“t0中保存的地址”所存储的数值，保存到t1中
+        new MemAsm(MemAsm.Op.LW, Register.T1, Register.T0, 0);
+        // 为Value新开一个栈空间，把t1的值保存在堆栈上
+        int curOffset = MipsBuilder.getInstance().getCurOffset();
+        MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
+        new MemAsm(MemAsm.Op.SW, Register.T1, Register.SP, curOffset);
+        MipsBuilder.getInstance().addCurOffset(4);
     }
 }
