@@ -1,5 +1,6 @@
 package llvm_ir;
 
+import back_end.mips.assembly.LabelAsm;
 import llvm_ir.type.OtherType;
 
 import java.util.LinkedList;
@@ -40,5 +41,13 @@ public class BasicBlock extends Value {
         sb.append(name + ":\n\t");
         sb.append(instrList.stream().map(instr -> instr.toString()).collect(Collectors.joining("\n\t")));
         return sb.toString();
+    }
+
+    @Override
+    public void toAssembly() {
+        new LabelAsm(name);
+        for (Instr instr : instrList) {
+            instr.toAssembly();
+        }
     }
 }
