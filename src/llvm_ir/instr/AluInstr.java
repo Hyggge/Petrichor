@@ -16,7 +16,7 @@ public class AluInstr extends Instr {
     public enum Op {
         ADD,
         SUB,
-        MOD,
+        SREM,
         MUL,
         SDIV,
         AND,
@@ -80,7 +80,7 @@ public class AluInstr extends Instr {
                 new MDAsm(MDAsm.Op.DIV, Register.T0, Register.T1);
                 new HiLoAsm(HiLoAsm.Op.MFLO, Register.T2);
                 break;
-            case MOD:
+            case SREM:
                 new MDAsm(MDAsm.Op.DIV, Register.T0, Register.T1);
                 new HiLoAsm(HiLoAsm.Op.MFHI, Register.T2);
                 break;

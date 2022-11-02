@@ -28,15 +28,21 @@ public class GlobalVar extends User{
     @Override
     public void toAssembly() {
         if (((PointerType)type).getTargetType() == BaseType.INT32) {
-            new GlobalAsm.Word(name.substring(1), initial.getValues().get(0));
+            // 无初始值的情况
+            if (initial.getValues() == null) new GlobalAsm.Word(name.substring(1), 0);
+            // 有初始值的情况
+            else new GlobalAsm.Word(name.substring(1), initial.getValues().get(0));
         }
         else {
             new GlobalAsm.Space(name.substring(1), initial.getValues().size() * 4);
-            int offset = 0;
-            for (Integer value : initial.getValues()) {
-                new LiAsm(Register.T0, value);
-                new MemAsm(MemAsm.Op.SW, Register.T0, name.substring(1), offset);
-                offset += 4;
+            // 有初始值的情况
+            if (initial.getValues() != null) {
+                int offset = 0;
+                for (Integer value : initial.getValues()) {
+                    new LiAsm(Register.T0, value);
+                    new MemAsm(MemAsm.Op.SW, Register.T0, name.substring(1), offset);
+                    offset += 4;
+                }
             }
         }
     }

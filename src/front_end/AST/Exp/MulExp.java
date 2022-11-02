@@ -64,7 +64,7 @@ public class MulExp extends Node {
             }
             else {
                 operand2 = children.get(++i).genIR();
-                instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.MOD, operand1, operand2);
+                instr = new AluInstr(IRBuilder.getInstance().genLocalVarName(), AluInstr.Op.SREM, operand1, operand2);
                 operand1 = instr;
             }
         }

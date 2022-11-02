@@ -1,40 +1,14 @@
 .data
-g0: .word 1
-g1: .space 16
+s0: .asciiz "hello world\n"
 
 
 .text
-li $t0 1
-sw $t0 g1+0
-li $t0 2
-sw $t0 g1+4
-li $t0 3
-sw $t0 g1+8
-li $t0 4
-sw $t0 g1+12
 jal main
 j end
 main:
 b0:
-li $t0 2
-li $t1 1
-mult $t0 $t1
-mflo $t2
-sw $t2 0($sp)
-lw $t0 0($sp)
-li $t1 1
-add $t2 $t0 $t1
-sw $t2 4($sp)
-la $t0, g1
-lw $t1 4($sp)
-sll $t1 $t1 2
-add $t2 $t0 $t1
-sw $t2 8($sp)
-lw $t0 8($sp)
-lw $t1 0($t0)
-sw $t1 12($sp)
-lw $a0 12($sp)
-li $v0 1
+la $a0, s0
+li $v0 4
 syscall
 li $v0 0
 jr $ra

@@ -1,5 +1,6 @@
 package llvm_ir.instr;
 
+import back_end.mips.assembly.JumpAsm;
 import llvm_ir.BasicBlock;
 import llvm_ir.Instr;
 import llvm_ir.type.BaseType;
@@ -15,5 +16,9 @@ public class JumpInstr extends Instr {
     @Override
     public String toString() {
         return "br label %" + targetBB.getName();
+    }
+    @Override
+    public void toAssembly() {
+        new JumpAsm(JumpAsm.Op.J, targetBB.getName());
     }
 }
