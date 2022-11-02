@@ -27,13 +27,21 @@ public class MipsBuilder {
         this.stackOffsetMap = new HashMap<>();
     }
 
-    public void addValueToStack(Value value) {
-        stackOffsetMap.put(value, curStackOffset);
-        curStackOffset += 4;
+    public void addValueOffsetMap(Value value, int offset) {
+        stackOffsetMap.put(value, offset);
     }
 
-    public int getStackOffset(Value value) {
+    public int getOffsetOf(Value value) {
         return stackOffsetMap.get(value);
+    }
+
+    public int getCurOffset() {
+        return curStackOffset;
+    }
+
+    public void addCurOffset(int offset) {
+        curStackOffset += offset;
+        assert curStackOffset >= 0;
     }
 
     public void addAssemblyToData(Assembly assembly) {
@@ -44,15 +52,10 @@ public class MipsBuilder {
         assemblyTable.addAssemblyToText(assembly);
     }
 
-
     public AssemblyTable getAssemblyTable() {
         return assemblyTable;
     }
 
-    public void addCurStackOffset(int offset) {
-        curStackOffset += offset;
-        assert curStackOffset >= 0;
-    }
 
 
 

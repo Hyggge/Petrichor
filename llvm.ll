@@ -9,5 +9,6 @@ declare void @putstr(i8* )
 
 define dso_local i32 @main() {
 b0:
+	%v0 = alloca i32
 	ret i32 0
 }

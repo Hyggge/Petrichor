@@ -30,5 +30,14 @@ public class Type {
         return this == OtherType.FUNCTION;
     }
 
+    public int getLength() {
+        if (this.isArray()) {
+            int eleNum = ((ArrayType)this).getEleNum();
+            Type eleType = ((ArrayType)this).getEleType();
+            return eleNum * eleType.getLength();
+        }
+        else return 1;
+    }
+
 
 }

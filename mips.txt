@@ -13,3 +13,7 @@ sw $t0 g1+8
 li $t0 4
 sw $t0 g1+12
 jal main
+main:
+b0:
+addi $t0 $sp 0
+sw $t0 4($sp)

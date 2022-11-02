@@ -62,8 +62,10 @@ public class Function extends User{
     @Override
     public void toAssembly() {
         new LabelAsm(name.substring(1));
+        // 进入一个新的函数定义，调用enterFunc方法，重置栈的offset，清空ValueOffsetMap
+        MipsBuilder.getInstance().enterFunc(this);
         // 为形参预留空间
-        MipsBuilder.getInstance().addCurStackOffset(paramList.size() * 4);
+        MipsBuilder.getInstance().addCurOffset(paramList.size() * 4);
         // 调用各个BB的toAssembly
         for (BasicBlock block : BBList) {
             block.toAssembly();
