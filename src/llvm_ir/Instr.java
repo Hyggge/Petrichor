@@ -1,5 +1,6 @@
 package llvm_ir;
 
+import back_end.mips.assembly.CommentAsm;
 import llvm_ir.type.Type;
 
 public class Instr extends User{
@@ -37,5 +38,10 @@ public class Instr extends User{
 
     public void setParentBB(BasicBlock parentBB) {
         this.parentBB = parentBB;
+    }
+
+    @Override
+    public void toAssembly() {
+        new CommentAsm("\n# " + this.toString());
     }
 }

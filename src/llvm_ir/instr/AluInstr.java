@@ -43,6 +43,7 @@ public class AluInstr extends Instr {
 
     @Override
     public void toAssembly() {
+        super.toAssembly();
         // TODO: 优化思路——可以利用addi等进行优化
         // 将第一个操作数的值保存到t0
         if (operand1 instanceof Constant) {

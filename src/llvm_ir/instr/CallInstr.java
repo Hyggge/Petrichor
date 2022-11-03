@@ -42,6 +42,7 @@ public class CallInstr extends Instr {
 
     @Override
     public void toAssembly() {
+        super.toAssembly();
         int curOffset = MipsBuilder.getInstance().getCurOffset();
         new MemAsm(MemAsm.Op.SW, Register.SP, Register.SP, curOffset);
         new MemAsm(MemAsm.Op.SW, Register.RA, Register.SP, curOffset + 4);

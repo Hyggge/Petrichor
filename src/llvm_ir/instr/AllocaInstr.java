@@ -23,6 +23,7 @@ public class AllocaInstr extends Instr {
 
     @Override
     public void toAssembly() {
+        super.toAssembly();
         // 在栈上分配空间
         int oriOffset = MipsBuilder.getInstance().getCurOffset();
         if (targetType.isArray()) {

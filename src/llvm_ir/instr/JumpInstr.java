@@ -19,6 +19,7 @@ public class JumpInstr extends Instr {
     }
     @Override
     public void toAssembly() {
+        super.toAssembly();
         new JumpAsm(JumpAsm.Op.J, targetBB.getName());
     }
 }

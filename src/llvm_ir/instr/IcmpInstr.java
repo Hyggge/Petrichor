@@ -40,6 +40,7 @@ public class IcmpInstr extends Instr {
 
     @Override
     public void toAssembly() {
+        super.toAssembly();
         // 对于>和<，尽量使用slt和sgt，因为这两个是基础指令
         // 对于>=和<=, 暂时采用sle和sge, 这两个指令都会翻译成三个基础指令
         // 对于==和!=，暂时采用seq和sne，seq会翻译成三条基础指令，slt会翻译成两条基础指令

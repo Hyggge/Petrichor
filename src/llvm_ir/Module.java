@@ -1,5 +1,6 @@
 package llvm_ir;
 
+import back_end.mips.assembly.CommentAsm;
 import back_end.mips.assembly.JumpAsm;
 import back_end.mips.assembly.LabelAsm;
 import llvm_ir.instr.IOInstr;
@@ -63,6 +64,7 @@ public class Module extends Value{
             stringLiteral.toAssembly();
         }
 
+        new CommentAsm("\n# jump to main function");
         new JumpAsm(JumpAsm.Op.JAL, "main");
         new JumpAsm(JumpAsm.Op.J, "end");
 

@@ -22,6 +22,7 @@ public class ZextInstr extends Instr {
 
     @Override
     public void toAssembly() {
+        super.toAssembly();
         // 实际在MIPS中不需要考虑位宽，i32和i1都存储在4字节的堆栈空间中
         // 如果是i1转到i32，我们可以直接将this和“oriValue的offset“绑定
         // 那么每次我们使用this时，实际上是取的oriValue的值

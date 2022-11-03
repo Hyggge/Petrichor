@@ -50,6 +50,7 @@ public class GEPInstr extends Instr {
 
     @Override
     public void toAssembly() {
+        super.toAssembly();
         // 先获得pointer中的值（也就是数组的首地址），存入t0中
         if (pointer instanceof GlobalVar) {
             new LaAsm(Register.T0, pointer.getName().substring(1));

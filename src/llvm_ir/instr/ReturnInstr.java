@@ -30,6 +30,7 @@ public class ReturnInstr extends Instr {
 
     @Override
     public void toAssembly() {
+        super.toAssembly();
         Function function = getParentBB().getParentFunction();
         if (retValue != null) {
             if (retValue instanceof Constant) {

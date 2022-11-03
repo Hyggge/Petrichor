@@ -31,6 +31,7 @@ public class BranchInstr extends Instr {
 
     @Override
     public void toAssembly() {
+        super.toAssembly();
         // con == 1 相当于 con != 0， 所以我们可以利用BNE指令和$0寄存器实现功能
         // 取出con的值，放到t0寄存器中
         new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, MipsBuilder.getInstance().getOffsetOf(con));

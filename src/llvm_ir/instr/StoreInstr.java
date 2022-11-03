@@ -33,6 +33,7 @@ public class StoreInstr extends Instr {
 
     @Override
     public void toAssembly() {
+        super.toAssembly();
         // 我们先获得address的值, 保存到t0中
         if (to instanceof GlobalVar) {
             new LaAsm(Register.T0, to.getName().substring(1));

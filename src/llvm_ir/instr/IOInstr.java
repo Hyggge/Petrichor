@@ -98,6 +98,7 @@ public class IOInstr extends Instr {
 
         @Override
         public void toAssembly() {
+            super.toAssembly();
             // 将StringLateral的地址保存到a0中
             new LaAsm(Register.A0, stringLiteral.getName().substring(1));
             new LiAsm(Register.V0, 4);

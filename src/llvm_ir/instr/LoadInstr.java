@@ -25,6 +25,7 @@ public class LoadInstr extends Instr {
 
     @Override
     public void toAssembly() {
+        super.toAssembly();
         if (pointer instanceof GlobalVar) {
             new LaAsm(Register.T0, pointer.getName().substring(1));
         } else {
