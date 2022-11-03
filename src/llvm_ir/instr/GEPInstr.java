@@ -70,7 +70,7 @@ public class GEPInstr extends Instr {
             // 将offset向左移2位(相当与*4),然后再存入t1中
             new AluAsm(AluAsm.Op.SLL, Register.T1, Register.T1, 2);
             // 将t0和t1将加，得到所求地址，存入t2
-            new AluAsm(AluAsm.Op.ADD, Register.T2, Register.T0, Register.T1);
+            new AluAsm(AluAsm.Op.ADDU, Register.T2, Register.T0, Register.T1);
         }
         // 为Value申请一个栈空间，将t2存入堆栈中
         int curOffset = MipsBuilder.getInstance().getCurOffset();

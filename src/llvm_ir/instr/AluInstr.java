@@ -61,10 +61,10 @@ public class AluInstr extends Instr {
         // 计算，将结果保存到t2寄存器中
         switch (op) {
             case ADD:
-                new AluAsm(AluAsm.Op.ADD, Register.T2, Register.T0, Register.T1);
+                new AluAsm(AluAsm.Op.ADDU, Register.T2, Register.T0, Register.T1);
                 break;
             case SUB:
-                new AluAsm(AluAsm.Op.SUB, Register.T2, Register.T0, Register.T1);
+                new AluAsm(AluAsm.Op.SUBU, Register.T2, Register.T0, Register.T1);
                 break;
             case AND:
                 new AluAsm(AluAsm.Op.AND, Register.T2, Register.T0, Register.T1);
