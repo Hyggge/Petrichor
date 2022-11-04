@@ -68,9 +68,9 @@ public class IcmpInstr extends Instr {
             case SLE: new CmpAsm(CmpAsm.Op.SLE, Register.T2, Register.T0, Register.T1); break;
         }
         // 为Value开一个栈空间，将t2的值store到堆栈上
+        MipsBuilder.getInstance().subCurOffset(4);
         int curOffset = MipsBuilder.getInstance().getCurOffset();
         MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
         new MemAsm(MemAsm.Op.SW, Register.T2, Register.SP, curOffset);
-        MipsBuilder.getInstance().addCurOffset(4);
     }
 }

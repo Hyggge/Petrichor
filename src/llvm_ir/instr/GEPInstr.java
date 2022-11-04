@@ -74,9 +74,9 @@ public class GEPInstr extends Instr {
             new AluAsm(AluAsm.Op.ADDU, Register.T2, Register.T0, Register.T1);
         }
         // 为Value申请一个栈空间，将t2存入堆栈中
+        MipsBuilder.getInstance().subCurOffset(4);
         int curOffset = MipsBuilder.getInstance().getCurOffset();
         MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
         new MemAsm(MemAsm.Op.SW, Register.T2, Register.SP, curOffset);
-        MipsBuilder.getInstance().addCurOffset(4);
     }
 }

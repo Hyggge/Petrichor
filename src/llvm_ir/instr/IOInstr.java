@@ -37,10 +37,10 @@ public class IOInstr extends Instr {
             new LiAsm(Register.V0, 5);
             new SyscallAsm();
             // 为当前value开辟栈空间，将v0中读取到的值存入
+            MipsBuilder.getInstance().subCurOffset(4);
             int curOffset = MipsBuilder.getInstance().getCurOffset();
             MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
             new MemAsm(MemAsm.Op.SW, Register.V0, Register.SP, curOffset);
-            MipsBuilder.getInstance().addCurOffset(4);
         }
     }
 

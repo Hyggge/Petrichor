@@ -69,11 +69,12 @@ public class Function extends User{
         // 进入一个新的函数定义，调用enterFunc方法，重置栈的offset，清空ValueOffsetMap
         MipsBuilder.getInstance().enterFunc(this);
         // 建立形参和offset的映射关系
-        for (int i = 0; i < paramList.size(); i++) {
-            MipsBuilder.getInstance().addValueOffsetMap(paramList.get(i), 4 * i);
-        }
         // 因为调用一个函数前，已经将函数的参数压入新栈的栈底了，所以curOffset不等于0
-        MipsBuilder.getInstance().addCurOffset(paramList.size() * 4);
+        for (int i = 0; i < paramList.size(); i++) {
+            MipsBuilder.getInstance().subCurOffset(4);
+            int curOffset = MipsBuilder.getInstance().getCurOffset();
+            MipsBuilder.getInstance().addValueOffsetMap(paramList.get(i), curOffset);
+        }
         // 调用各个BB的toAssembly
         for (BasicBlock block : BBList) {
             block.toAssembly();

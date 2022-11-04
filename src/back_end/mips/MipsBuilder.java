@@ -39,8 +39,8 @@ public class MipsBuilder {
         return curStackOffset;
     }
 
-    public void addCurOffset(int offset) {
-        curStackOffset += offset;
+    public void subCurOffset(int offset) {
+        curStackOffset -= offset;
         assert curStackOffset >= 0;
     }
 

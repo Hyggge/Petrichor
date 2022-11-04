@@ -87,9 +87,9 @@ public class AluInstr extends Instr {
                 break;
         }
         // 为Value开一个栈空间，将t2的值store到堆栈上
+        MipsBuilder.getInstance().subCurOffset(4);
         int curOffset = MipsBuilder.getInstance().getCurOffset();
         MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
         new MemAsm(MemAsm.Op.SW, Register.T2, Register.SP, curOffset);
-        MipsBuilder.getInstance().addCurOffset(4);
     }
 }

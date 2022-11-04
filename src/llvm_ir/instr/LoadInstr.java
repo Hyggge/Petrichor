@@ -35,9 +35,9 @@ public class LoadInstr extends Instr {
         // 取得“t0中保存的地址”所存储的数值，保存到t1中
         new MemAsm(MemAsm.Op.LW, Register.T1, Register.T0, 0);
         // 为Value新开一个栈空间，把t1的值保存在堆栈上
+        MipsBuilder.getInstance().subCurOffset(4);
         int curOffset = MipsBuilder.getInstance().getCurOffset();
         MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
         new MemAsm(MemAsm.Op.SW, Register.T1, Register.SP, curOffset);
-        MipsBuilder.getInstance().addCurOffset(4);
     }
 }
