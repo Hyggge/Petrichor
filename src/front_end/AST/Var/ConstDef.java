@@ -82,7 +82,7 @@ public class ConstDef extends Node {
     public Value genIR() {
         SymbolManager.getInstance().addSymbol(symbol);
         Initial initial = symbol.getInitial();
-        // 生成global IR
+        // 如果生成全局常量
         if (symbol.isGlobal()) {
             String name = IRBuilder.getInstance().genGlobalVarName();
             GlobalVar globalVar = new GlobalVar(new PointerType(initial.getType()), name, initial);

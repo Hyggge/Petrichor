@@ -8,6 +8,7 @@ import llvm_ir.initial.Initial;
 import llvm_ir.type.PointerType;
 import llvm_ir.type.LLVMType;
 
+// 全局变量和全局常量都会生成GlobalVar
 public class GlobalVar extends User{
     private Initial initial;
 

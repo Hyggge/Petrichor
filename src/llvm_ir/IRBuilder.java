@@ -15,6 +15,7 @@ public class IRBuilder {
     private static final String LOCAL_VAR_NAME_PREFIX = "%v";
     private static final String PARAM_NAME_PREFIX = "%a";
     private static final String BB_NAME_PREFIX = "b";
+    private static final String FUNC_NAME_PREFIX = "@f_";
 
     public static IRBuilder getInstance() {
         return irBuilder;
@@ -95,7 +96,7 @@ public class IRBuilder {
 
     public String genFuncName(String name) {
         if (name.equals("main")) return "@" + name;
-        return "@f_" + name;
+        return FUNC_NAME_PREFIX + name;
     }
 
 
