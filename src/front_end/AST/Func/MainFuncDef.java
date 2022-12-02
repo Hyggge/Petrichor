@@ -14,7 +14,6 @@ import llvm_ir.type.BaseType;
 import llvm_ir.type.LLVMType;
 import utils.ErrorType;
 import utils.Printer;
-import utils.SymbolType;
 import utils.SyntaxVarType;
 import utils.ValueType;
 
@@ -31,9 +30,8 @@ public class MainFuncDef extends Node {
     private FuncSymbol createSymbol() {
         // 'int' 'main' '('  ')' Block
         String symbolName = ((TokenNode)children.get(1)).getToken().getValue();
-        SymbolType symbolType = SymbolType.SYMBOL_FUNC;
         ValueType returnType = ValueType.INT;
-        return new FuncSymbol(symbolName, symbolType, returnType);
+        return new FuncSymbol(symbolName, returnType);
     }
 
     private void setParamInfo() {

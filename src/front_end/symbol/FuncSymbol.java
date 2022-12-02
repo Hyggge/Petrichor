@@ -12,17 +12,16 @@ public class FuncSymbol extends Symbol {
     private ArrayList<Integer> FParamDims;
     private Function llvmValue;
 
-    public FuncSymbol(String symbolName, SymbolType symbolType, ValueType returnType) {
-        super(symbolName, symbolType);
+    public FuncSymbol(String symbolName, ValueType returnType) {
+        super(symbolName, SymbolType.SYMBOL_FUNC);
         this.returnType = returnType;
         this.FParamDims = null;
         this.FParamTypes = null;
         this.llvmValue = null;
     }
 
-    public FuncSymbol(String symbolName, SymbolType symbolType, ValueType returnType,
-                      ArrayList<ValueType> FParamTypes, ArrayList<Integer> FParamDims) {
-        super(symbolName, symbolType);
+    public FuncSymbol(String symbolName, ValueType returnType, ArrayList<ValueType> FParamTypes, ArrayList<Integer> FParamDims) {
+        super(symbolName, SymbolType.SYMBOL_FUNC);
         this.returnType = returnType;
         this.FParamTypes = FParamTypes;
         this.FParamDims = FParamDims;

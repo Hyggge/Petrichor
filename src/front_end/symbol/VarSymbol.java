@@ -15,8 +15,8 @@ public class VarSymbol extends Symbol {
     private boolean isGlobal;
     private Value llvmValue;
 
-    public VarSymbol(String symbolName, SymbolType symbolType, ValueType valueType, int dim, ArrayList<Integer> lenList) {
-        super(symbolName, symbolType);
+    public VarSymbol(String symbolName, ValueType valueType, int dim, ArrayList<Integer> lenList) {
+        super(symbolName, SymbolType.SYMBOL_VAR);
         this.valueType = valueType;
         this.dim = dim;
         this.lenList = lenList;
@@ -26,8 +26,8 @@ public class VarSymbol extends Symbol {
     }
 
     // 对于全局变量来说初始值是可以确定的
-    public VarSymbol(String symbolName, SymbolType symbolType, ValueType valueType, int dim, ArrayList<Integer> lenList, Initial initial) {
-        super(symbolName, symbolType);
+    public VarSymbol(String symbolName, ValueType valueType, int dim, ArrayList<Integer> lenList, Initial initial) {
+        super(symbolName, SymbolType.SYMBOL_VAR);
         this.valueType = valueType;
         this.dim = dim;
         this.lenList = lenList;

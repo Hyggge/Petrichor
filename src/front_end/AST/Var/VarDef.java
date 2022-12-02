@@ -67,10 +67,10 @@ public class VarDef extends Node {
                 ArrayList<Integer> values = ((InitVal)children.get(children.size()-1)).execute(dim);
                 initial = new Initial(initialType, values);
             }
-            return new VarSymbol(symbolName, symbolType, valueType, dim, lenList, initial);
+            return new VarSymbol(symbolName, valueType, dim, lenList, initial);
         }
 
-        return new VarSymbol(symbolName, symbolType, valueType, dim, lenList);
+        return new VarSymbol(symbolName, valueType, dim, lenList);
     }
 
     @Override

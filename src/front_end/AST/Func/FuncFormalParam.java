@@ -34,7 +34,6 @@ public class FuncFormalParam extends Node {
     public VarSymbol createSymbol() {
         // FuncFormalParam  ==> 'int' Indent ['[' ']'  {'[' ConstExp ']'}]
         String symbolName = ((TokenNode)children.get(1)).getToken().getValue();
-        SymbolType symbolType = SymbolType.SYMBOL_VAR;
         ValueType FParamType = null;
         int dim = 0;
         ArrayList<Integer> lenList = new ArrayList<>();
@@ -52,7 +51,7 @@ public class FuncFormalParam extends Node {
                 }
             }
         }
-        return new VarSymbol(symbolName, symbolType, FParamType, dim, lenList);
+        return new VarSymbol(symbolName, FParamType, dim, lenList);
     }
 
     public ValueType getFParamType() {

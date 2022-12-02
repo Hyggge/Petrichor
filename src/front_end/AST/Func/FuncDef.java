@@ -31,9 +31,8 @@ public class FuncDef extends Node {
     private FuncSymbol createSymbol() {
         // FuncType Ident '(' [FuncFormalParams] ')' Block
         String symbolName = ((TokenNode)children.get(1)).getToken().getValue();
-        SymbolType symbolType = SymbolType.SYMBOL_FUNC;
         ValueType returnType = ((FuncType)children.get(0)).getReturnType();
-        return new FuncSymbol(symbolName, symbolType, returnType);
+        return new FuncSymbol(symbolName, returnType);
     }
 
     private void setParamInfo() {

@@ -66,7 +66,7 @@ public class ConstDef extends Node {
             ArrayList<Integer> values = ((ConstInitVal)children.get(num-1)).execute(dim);
             initial = new Initial(initialType, values);
         }
-        return new ConstSymbol(symbolName, symbolType, valueType, dim, lenList, initial);
+        return new ConstSymbol(symbolName, valueType, dim, lenList, initial);
     }
 
     @Override

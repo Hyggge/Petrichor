@@ -15,8 +15,8 @@ public class ConstSymbol extends Symbol {
     private boolean isGlobal;
     private Value llvmValue;
 
-    public ConstSymbol(String symbolName, SymbolType symbolType, ValueType valueType, int dim, ArrayList<Integer> lenList) {
-        super(symbolName, symbolType);
+    public ConstSymbol(String symbolName, ValueType valueType, int dim, ArrayList<Integer> lenList) {
+        super(symbolName, SymbolType.SYMBOL_CONST);
         this.valueType = valueType;
         this.dim = dim;
         this.lenList = lenList;
@@ -25,8 +25,8 @@ public class ConstSymbol extends Symbol {
         this.isGlobal = SymbolManager.getInstance().isGlobal();
     }
 
-    public ConstSymbol(String symbolName, SymbolType symbolType, ValueType valueType, int dim, ArrayList<Integer> lenList, Initial initial) {
-        super(symbolName, symbolType);
+    public ConstSymbol(String symbolName, ValueType valueType, int dim, ArrayList<Integer> lenList, Initial initial) {
+        super(symbolName, SymbolType.SYMBOL_CONST);
         this.valueType = valueType;
         this.dim = dim;
         this.lenList = lenList;
