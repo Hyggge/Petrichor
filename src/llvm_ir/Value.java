@@ -1,16 +1,16 @@
 package llvm_ir;
 
-import llvm_ir.type.Type;
+import llvm_ir.type.LLVMType;
 
 import java.util.ArrayList;
 
 public class Value {
 
-    protected Type type;
+    protected LLVMType type;
     protected String name;
     protected ArrayList<Use> useList;
 
-    public Value(Type type, String name) {
+    public Value(LLVMType type, String name) {
         this.type = type;
         this.name = name;
         this.useList = new ArrayList<>();
@@ -21,7 +21,7 @@ public class Value {
         useList.add(use);
     }
 
-    public Type getType() {
+    public LLVMType getType() {
         return type;
     }
 

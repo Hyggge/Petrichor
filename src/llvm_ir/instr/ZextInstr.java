@@ -3,13 +3,13 @@ package llvm_ir.instr;
 import back_end.mips.MipsBuilder;
 import llvm_ir.Instr;
 import llvm_ir.Value;
-import llvm_ir.type.Type;
+import llvm_ir.type.LLVMType;
 
 public class ZextInstr extends Instr {
     private Value oriValue;
-    private Type targetType;
+    private LLVMType targetType;
 
-    public ZextInstr(String name, Value oriValue, Type targetType) {
+    public ZextInstr(String name, Value oriValue, LLVMType targetType) {
         super(targetType, name, InstrType.ZEXT);
         this.oriValue = oriValue;
         this.targetType = targetType;

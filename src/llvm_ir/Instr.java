@@ -1,7 +1,7 @@
 package llvm_ir;
 
 import back_end.mips.assembly.CommentAsm;
-import llvm_ir.type.Type;
+import llvm_ir.type.LLVMType;
 
 public class Instr extends User{
     public static enum InstrType {
@@ -23,7 +23,7 @@ public class Instr extends User{
     private InstrType instrType;
     private BasicBlock parentBB;
 
-    public Instr(Type type, String name, InstrType instrType) {
+    public Instr(LLVMType type, String name, InstrType instrType) {
         super(type, name);
         this.instrType = instrType;
         this.parentBB = null;

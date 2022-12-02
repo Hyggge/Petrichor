@@ -1,13 +1,13 @@
 package llvm_ir.type;
 
-public class PointerType extends Type{
-    private Type targetType;
+public class PointerType extends LLVMType {
+    private LLVMType targetType;
 
-    public PointerType(Type targetType) {
+    public PointerType(LLVMType targetType) {
         this.targetType = targetType;
     }
 
-    public Type getTargetType() {
+    public LLVMType getTargetType() {
         return targetType;
     }
 

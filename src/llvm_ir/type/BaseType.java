@@ -1,6 +1,6 @@
 package llvm_ir.type;
 
-public class BaseType extends Type{
+public class BaseType extends LLVMType {
     public static BaseType VOID = new BaseType(0);
     public static BaseType INT1 = new BaseType(1);
     public static BaseType INT8 = new BaseType(8);

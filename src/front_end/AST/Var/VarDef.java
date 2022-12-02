@@ -17,7 +17,7 @@ import llvm_ir.instr.StoreInstr;
 import llvm_ir.type.ArrayType;
 import llvm_ir.type.BaseType;
 import llvm_ir.type.PointerType;
-import llvm_ir.type.Type;
+import llvm_ir.type.LLVMType;
 import utils.ErrorType;
 import utils.Printer;
 import utils.SymbolType;
@@ -56,7 +56,7 @@ public class VarDef extends Node {
         // 如果该变量是全局变量，我们可以直接求出对应的值
         if (SymbolManager.getInstance().isGlobal()) {
             Initial initial = null;
-            Type initialType = null;
+            LLVMType initialType = null;
             // 判断是整数型常量还是数组型常量
             if (dim == 0) initialType = BaseType.INT32;
             else initialType = new ArrayType(totLen, BaseType.INT32);
@@ -99,7 +99,7 @@ public class VarDef extends Node {
             // 如果是非数组类型
             if (symbol.getDim() == 0) {
                 // 生成alloc指令
-                Type allocType = BaseType.INT32;
+                LLVMType allocType = BaseType.INT32;
                 instr = new AllocaInstr(IRBuilder.getInstance().genLocalVarName(), allocType);
                 symbol.setLlvmValue(instr);
                 // 生成 store指令，将初始值存入变量
@@ -113,7 +113,7 @@ public class VarDef extends Node {
             // 如果是数组类型
             else {
                 // 生成alloc指令
-                Type allocType = new ArrayType(symbol.getTotLen(), BaseType.INT32);
+                LLVMType allocType = new ArrayType(symbol.getTotLen(), BaseType.INT32);
                 instr = new AllocaInstr(IRBuilder.getInstance().genLocalVarName(), allocType);
                 symbol.setLlvmValue(instr);
                 // 生成一系列GEP+store指令，将初始值存入常量

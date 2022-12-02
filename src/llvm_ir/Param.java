@@ -1,11 +1,11 @@
 package llvm_ir;
 
-import llvm_ir.type.Type;
+import llvm_ir.type.LLVMType;
 
 public class Param extends Value{
     private Function parentFunction;
 
-    public Param(Type type, String name) {
+    public Param(LLVMType type, String name) {
         super(type, name);
         if (IRBuilder.mode == IRBuilder.AUTO_INSERT_MODE) {
             IRBuilder.getInstance().addParam(this);

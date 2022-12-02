@@ -6,12 +6,12 @@ import back_end.mips.assembly.AluAsm;
 import back_end.mips.assembly.MemAsm;
 import llvm_ir.Instr;
 import llvm_ir.type.PointerType;
-import llvm_ir.type.Type;
+import llvm_ir.type.LLVMType;
 
 public class AllocaInstr extends Instr {
-    private Type targetType;
+    private LLVMType targetType;
 
-    public AllocaInstr(String name, Type targetType) {
+    public AllocaInstr(String name, LLVMType targetType) {
         super(new PointerType(targetType), name, InstrType.ALLOCA);
         this.targetType = targetType;
     }

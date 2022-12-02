@@ -1,6 +1,6 @@
 package llvm_ir.initial;
 
-import llvm_ir.type.Type;
+import llvm_ir.type.LLVMType;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -9,15 +9,15 @@ import java.util.stream.Collectors;
 // 对于全局变量和常量，Initial会直接加入对应的GlobalVal
 // 对于局部常量，Initial只是起到了优化作用，仍然需要通过store指令将初始值存入对应的位置
 public class Initial {
-    private Type type;
+    private LLVMType type;
     private ArrayList<Integer> values;
 
-    public Initial(Type type, ArrayList<Integer> values) {
+    public Initial(LLVMType type, ArrayList<Integer> values) {
         this.type = type;
         this.values = values;
     }
 
-    public Type getType() {
+    public LLVMType getType() {
         return type;
     }
 

@@ -12,11 +12,11 @@ import llvm_ir.StringLiteral;
 import llvm_ir.Value;
 import llvm_ir.type.BaseType;
 import llvm_ir.type.PointerType;
-import llvm_ir.type.Type;
+import llvm_ir.type.LLVMType;
 
 public class IOInstr extends Instr {
 
-    public IOInstr(Type type, String name, InstrType instrType) {
+    public IOInstr(LLVMType type, String name, InstrType instrType) {
         super(type, name, instrType);
     }
 

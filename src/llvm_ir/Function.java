@@ -4,7 +4,7 @@ import back_end.mips.MipsBuilder;
 import back_end.mips.assembly.LabelAsm;
 import llvm_ir.instr.ReturnInstr;
 import llvm_ir.type.OtherType;
-import llvm_ir.type.Type;
+import llvm_ir.type.LLVMType;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 public class Function extends User{
     private ArrayList<Param> paramList;
     private LinkedList<BasicBlock> BBList;
-    private Type retType;
+    private LLVMType retType;
 
-    public Function(String name, Type retType) {
+    public Function(String name, LLVMType retType) {
         super(OtherType.FUNCTION, name);
         this.retType = retType;
         this.paramList = new ArrayList<>();
@@ -33,7 +33,7 @@ public class Function extends User{
         BBList.add(bb);
     }
 
-    public Type getRetType() {
+    public LLVMType getRetType() {
         return retType;
     }
 

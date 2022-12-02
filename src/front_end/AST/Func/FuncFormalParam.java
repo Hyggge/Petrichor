@@ -13,7 +13,7 @@ import llvm_ir.instr.AllocaInstr;
 import llvm_ir.instr.StoreInstr;
 import llvm_ir.type.BaseType;
 import llvm_ir.type.PointerType;
-import llvm_ir.type.Type;
+import llvm_ir.type.LLVMType;
 import utils.ErrorType;
 import utils.Printer;
 import utils.SymbolType;
@@ -75,7 +75,7 @@ public class FuncFormalParam extends Node {
     @Override
     public Value genIR() {
         SymbolManager.getInstance().addSymbol(symbol);
-        Type type = symbol.getDim() == 0 ? BaseType.INT32 : new PointerType(BaseType.INT32); // 只要是数组一律将类型变为i32，然后按照一维数组取值。
+        LLVMType type = symbol.getDim() == 0 ? BaseType.INT32 : new PointerType(BaseType.INT32); // 只要是数组一律将类型变为i32，然后按照一维数组取值。
         Param param = new Param(type, IRBuilder.getInstance().genParamName());
         // 如果参数是整数类型，为了防止被修改，需要在函数体为其创建一个指针
         if (param.getType().isInt32()) {

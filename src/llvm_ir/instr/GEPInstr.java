@@ -11,7 +11,7 @@ import llvm_ir.Instr;
 import llvm_ir.Value;
 import llvm_ir.type.BaseType;
 import llvm_ir.type.PointerType;
-import llvm_ir.type.Type;
+import llvm_ir.type.LLVMType;
 
 public class GEPInstr extends Instr {
     private Value pointer;
@@ -29,7 +29,7 @@ public class GEPInstr extends Instr {
     @Override
     public String toString() {
         PointerType pointerType = (PointerType) pointer.getType();
-        Type targetType = pointerType.getTargetType();
+        LLVMType targetType = pointerType.getTargetType();
         // 如果传入的是[n * i32]*
         if (targetType.isArray()) {
             return name + " = getelementptr inbounds " +

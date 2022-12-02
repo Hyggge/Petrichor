@@ -1,15 +1,15 @@
 package llvm_ir.type;
 
-public class ArrayType extends Type{
+public class ArrayType extends LLVMType {
     private int eleNum;
-    private Type eleType;
+    private LLVMType eleType;
 
-    public ArrayType(int eleNum, Type eleType) {
+    public ArrayType(int eleNum, LLVMType eleType) {
         this.eleNum = eleNum;
         this.eleType = eleType;
     }
 
-    public Type getEleType() {
+    public LLVMType getEleType() {
         return eleType;
     }
 

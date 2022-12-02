@@ -1,6 +1,6 @@
 package llvm_ir.type;
 
-public class Type {
+public class LLVMType {
 
     public boolean isArray() {
         return this instanceof ArrayType;
@@ -33,7 +33,7 @@ public class Type {
     public int getLength() {
         if (this.isArray()) {
             int eleNum = ((ArrayType)this).getEleNum();
-            Type eleType = ((ArrayType)this).getEleType();
+            LLVMType eleType = ((ArrayType)this).getEleType();
             return eleNum * eleType.getLength();
         }
         else return 1;

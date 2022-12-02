@@ -6,12 +6,12 @@ import back_end.mips.assembly.LiAsm;
 import back_end.mips.assembly.MemAsm;
 import llvm_ir.initial.Initial;
 import llvm_ir.type.PointerType;
-import llvm_ir.type.Type;
+import llvm_ir.type.LLVMType;
 
 public class GlobalVar extends User{
     private Initial initial;
 
-    public GlobalVar(Type type, String name, Initial initial) {
+    public GlobalVar(LLVMType type, String name, Initial initial) {
         super(type, name);
         this.initial = initial;
         if (IRBuilder.mode == IRBuilder.AUTO_INSERT_MODE) {
@@ -26,7 +26,7 @@ public class GlobalVar extends User{
 
     @Override
     public void toAssembly() {
-        Type targetType = ((PointerType) type).getTargetType();
+        LLVMType targetType = ((PointerType) type).getTargetType();
         // 如果全局变量为非数组变量
         if (targetType.isInt32()) {
             // 无初始值的情况
