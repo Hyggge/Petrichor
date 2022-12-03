@@ -34,7 +34,7 @@ public class IRBuilder {
 
     private Stack<Loop> loopStack;
 
-    public IRBuilder() {
+    private IRBuilder() {
         this.bbCnt = 0;
         this.paramCnt = 0;
         this.localVarCnt = 0;

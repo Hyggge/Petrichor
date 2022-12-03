@@ -16,6 +16,7 @@ public class Module extends Value{
     private final LinkedList<GlobalVar> globalVarList;
     private final LinkedList<Function> functionList;
 
+
     public Module() {
         super(OtherType.MODULE, "module");
         this.globalVarList = new LinkedList<>();
@@ -40,6 +41,9 @@ public class Module extends Value{
         this.stringLiterals.add(stringLiteral);
     }
 
+    public LinkedList<Function> getFunctionList() {
+        return functionList;
+    }
 
     @Override
     public String toString() {

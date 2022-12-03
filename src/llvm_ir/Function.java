@@ -7,13 +7,25 @@ import llvm_ir.type.OtherType;
 import llvm_ir.type.LLVMType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class Function extends User{
+    // 基本信息
     private ArrayList<Param> paramList;
     private LinkedList<BasicBlock> BBList;
     private LLVMType retType;
+
+    // 和CFG相关内容
+    private HashMap<BasicBlock, HashSet<BasicBlock>> preMap;
+    private HashMap<BasicBlock, HashSet<BasicBlock>> sucMap;
+
+    // 支配树
+    private HashMap<BasicBlock, BasicBlock> parentMap;
+    private HashMap<BasicBlock, HashSet<BasicBlock>> childMap;
+
 
     public Function(String name, LLVMType retType) {
         super(OtherType.FUNCTION, name);
@@ -37,8 +49,28 @@ public class Function extends User{
         return retType;
     }
 
+    public LinkedList<BasicBlock> getBBList() {
+        return BBList;
+    }
+
     public ArrayList<Param> getParamList() {
         return paramList;
+    }
+
+    public void setPreMap(HashMap<BasicBlock, HashSet<BasicBlock>> preMap) {
+        this.preMap = preMap;
+    }
+
+    public void setSucMap(HashMap<BasicBlock, HashSet<BasicBlock>> sucMap) {
+        this.sucMap = sucMap;
+    }
+
+    public void setParentMap(HashMap<BasicBlock, BasicBlock> parentMap) {
+        this.parentMap = parentMap;
+    }
+
+    public void setChildMap(HashMap<BasicBlock, HashSet<BasicBlock>> childMap) {
+        this.childMap = childMap;
     }
 
     // 我们需要保证函数最后一个BB一定有一个ret语句

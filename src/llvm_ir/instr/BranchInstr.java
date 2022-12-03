@@ -24,6 +24,14 @@ public class BranchInstr extends Instr {
         addOperands(elseBlock);
     }
 
+    public BasicBlock getThenBlock() {
+        return thenBlock;
+    }
+
+    public BasicBlock getElseBlock() {
+        return elseBlock;
+    }
+
     @Override
     public String toString() {
         return "br i1 " + con.getName() + ", label %" + thenBlock.getName() + ", label %" + elseBlock.getName();
@@ -40,4 +48,5 @@ public class BranchInstr extends Instr {
         // 反之，直接jump到elseBlock
         new JumpAsm(JumpAsm.Op.J, elseBlock.getName());
     }
+
 }
