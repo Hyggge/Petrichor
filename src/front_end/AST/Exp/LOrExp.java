@@ -13,7 +13,7 @@ public class LOrExp extends Node {
         super(startLine, endLine, type, children);
     }
 
-    public void genIRForAnd(BasicBlock thenBlock, BasicBlock elseBlock) {
+    public void genIRForOr(BasicBlock thenBlock, BasicBlock elseBlock) {
         for (Node child : children) {
             if (child instanceof LAndExp) {
                 if (children.indexOf(child) == children.size() - 1) {

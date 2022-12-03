@@ -14,6 +14,6 @@ public class CondExp extends Node {
 
 
     public void genIRForCond(BasicBlock thenBlock, BasicBlock elseBlock) {
-        ((LOrExp)children.get(0)).genIRForAnd(thenBlock, elseBlock);
+        ((LOrExp)children.get(0)).genIRForOr(thenBlock, elseBlock);
     }
 }

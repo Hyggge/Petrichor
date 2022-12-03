@@ -5,3 +5,6 @@
 testfile.txt
 output.txt
 /out/
+/error.txt
+/llvm_ir.txt
+/mips.txt
