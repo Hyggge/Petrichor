@@ -49,6 +49,10 @@ public class BasicBlock extends Value {
         return instrList.getLast();
     }
 
+    public LinkedList<Instr> getInstrList() {
+        return instrList;
+    }
+
     public HashSet<BasicBlock> getPreSet() {
         return preSet;
     }

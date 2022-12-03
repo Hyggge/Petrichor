@@ -36,19 +36,8 @@ public class CFGBuilder {
 
     public void run() {
         for (Function function : module.getFunctionList()) {
-            // 初始化preMap和sucMap
-            preMap = new HashMap<>();
-            sucMap = new HashMap<>();
-            parentMap = new HashMap<>();
-            childMap = new HashMap<>();
-            DFMap = new HashMap<>();
-            for (BasicBlock bb : function.getBBList()) {
-                preMap.put(bb, new HashSet<>());
-                sucMap.put(bb, new HashSet<>());
-                parentMap.put(bb, null);
-                childMap.put(bb, new HashSet<>());
-                DFMap.put(bb, new HashSet<>());
-            }
+            // 初始化辅助变量
+            initAttr(function);
             // 求函数的控制流图
             getCFG(function);
             // 求某个基本块的支配集合
@@ -57,6 +46,21 @@ public class CFGBuilder {
             getIDom(function);
             // 求支配边界集合
             getDF(function);
+        }
+    }
+
+    private void initAttr(Function function) {
+        preMap = new HashMap<>();
+        sucMap = new HashMap<>();
+        parentMap = new HashMap<>();
+        childMap = new HashMap<>();
+        DFMap = new HashMap<>();
+        for (BasicBlock bb : function.getBBList()) {
+            preMap.put(bb, new HashSet<>());
+            sucMap.put(bb, new HashSet<>());
+            parentMap.put(bb, null);
+            childMap.put(bb, new HashSet<>());
+            DFMap.put(bb, new HashSet<>());
         }
     }
 

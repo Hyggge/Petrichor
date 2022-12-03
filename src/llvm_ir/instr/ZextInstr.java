@@ -13,6 +13,7 @@ public class ZextInstr extends Instr {
         super(targetType, name, InstrType.ZEXT);
         this.oriValue = oriValue;
         this.targetType = targetType;
+        this.addOperands(oriValue);
     }
 
     @Override

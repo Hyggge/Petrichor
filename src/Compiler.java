@@ -80,6 +80,29 @@ public class Compiler {
             Printer.printMIPS(assemblyTable);
         }
 
+        else if (arg.equals("-geo")) {
+            // token analyse
+            Lexer lexer = new Lexer(input);
+            TokenStream tokenStream = lexer.getTokenStream();
+            // syntax analyse
+            Parser parser = new Parser(tokenStream);
+            Node compUnit = parser.parseCompUnit();
+            // check error
+            compUnit.checkError();
+            Printer.printAllErrorMsg();
+            // generate IR
+            IRBuilder.mode = IRBuilder.AUTO_INSERT_MODE;
+            compUnit.genIR();
+            Module module = IRBuilder.getInstance().getModule();
+            Printer.printLLVM(module);
+            // optimize
+            IRBuilder.mode = IRBuilder.DEFAULT_MODE;
+            // generate MIPS
+            module.toAssembly();
+            AssemblyTable assemblyTable = MipsBuilder.getInstance().getAssemblyTable();
+            Printer.printMIPS(assemblyTable);
+        }
+
 
         // close all streams
         input.close();

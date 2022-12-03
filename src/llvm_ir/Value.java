@@ -25,6 +25,10 @@ public class Value {
         return type;
     }
 
+    public ArrayList<Use> getUseList() {
+        return useList;
+    }
+
     public String getName() {
         return name;
     }
