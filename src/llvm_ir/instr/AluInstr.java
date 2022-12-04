@@ -24,26 +24,36 @@ public class AluInstr extends Instr {
     }
 
     private Op op;
-    private Value operand1;
-    private Value operand2;
+    // private Value operand1;
+    // private Value operand2;
 
     public AluInstr(String name, Op op, Value operand1, Value operand2) {
         super(BaseType.INT32, name, InstrType.ALU);
         this.op = op;
-        this.operand1 = operand1;
-        this.operand2 = operand2;
         addOperands(operand1);
         addOperands(operand2);
     }
 
+    public Value getOperand1() {
+        return operands.get(0);
+    }
+
+    public Value getOperand2() {
+        return operands.get(1);
+    }
+
     @Override
     public String toString() {
+        Value operand1 = getOperand1();
+        Value operand2 = getOperand2();
         return name + " = " + op.toString().toLowerCase() + " i32 " + operand1.getName() + ", " + operand2.getName();
     }
 
     @Override
     public void toAssembly() {
         super.toAssembly();
+        Value operand1 = getOperand1();
+        Value operand2 = getOperand2();
         // TODO: 优化思路——可以利用addi等进行优化
         // 将第一个操作数的值保存到t0
         if (operand1 instanceof Constant) {

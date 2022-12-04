@@ -7,24 +7,26 @@ import llvm_ir.type.BaseType;
 
 public class JumpInstr extends Instr {
 
-    private BasicBlock targetBB;
+    // private BasicBlock targetBB;
 
     public JumpInstr(String name, BasicBlock targetBB) {
         super(BaseType.VOID, name, InstrType.JUMP);
-        this.targetBB = targetBB;
+        operands.add(targetBB);
     }
 
     public BasicBlock getTargetBB() {
-        return targetBB;
+        return (BasicBlock) operands.get(0);
     }
 
     @Override
     public String toString() {
+        BasicBlock targetBB = getTargetBB();
         return "br label %" + targetBB.getName();
     }
     @Override
     public void toAssembly() {
         super.toAssembly();
+        BasicBlock targetBB = getTargetBB();
         new JumpAsm(JumpAsm.Op.J, targetBB.getName());
     }
 }

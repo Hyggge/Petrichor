@@ -12,18 +12,27 @@ import llvm_ir.Value;
 import llvm_ir.type.BaseType;
 
 public class StoreInstr extends Instr {
-    private Value from;
-    private Value to;
+    // private Value from;
+    // private Value to;
+
     public StoreInstr(String name, Value from, Value to) {
         super(BaseType.VOID, name, InstrType.STORE);
-        this.from = from;
-        this.to = to;
         addOperands(from);
         addOperands(to);
     }
 
+    public Value getFrom() {
+        return operands.get(0);
+    }
+
+    public Value getTo() {
+        return operands.get(1);
+    }
+
     @Override
     public String toString() {
+        Value from = getFrom();
+        Value to = getTo();
         return "store " +
                 from.getType() + " " +
                 from.getName() + ", " +
@@ -34,6 +43,8 @@ public class StoreInstr extends Instr {
     @Override
     public void toAssembly() {
         super.toAssembly();
+        Value from = getFrom();
+        Value to = getTo();
         // 我们先获得address的值, 保存到t0中
         if (to instanceof GlobalVar) {
             new LaAsm(Register.T0, to.getName().substring(1));

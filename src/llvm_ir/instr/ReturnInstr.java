@@ -12,18 +12,22 @@ import llvm_ir.Value;
 import llvm_ir.type.BaseType;
 
 public class ReturnInstr extends Instr {
-    private Value retValue;
+    // private Value retValue;
 
     public ReturnInstr(String name, Value retValue) {
         super(BaseType.VOID, name, InstrType.RETURN);
-        this.retValue = retValue;
         // 如果retValue != null, 也就是非"ret void"时候，需要记录def-use关系。
-        if(retValue != null) addOperands(retValue);
+        if (retValue != null) addOperands(retValue);
+    }
 
+    public Value getRetValue() {
+        if (operands.isEmpty()) return null;
+        else return operands.get(0);
     }
 
     @Override
     public String toString() {
+        Value retValue = getRetValue();
         if (retValue == null) return "ret void";
         return "ret " + retValue.getType() + " " + retValue.getName();
     }
@@ -31,6 +35,7 @@ public class ReturnInstr extends Instr {
     @Override
     public void toAssembly() {
         super.toAssembly();
+        Value retValue = getRetValue();
         Function function = getParentBB().getParentFunction();
         if (retValue != null) {
             if (retValue instanceof Constant) {

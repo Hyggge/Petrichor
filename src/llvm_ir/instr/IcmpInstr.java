@@ -20,27 +20,37 @@ public class IcmpInstr extends Instr {
         SLE
     }
     private Op op;
-    private Value operand1;
-    private Value operand2;
+    // private Value operand1;
+    // private Value operand2;
 
 
     public IcmpInstr(String name, Op op, Value operand1, Value operand2) {
         super(BaseType.INT1, name, InstrType.ICMP);
         this.op = op;
-        this.operand1 = operand1;
-        this.operand2 = operand2;
         addOperands(operand1);
         addOperands(operand2);
     }
 
+    public Value getOperand1() {
+        return operands.get(0);
+    }
+
+    public Value getOperand2() {
+        return operands.get(1);
+    }
+
     @Override
     public String toString() {
+        Value operand1 = getOperand1();
+        Value operand2 = getOperand2();
         return name + " = icmp " + op.toString().toLowerCase() + " i32 " + operand1.getName() + ", " + operand2.getName();
     }
 
     @Override
     public void toAssembly() {
         super.toAssembly();
+        Value operand1 = getOperand1();
+        Value operand2 = getOperand2();
         // 对于>和<，尽量使用slt和sgt，因为这两个是基础指令
         // 对于>=和<=, 暂时采用sle和sge, 这两个指令都会翻译成三个基础指令
         // 对于==和!=，暂时采用seq和sne，seq会翻译成三条基础指令，slt会翻译成两条基础指令

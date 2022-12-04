@@ -12,23 +12,32 @@ import llvm_ir.Instr;
 import llvm_ir.Value;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CallInstr extends Instr {
-    private Function targetFunc;
-    private ArrayList<Value> paramList;
+    // private Function targetFunc;
+    // private ArrayList<Value> paramList;
 
     public CallInstr(String name, Function targetFunc, ArrayList<Value> paramList) {
         super(targetFunc.getRetType(), name, InstrType.CALL);
-        this.targetFunc = targetFunc;
-        this.paramList = paramList;
         addOperands(targetFunc);
         for (Value param : paramList) {
             addOperands(param);
         }
     }
 
+    public Function getTargetFunc() {
+        return (Function) operands.get(0);
+    }
+
+    public List<Value> getParamList() {
+        return operands.subList(1, operands.size());
+    }
+
     @Override
     public String toString() {
+        Function targetFunc = getTargetFunc();
+        List<Value> paramList = getParamList();
         ArrayList<String> paramInfo = new ArrayList<>();
         for (Value param : paramList) {
             paramInfo.add(param.getType() + " " + param.getName());
@@ -43,6 +52,8 @@ public class CallInstr extends Instr {
     @Override
     public void toAssembly() {
         super.toAssembly();
+        Function targetFunc = getTargetFunc();
+        List<Value> paramList = getParamList();
         int curOffset = MipsBuilder.getInstance().getCurOffset();
         new MemAsm(MemAsm.Op.SW, Register.SP, Register.SP, curOffset - 4);
         new MemAsm(MemAsm.Op.SW, Register.RA, Register.SP, curOffset - 8);

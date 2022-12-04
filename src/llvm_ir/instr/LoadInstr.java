@@ -10,22 +10,27 @@ import llvm_ir.Value;
 import llvm_ir.type.PointerType;
 
 public class LoadInstr extends Instr {
-    private Value pointer;
+    // private Value pointer;
 
     public LoadInstr(String name, Value pointer) {
         super(((PointerType)pointer.getType()).getTargetType(), name, InstrType.LOAD);
-        this.pointer = pointer;
         addOperands(pointer);
+    }
+
+    public Value getPointer() {
+        return operands.get(0);
     }
 
     @Override
     public String toString() {
+        Value pointer = getPointer();
         return name + " = load " + type + ", " + pointer.getType() + " " + pointer.getName();
     }
 
     @Override
     public void toAssembly() {
         super.toAssembly();
+        Value pointer = getPointer();
         if (pointer instanceof GlobalVar) {
             new LaAsm(Register.T0, pointer.getName().substring(1));
         } else {

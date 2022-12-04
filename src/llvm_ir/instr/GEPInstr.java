@@ -14,20 +14,27 @@ import llvm_ir.type.PointerType;
 import llvm_ir.type.LLVMType;
 
 public class GEPInstr extends Instr {
-    private Value pointer;
-    private Value offset;
+//    private Value pointer;
+//    private Value offset;
 
     public GEPInstr(String name, Value pointer, Value offset) {
         super(new PointerType(BaseType.INT32), name, InstrType.GEP);
-        this.pointer = pointer;
-        this.offset = offset;
         addOperands(pointer);
         addOperands(offset);
     }
 
+    public Value getPointer() {
+        return operands.get(0);
+    }
+
+    public Value getOffset() {
+        return operands.get(1);
+    }
 
     @Override
     public String toString() {
+        Value pointer = getPointer();
+        Value offset = getOffset();
         PointerType pointerType = (PointerType) pointer.getType();
         LLVMType targetType = pointerType.getTargetType();
         // 如果传入的是[n * i32]*
@@ -51,6 +58,8 @@ public class GEPInstr extends Instr {
     @Override
     public void toAssembly() {
         super.toAssembly();
+        Value pointer = getPointer();
+        Value offset = getOffset();
         // 先获得pointer中的值（也就是数组的首地址），存入t0中
         if (pointer instanceof GlobalVar) {
             new LaAsm(Register.T0, pointer.getName().substring(1));
