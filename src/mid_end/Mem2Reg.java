@@ -5,6 +5,7 @@ import llvm_ir.Function;
 import llvm_ir.IRBuilder;
 import llvm_ir.Instr;
 import llvm_ir.Module;
+import llvm_ir.UndefinedValue;
 import llvm_ir.Use;
 import llvm_ir.Value;
 import llvm_ir.instr.AllocaInstr;
@@ -16,6 +17,7 @@ import llvm_ir.type.PointerType;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -39,15 +41,22 @@ public class Mem2Reg {
 
     public void run() {
         for (Function function : module.getFunctionList()) {
+            // 遍历所有基本块，插入phi指令
             for (BasicBlock bb : function.getBBList()) {
                 for (Instr instr : bb.getInstrList()) {
-                    if (instr instanceof AllocaInstr &&
-                            ((PointerType)instr.getType()).getTargetType() == BaseType.INT32) {
+                    if (instr instanceof AllocaInstr && ((PointerType)instr.getType()).getTargetType() == BaseType.INT32) {
+                        // 初始化和该alloca指令相关的数据结构
                         initAttr(instr);
+                        // 找出需要添加phi指令的基本块，并添加phi
                         insertPhi(instr);
-                        rename(defBBList.get(0));
+                        // 通过DFS进行重命名，同时将相关的store和load指令删除
+                        rename(function.getBBList().get(0));
                     }
                 }
+            }
+            // 遍历所有基本块，删除所有的alloca, load, store指令
+            for (BasicBlock bb : function.getBBList()) {
+                bb.getInstrList().removeIf(instr -> instr instanceof AllocaInstr || instr instanceof LoadInstr || instr instanceof StoreInstr);
             }
         }
     }
@@ -97,7 +106,7 @@ public class Mem2Reg {
     private void insert(BasicBlock bb) {
         LinkedList<Instr> instrList = bb.getInstrList();
         String name = IRBuilder.getInstance().genLocalVarName();
-        Instr phi = new PhiInstr(name, new ArrayList<>());
+        Instr phi = new PhiInstr(name, bb.getPreList());
         instrList.addFirst(phi);
         // phi既是useInstr,又是defInstr
         useInstrList.add(phi);
@@ -108,19 +117,22 @@ public class Mem2Reg {
     // 通过DFS对load、store、phi进行重命名
     private void rename(BasicBlock entry) {
         // 遍历基本块entry的各个指令，修改其reaching-define
-        for (Instr instr : entry.getInstrList()) {
+        Iterator<Instr> iterator = entry.getInstrList().iterator();
+        while (iterator.hasNext()) {
+            Instr instr = iterator.next();
             if (instr instanceof LoadInstr) {
-                // TODO: 将所有使用该load指令的指令，改为使用stack.peek()
-                instr.modifyAllUseThisToNewValue(stack.peek());
-
+                // 将所有使用该load指令的指令，改为使用stack.peek()
+                // 如果当前的stack.peek()为空，则说明该变量没有被def，值是未定义的undefined
+                Value newValue = stack.empty() ? new UndefinedValue() : stack.peek();
+                instr.modifyAllUseThisToNewValue(newValue);
             }
             else if (instr instanceof StoreInstr) {
-                // TODO: 将该指令使用的值推入stack
+                // 将该指令使用的值推入stack
                 Value value = ((StoreInstr) instr).getFrom();
                 stack.push(value);
             }
             else if (instr instanceof PhiInstr) {
-                // TODO: 将该指令推入stack
+                // 将该指令推入stack
                 stack.push(instr);
             }
         }
@@ -131,7 +143,8 @@ public class Mem2Reg {
             if (firstInstr instanceof PhiInstr && useInstrList.contains(firstInstr)) {
                 // 将stack.peek() 插入该phi指令的options中
                 PhiInstr phi = (PhiInstr) firstInstr;
-                phi.addOption(stack.peek());
+                Value option = stack.empty() ? new UndefinedValue() : stack.peek();
+                phi.addOption(option, entry);
             }
         }
         // 对entry支配的基本块使用rename方法，实现DFS

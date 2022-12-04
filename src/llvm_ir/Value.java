@@ -37,7 +37,8 @@ public class Value {
     public void modifyAllUseThisToNewValue(Value newValue) {
         ArrayList<User> users = useList.stream().map(Use::getUser).collect(Collectors.toCollection(ArrayList::new));
         for (User user : users) {
-            assert user.modifyOperand(this, newValue);
+            boolean res = user.modifyOperand(this, newValue);
+            assert res;
         }
     }
 

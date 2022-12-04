@@ -18,6 +18,7 @@ public class Printer {
 
     private static FileOutputStream outFile = null;
     private static FileOutputStream errFile = null;
+    private static FileOutputStream oriLLVMFile = null;
     private static FileOutputStream llvmFile = null;
     private static FileOutputStream mipsFile = null;
     private static HashMap<Integer, ErrorType> errorMap;

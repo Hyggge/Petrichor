@@ -99,6 +99,7 @@ public class Compiler {
             // optimize
             IRBuilder.mode = IRBuilder.DEFAULT_MODE;
             Optimizer.getInstance().run(module);
+            Printer.printLLVM(module);
             // generate MIPS
             module.toAssembly();
             AssemblyTable assemblyTable = MipsBuilder.getInstance().getAssemblyTable();

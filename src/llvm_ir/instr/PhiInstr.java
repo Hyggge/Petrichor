@@ -1,25 +1,39 @@
 package llvm_ir.instr;
 
+import llvm_ir.BasicBlock;
 import llvm_ir.Instr;
 import llvm_ir.Value;
 import llvm_ir.type.BaseType;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class PhiInstr extends Instr {
-    private ArrayList<Value> options;
+    private ArrayList<BasicBlock> preBBList;
 
-    public PhiInstr(String name, ArrayList<Value> options) {
+    public PhiInstr(String name, ArrayList<BasicBlock> preBBList) {
         super(BaseType.INT32, name, InstrType.PHI);
-        this.options = options;
+        this.preBBList = preBBList;
+        for (int i = 0; i < preBBList.size(); i++) {
+            operands.add(null);
+        }
     }
 
-    public void addOption(Value value) {
-        options.add(value);
+    public void addOption(Value value, BasicBlock preBB) {
+        operands.set(preBBList.indexOf(preBB), value);
     }
 
+    public ArrayList<Value> getOptions() {
+        return operands;
+    }
 
-
-
-
+    @Override
+    public String toString() {
+        ArrayList<Value> options = getOptions();
+        //  %4 = phi i32 [ 1, %2 ], [ %6, %5 ]
+        return name + " = phi " + type + " "
+                + preBBList.stream()
+                            .map(bb -> "[ " + options.get(preBBList.indexOf(bb)).getName() + ", %" + bb.getName() + " ]")
+                            .collect(Collectors.joining(", "));
+    }
 }
