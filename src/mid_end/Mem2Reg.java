@@ -19,10 +19,10 @@ import java.util.Stack;
 
 public class Mem2Reg {
     private Module module;
-    private HashSet<Instr> useInstrList;
-    private HashSet<Instr> defInstrList;
-    private HashSet<BasicBlock> defBBList;
-    private HashSet<BasicBlock> useBBList;
+    private ArrayList<Instr> useInstrList;
+    private ArrayList<Instr> defInstrList;
+    private ArrayList<BasicBlock> defBBList;
+    private ArrayList<BasicBlock> useBBList;
     private Stack<Value> stack;
 
 
@@ -51,10 +51,10 @@ public class Mem2Reg {
 
 
     private void initAttr(Instr instr) {
-        this.useBBList = new HashSet<>();
-        this.defBBList = new HashSet<>();
-        this.useInstrList = new HashSet<>();
-        this.defInstrList = new HashSet<>();
+        this.useBBList = new ArrayList<>();
+        this.defBBList = new ArrayList<>();
+        this.useInstrList = new ArrayList<>();
+        this.defInstrList = new ArrayList<>();
         this.stack = new Stack<>();
         for (Use use : instr.getUseList()) {
             assert use.getUser() instanceof Instr;
