@@ -3,12 +3,11 @@ package llvm_ir;
 import back_end.mips.MipsBuilder;
 import back_end.mips.assembly.LabelAsm;
 import llvm_ir.instr.ReturnInstr;
-import llvm_ir.type.OtherType;
 import llvm_ir.type.LLVMType;
+import llvm_ir.type.OtherType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -19,12 +18,12 @@ public class Function extends User{
     private LLVMType retType;
 
     // 和CFG相关内容
-    private HashMap<BasicBlock, HashSet<BasicBlock>> preMap;
-    private HashMap<BasicBlock, HashSet<BasicBlock>> sucMap;
+    private HashMap<BasicBlock, ArrayList<BasicBlock>> preMap;
+    private HashMap<BasicBlock, ArrayList<BasicBlock>> sucMap;
 
     // 支配树
     private HashMap<BasicBlock, BasicBlock> parentMap;
-    private HashMap<BasicBlock, HashSet<BasicBlock>> childMap;
+    private HashMap<BasicBlock, ArrayList<BasicBlock>> childMap;
 
 
     public Function(String name, LLVMType retType) {
@@ -57,11 +56,11 @@ public class Function extends User{
         return paramList;
     }
 
-    public void setPreMap(HashMap<BasicBlock, HashSet<BasicBlock>> preMap) {
+    public void setPreMap(HashMap<BasicBlock, ArrayList<BasicBlock>> preMap) {
         this.preMap = preMap;
     }
 
-    public void setSucMap(HashMap<BasicBlock, HashSet<BasicBlock>> sucMap) {
+    public void setSucMap(HashMap<BasicBlock, ArrayList<BasicBlock>> sucMap) {
         this.sucMap = sucMap;
     }
 
@@ -69,7 +68,7 @@ public class Function extends User{
         this.parentMap = parentMap;
     }
 
-    public void setChildMap(HashMap<BasicBlock, HashSet<BasicBlock>> childMap) {
+    public void setChildMap(HashMap<BasicBlock, ArrayList<BasicBlock>> childMap) {
         this.childMap = childMap;
     }
 

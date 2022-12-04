@@ -8,6 +8,7 @@ import llvm_ir.instr.BranchInstr;
 import llvm_ir.instr.JumpInstr;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
@@ -16,13 +17,13 @@ public class CFGBuilder {
     private Module module;
 
     // 流图
-    private HashMap<BasicBlock, HashSet<BasicBlock>> preMap;
-    private HashMap<BasicBlock, HashSet<BasicBlock>> sucMap;
+    private HashMap<BasicBlock, ArrayList<BasicBlock>> preMap;
+    private HashMap<BasicBlock, ArrayList<BasicBlock>> sucMap;
     // 支配树
     private HashMap<BasicBlock, BasicBlock> parentMap;
-    private HashMap<BasicBlock, HashSet<BasicBlock>> childMap;
+    private HashMap<BasicBlock, ArrayList<BasicBlock>> childMap;
     // DF
-    private HashMap<BasicBlock, HashSet<BasicBlock>> DFMap;
+    private HashMap<BasicBlock, ArrayList<BasicBlock>> DFMap;
 
 
     public CFGBuilder(Module module) {
@@ -56,11 +57,11 @@ public class CFGBuilder {
         childMap = new HashMap<>();
         DFMap = new HashMap<>();
         for (BasicBlock bb : function.getBBList()) {
-            preMap.put(bb, new HashSet<>());
-            sucMap.put(bb, new HashSet<>());
+            preMap.put(bb, new ArrayList<>());
+            sucMap.put(bb, new ArrayList<>());
             parentMap.put(bb, null);
-            childMap.put(bb, new HashSet<>());
-            DFMap.put(bb, new HashSet<>());
+            childMap.put(bb, new ArrayList<>());
+            DFMap.put(bb, new ArrayList<>());
         }
     }
 
@@ -85,8 +86,8 @@ public class CFGBuilder {
         }
         // 将前驱和后继信息写入BB
         for (BasicBlock bb : bbList) {
-            bb.setPreSet(preMap.get(bb));
-            bb.setSucSet(sucMap.get(bb));
+            bb.setPreList(preMap.get(bb));
+            bb.setSucList(sucMap.get(bb));
         }
         // 将sucMap和preMap写入function
         function.setPreMap(preMap);
@@ -102,13 +103,13 @@ public class CFGBuilder {
             HashSet<BasicBlock> reachedSet = new HashSet<>();
             DFSForJudgeDom(entry, target, reachedSet);
             // 接下来，所有不在reached中的BB，都是被target支配的BB(包括target本身)
-            HashSet<BasicBlock> domSet = new HashSet<>();
+            ArrayList<BasicBlock> domList = new ArrayList<>();
             for (BasicBlock temp : bbList) {
                 if (! reachedSet.contains(temp)) {
-                    domSet.add(temp);
+                    domList.add(temp);
                 }
             }
-            target.setDomSet(domSet);
+            target.setDomList(domList);
         }
     }
 
@@ -118,7 +119,7 @@ public class CFGBuilder {
             return;
         }
         reachedSet.add(entry);
-        for (BasicBlock sucBB : entry.getSucSet()) {
+        for (BasicBlock sucBB : entry.getSucList()) {
             if (! reachedSet.contains(sucBB)) {
                 DFSForJudgeDom(sucBB, target, reachedSet);
             }
@@ -140,7 +141,7 @@ public class CFGBuilder {
         // 将支配和被支配信息写入BB
         for (BasicBlock bb : bbList) {
             bb.setParent(parentMap.get(bb));
-            bb.setChildrenSet(childMap.get(bb));
+            bb.setChildrenList(childMap.get(bb));
         }
         // 将支配树写入function
         function.setParentMap(parentMap);
@@ -149,11 +150,11 @@ public class CFGBuilder {
 
     private boolean judgeIDOM(BasicBlock domer, BasicBlock domed, LinkedList<BasicBlock> bbList) {
         // 如果domer和domed没有支配关系，那么显然也没有直接支配关系
-        if (! domer.getDomSet().contains(domed)) {
+        if (! domer.getDomList().contains(domed)) {
             return false;
         }
-        for (BasicBlock mid : domer.getDomSet()) {
-            if (! mid.equals(domer) && ! mid.equals(domed) && mid.getDomSet().contains(domed)) {
+        for (BasicBlock mid : domer.getDomList()) {
+            if (! mid.equals(domer) && ! mid.equals(domed) && mid.getDomList().contains(domed)) {
                 return false;
             }
         }
@@ -163,12 +164,12 @@ public class CFGBuilder {
     private void getDF(Function function) {
         LinkedList<BasicBlock> bbList = function.getBBList();
         // 对所有的边进行遍历, 求出DFMap
-        for (Map.Entry<BasicBlock, HashSet<BasicBlock>> entry : sucMap.entrySet()) {
+        for (Map.Entry<BasicBlock, ArrayList<BasicBlock>> entry : sucMap.entrySet()) {
             BasicBlock a = entry.getKey();
             for (BasicBlock b : entry.getValue()) {
                 // a, b是某条边的两个节点（基本块）
                 BasicBlock x = a;
-                while (! x.getDomSet().contains(b)) {
+                while (! x.getDomList().contains(b)) {
                     DFMap.get(x).add(b);
                     x = x.getParent();
                 }

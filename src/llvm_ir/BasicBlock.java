@@ -3,7 +3,7 @@ package llvm_ir;
 import back_end.mips.assembly.LabelAsm;
 import llvm_ir.type.OtherType;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -12,12 +12,12 @@ public class BasicBlock extends Value {
     private Function parentFunction;
 
     // 和CFG相关属性
-    private HashSet<BasicBlock> preSet; // 流图
-    private HashSet<BasicBlock> sucSet; // 流图
+    private ArrayList<BasicBlock> preList; // 流图
+    private ArrayList<BasicBlock> sucList; // 流图
     private BasicBlock parent; // 支配树
-    private HashSet<BasicBlock> childrenSet; // 支配树
-    private HashSet<BasicBlock> domSet;
-    private HashSet<BasicBlock> DF;
+    private ArrayList<BasicBlock> childrenList; // 支配树
+    private ArrayList<BasicBlock> domList;
+    private ArrayList<BasicBlock> DF;
 
 
     public BasicBlock(String name) {
@@ -53,20 +53,20 @@ public class BasicBlock extends Value {
         return instrList;
     }
 
-    public HashSet<BasicBlock> getPreSet() {
-        return preSet;
+    public ArrayList<BasicBlock> getPreList() {
+        return preList;
     }
 
-    public void setPreSet(HashSet<BasicBlock> preSet) {
-        this.preSet = preSet;
+    public void setPreList(ArrayList<BasicBlock> preList) {
+        this.preList = preList;
     }
 
-    public HashSet<BasicBlock> getSucSet() {
-        return sucSet;
+    public ArrayList<BasicBlock> getSucList() {
+        return sucList;
     }
 
-    public void setSucSet(HashSet<BasicBlock> sucSet) {
-        this.sucSet = sucSet;
+    public void setSucList(ArrayList<BasicBlock> sucList) {
+        this.sucList = sucList;
     }
 
     public BasicBlock getParent() {
@@ -77,27 +77,27 @@ public class BasicBlock extends Value {
         this.parent = parent;
     }
 
-    public HashSet<BasicBlock> getChildrenSet() {
-        return childrenSet;
+    public ArrayList<BasicBlock> getChildrenList() {
+        return childrenList;
     }
 
-    public void setChildrenSet(HashSet<BasicBlock> childrenSet) {
-        this.childrenSet = childrenSet;
+    public void setChildrenList(ArrayList<BasicBlock> childrenList) {
+        this.childrenList = childrenList;
     }
 
-    public HashSet<BasicBlock> getDomSet() {
-        return domSet;
+    public ArrayList<BasicBlock> getDomList() {
+        return domList;
     }
 
-    public void setDomSet(HashSet<BasicBlock> domSet) {
-        this.domSet = domSet;
+    public void setDomList(ArrayList<BasicBlock> domList) {
+        this.domList = domList;
     }
 
-    public HashSet<BasicBlock> getDF() {
+    public ArrayList<BasicBlock> getDF() {
         return DF;
     }
 
-    public void setDF(HashSet<BasicBlock> DF) {
+    public void setDF(ArrayList<BasicBlock> DF) {
         this.DF = DF;
     }
 
