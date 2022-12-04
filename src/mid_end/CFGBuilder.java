@@ -141,7 +141,7 @@ public class CFGBuilder {
         // 将支配和被支配信息写入BB
         for (BasicBlock bb : bbList) {
             bb.setParent(parentMap.get(bb));
-            bb.setChildrenList(childMap.get(bb));
+            bb.setChildList(childMap.get(bb));
         }
         // 将支配树写入function
         function.setParentMap(parentMap);

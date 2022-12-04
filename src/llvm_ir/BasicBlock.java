@@ -15,7 +15,7 @@ public class BasicBlock extends Value {
     private ArrayList<BasicBlock> preList; // 流图
     private ArrayList<BasicBlock> sucList; // 流图
     private BasicBlock parent; // 支配树
-    private ArrayList<BasicBlock> childrenList; // 支配树
+    private ArrayList<BasicBlock> childList; // 支配树
     private ArrayList<BasicBlock> domList;
     private ArrayList<BasicBlock> DF;
 
@@ -49,6 +49,10 @@ public class BasicBlock extends Value {
         return instrList.getLast();
     }
 
+    public Instr getFirstInstr() {
+        return instrList.getFirst();
+    }
+
     public LinkedList<Instr> getInstrList() {
         return instrList;
     }
@@ -77,12 +81,12 @@ public class BasicBlock extends Value {
         this.parent = parent;
     }
 
-    public ArrayList<BasicBlock> getChildrenList() {
-        return childrenList;
+    public ArrayList<BasicBlock> getChildList() {
+        return childList;
     }
 
-    public void setChildrenList(ArrayList<BasicBlock> childrenList) {
-        this.childrenList = childrenList;
+    public void setChildList(ArrayList<BasicBlock> childList) {
+        this.childList = childList;
     }
 
     public ArrayList<BasicBlock> getDomList() {

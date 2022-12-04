@@ -11,6 +11,8 @@ import llvm_ir.instr.AllocaInstr;
 import llvm_ir.instr.LoadInstr;
 import llvm_ir.instr.PhiInstr;
 import llvm_ir.instr.StoreInstr;
+import llvm_ir.type.BaseType;
+import llvm_ir.type.PointerType;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,10 +41,11 @@ public class Mem2Reg {
         for (Function function : module.getFunctionList()) {
             for (BasicBlock bb : function.getBBList()) {
                 for (Instr instr : bb.getInstrList()) {
-                    if (instr instanceof AllocaInstr) {
+                    if (instr instanceof AllocaInstr &&
+                            ((PointerType)instr.getType()).getTargetType() == BaseType.INT32) {
                         initAttr(instr);
                         insertPhi(instr);
-                        rename(instr);
+                        rename(function.getBBList().get(0));
                     }
                 }
             }
@@ -94,10 +97,36 @@ public class Mem2Reg {
         Instr phi = new PhiInstr(name, new ArrayList<>());
         instrList.addFirst(phi);
         // phi既是useInstr,又是defInstr
+        useInstrList.add(phi);
+        defInstrList.add(phi);
     }
 
 
-    private void rename(Instr instr) {
-
+    // 通过DFS对load、store、phi进行重命名
+    private void rename(BasicBlock entry) {
+        // 遍历基本块entry的各个指令，修改其reaching-define
+        for (Instr instr : entry.getInstrList()) {
+            if (instr instanceof LoadInstr) {
+                // TODO: 将所有使用该load指令的指令，改为使用stack.peek()
+            }
+            else if (instr instanceof StoreInstr) {
+                // TODO: 将该指令使用的值推入stack
+            }
+            else if (instr instanceof PhiInstr) {
+                // TODO: 将该指令推入stack
+            }
+        }
+        // 遍历entry的后继集合，将最新的define（stack.peek）填充进每个后继块的第一个phi指令中
+        // 有可能某个后继块没有和当前alloc指令相关的phi，需要进行特判（符合条件的Phi应该在useInstrList中）
+        for (BasicBlock sucBB : entry.getSucList()) {
+            Instr firstInstr = sucBB.getFirstInstr();
+            if (firstInstr instanceof PhiInstr && useInstrList.contains(firstInstr)) {
+                // 将stack.peek() 插入该phi指令的options中
+            }
+        }
+        // 对entry支配的基本块使用rename方法，实现DFS
+        for (BasicBlock child : entry.getChildList()) {
+            rename(child);
+        }
     }
 }
