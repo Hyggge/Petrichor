@@ -108,12 +108,17 @@ public class Mem2Reg {
         for (Instr instr : entry.getInstrList()) {
             if (instr instanceof LoadInstr) {
                 // TODO: 将所有使用该load指令的指令，改为使用stack.peek()
+                instr.modifyAllUseThisToNewValue(stack.peek());
+
             }
             else if (instr instanceof StoreInstr) {
                 // TODO: 将该指令使用的值推入stack
+                Value value = ((StoreInstr) instr).getFrom();
+                stack.push(value);
             }
             else if (instr instanceof PhiInstr) {
                 // TODO: 将该指令推入stack
+                stack.push(instr);
             }
         }
         // 遍历entry的后继集合，将最新的define（stack.peek）填充进每个后继块的第一个phi指令中
@@ -122,6 +127,8 @@ public class Mem2Reg {
             Instr firstInstr = sucBB.getFirstInstr();
             if (firstInstr instanceof PhiInstr && useInstrList.contains(firstInstr)) {
                 // 将stack.peek() 插入该phi指令的options中
+                PhiInstr phi = (PhiInstr) firstInstr;
+                phi.addOption(stack.peek());
             }
         }
         // 对entry支配的基本块使用rename方法，实现DFS

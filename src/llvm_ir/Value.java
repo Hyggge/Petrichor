@@ -3,6 +3,8 @@ package llvm_ir;
 import llvm_ir.type.LLVMType;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.stream.Collectors;
 
 public class Value {
 
@@ -21,6 +23,24 @@ public class Value {
         useList.add(use);
     }
 
+    public void deleteUser(User user) {
+        Iterator<Use> iterator = useList.iterator();
+        while (iterator.hasNext()) {
+            Use use = iterator.next();
+            if (use.getUser() == user) {
+                iterator.remove();
+                break;
+            }
+        }
+    }
+
+    public void modifyAllUseThisToNewValue(Value newValue) {
+        ArrayList<User> users = useList.stream().map(Use::getUser).collect(Collectors.toCollection(ArrayList::new));
+        for (User user : users) {
+            assert user.modifyOperand(this, newValue);
+        }
+    }
+
     public LLVMType getType() {
         return type;
     }
@@ -32,6 +52,8 @@ public class Value {
     public String getName() {
         return name;
     }
+
+
 
     public void toAssembly() {
     }
