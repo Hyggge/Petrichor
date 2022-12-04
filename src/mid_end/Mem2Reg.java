@@ -45,7 +45,7 @@ public class Mem2Reg {
                             ((PointerType)instr.getType()).getTargetType() == BaseType.INT32) {
                         initAttr(instr);
                         insertPhi(instr);
-                        rename(function.getBBList().get(0));
+                        rename(defBBList.get(0));
                     }
                 }
             }
@@ -64,11 +64,13 @@ public class Mem2Reg {
             Instr user = (Instr)use.getUser();
             if (user instanceof StoreInstr) {
                 defInstrList.add(user);
-                defBBList.add(user.getParentBB());
+                if (! defBBList.contains(user.getParentBB()))
+                    defBBList.add(user.getParentBB());
             }
             else if (user instanceof LoadInstr) {
                 useInstrList.add(user);
-                defBBList.add(user.getParentBB());
+                if (! defBBList.contains(user.getParentBB()))
+                    useBBList.add(user.getParentBB());
             }
         }
 
@@ -79,6 +81,7 @@ public class Mem2Reg {
         HashSet<BasicBlock> W = new HashSet<>(defBBList); // 定义变量的基本块的集合
         while (! W.isEmpty()) {
             BasicBlock X = W.iterator().next();
+            W.remove(X);
             for (BasicBlock Y : X.getDF()) {
                 if (! F.contains(Y)) {
                     insert(Y);

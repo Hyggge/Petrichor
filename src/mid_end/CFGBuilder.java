@@ -19,6 +19,8 @@ public class CFGBuilder {
     // 流图
     private HashMap<BasicBlock, ArrayList<BasicBlock>> preMap;
     private HashMap<BasicBlock, ArrayList<BasicBlock>> sucMap;
+    // dom
+    private HashMap<BasicBlock, ArrayList<BasicBlock>> domMap;
     // 支配树
     private HashMap<BasicBlock, BasicBlock> parentMap;
     private HashMap<BasicBlock, ArrayList<BasicBlock>> childMap;
@@ -30,6 +32,7 @@ public class CFGBuilder {
         this.module = module;
         this.preMap = null;
         this.sucMap = null;
+        this.domMap = null;
         this.parentMap = null;
         this.childMap = null;
         this.DFMap = null;
@@ -53,12 +56,14 @@ public class CFGBuilder {
     private void initAttr(Function function) {
         preMap = new HashMap<>();
         sucMap = new HashMap<>();
+        domMap = new HashMap<>();
         parentMap = new HashMap<>();
         childMap = new HashMap<>();
         DFMap = new HashMap<>();
         for (BasicBlock bb : function.getBBList()) {
             preMap.put(bb, new ArrayList<>());
             sucMap.put(bb, new ArrayList<>());
+            domMap.put(bb, new ArrayList<>());
             parentMap.put(bb, null);
             childMap.put(bb, new ArrayList<>());
             DFMap.put(bb, new ArrayList<>());
@@ -109,6 +114,7 @@ public class CFGBuilder {
                     domList.add(temp);
                 }
             }
+            domMap.put(target, domList);
             target.setDomList(domList);
         }
     }
@@ -149,8 +155,8 @@ public class CFGBuilder {
     }
 
     private boolean judgeIDOM(BasicBlock domer, BasicBlock domed, LinkedList<BasicBlock> bbList) {
-        // 如果domer和domed没有支配关系，那么显然也没有直接支配关系
-        if (! domer.getDomList().contains(domed)) {
+        // 保证两者必须首先是严格支配
+        if (! domer.getDomList().contains(domed) || domer.equals(domed)) {
             return false;
         }
         for (BasicBlock mid : domer.getDomList()) {
@@ -169,7 +175,7 @@ public class CFGBuilder {
             for (BasicBlock b : entry.getValue()) {
                 // a, b是某条边的两个节点（基本块）
                 BasicBlock x = a;
-                while (! x.getDomList().contains(b)) {
+                while (! x.getDomList().contains(b) || x.equals(b)) {
                     DFMap.get(x).add(b);
                     x = x.getParent();
                 }

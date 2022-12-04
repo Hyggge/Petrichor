@@ -7,6 +7,7 @@ import front_end.lexer.TokenStream;
 import front_end.parser.Parser;
 import llvm_ir.IRBuilder;
 import llvm_ir.Module;
+import mid_end.Optimizer;
 import utils.Printer;
 
 import java.io.FileInputStream;
@@ -15,7 +16,7 @@ import java.io.PushbackInputStream;
 
 public class Compiler {
     public static void main(String[] args) throws Exception {
-         String arg = "-ge";
+         String arg = "-geo";
 //        String arg = args[0];
 
         PushbackInputStream input = new PushbackInputStream(new FileInputStream("testfile.txt"), 16);
@@ -97,6 +98,7 @@ public class Compiler {
             Printer.printLLVM(module);
             // optimize
             IRBuilder.mode = IRBuilder.DEFAULT_MODE;
+            Optimizer.getInstance().run(module);
             // generate MIPS
             module.toAssembly();
             AssemblyTable assemblyTable = MipsBuilder.getInstance().getAssemblyTable();
