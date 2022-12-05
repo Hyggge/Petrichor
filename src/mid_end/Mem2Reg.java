@@ -117,6 +117,8 @@ public class Mem2Reg {
 
     // 通过DFS对load、store、phi进行重命名
     private void rename(BasicBlock entry) {
+        // cnt记录遍历entry的过程中，stack的push次数
+        int cnt = 0;
         // 遍历基本块entry的各个指令，修改其reaching-define
         Iterator<Instr> iterator = entry.getInstrList().iterator();
         while (iterator.hasNext()) {
@@ -131,10 +133,12 @@ public class Mem2Reg {
                 // 将该指令使用的值推入stack
                 Value value = ((StoreInstr) instr).getFrom();
                 stack.push(value);
+                cnt++;
             }
             else if (instr instanceof PhiInstr && defInstrList.contains(instr)) {
                 // 将该指令推入stack
                 stack.push(instr);
+                cnt++;
             }
         }
         // 遍历entry的后继集合，将最新的define（stack.peek）填充进每个后继块的第一个phi指令中
@@ -151,6 +155,10 @@ public class Mem2Reg {
         // 对entry支配的基本块使用rename方法，实现DFS
         for (BasicBlock child : entry.getChildList()) {
             rename(child);
+        }
+        // 将该次dfs时压入stack的数据全部弹出
+        for (int i = 0; i < cnt; i++) {
+            stack.pop();
         }
     }
 }
