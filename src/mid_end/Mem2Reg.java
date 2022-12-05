@@ -108,6 +108,7 @@ public class Mem2Reg {
         String name = IRBuilder.getInstance().genLocalVarName();
         Instr phi = new PhiInstr(name, bb.getPreList());
         instrList.addFirst(phi);
+        phi.setParentBB(bb);
         // phi既是useInstr,又是defInstr
         useInstrList.add(phi);
         defInstrList.add(phi);

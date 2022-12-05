@@ -15,7 +15,7 @@ public class PhiInstr extends Instr {
         super(BaseType.INT32, name, InstrType.PHI);
         this.preBBList = preBBList;
         for (int i = 0; i < preBBList.size(); i++) {
-            operands.add(null);
+            addOperands(null);
         }
     }
 

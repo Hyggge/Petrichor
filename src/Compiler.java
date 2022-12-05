@@ -11,7 +11,6 @@ import mid_end.Optimizer;
 import utils.Printer;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.PushbackInputStream;
 
 public class Compiler {
@@ -20,12 +19,7 @@ public class Compiler {
 //        String arg = args[0];
 
         PushbackInputStream input = new PushbackInputStream(new FileInputStream("testfile.txt"), 16);
-        FileOutputStream output = new FileOutputStream("output.txt");
-        FileOutputStream error = new FileOutputStream("error.txt");
-        FileOutputStream llvm = new FileOutputStream("llvm_ir.txt");
-        FileOutputStream mips = new FileOutputStream("mips.txt");
-        // set Printer
-        Printer.init(output, error, llvm, mips);
+        Printer.init();
 
         if (arg.equals("-la")) {
             // token analyse
@@ -74,7 +68,7 @@ public class Compiler {
             IRBuilder.mode = IRBuilder.AUTO_INSERT_MODE;
             Module module = IRBuilder.getInstance().getModule();
             compUnit.genIR();
-            Printer.printLLVM(module);
+            Printer.printOriLLVM(module);
             // generate MIPS
             AssemblyTable assemblyTable = MipsBuilder.getInstance().getAssemblyTable();
             module.toAssembly();
@@ -95,11 +89,10 @@ public class Compiler {
             IRBuilder.mode = IRBuilder.AUTO_INSERT_MODE;
             compUnit.genIR();
             Module module = IRBuilder.getInstance().getModule();
-            Printer.printLLVM(module);
+            Printer.printOriLLVM(module);
             // optimize
             IRBuilder.mode = IRBuilder.DEFAULT_MODE;
             Optimizer.getInstance().run(module);
-            Printer.printLLVM(module);
             // generate MIPS
             module.toAssembly();
             AssemblyTable assemblyTable = MipsBuilder.getInstance().getAssemblyTable();
@@ -109,6 +102,5 @@ public class Compiler {
 
         // close all streams
         input.close();
-        output.close();
     }
 }

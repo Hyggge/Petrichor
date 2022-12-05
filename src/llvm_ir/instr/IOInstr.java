@@ -45,11 +45,14 @@ public class IOInstr extends Instr {
     }
 
     public static class PutInt extends IOInstr {
-        private Value target;
 
         public PutInt(String name, Value target) {
             super(BaseType.VOID, name, InstrType.IO);
-            this.target = target;
+            addOperands(target);
+        }
+
+        public Value getTarget() {
+            return operands.get(0);
         }
 
         public static String getDeclare() {
@@ -58,11 +61,13 @@ public class IOInstr extends Instr {
 
         @Override
         public String toString() {
+            Value target = getTarget();
             return "call void @putint(i32 " + target.getName() + ")";
         }
 
         @Override
         public void toAssembly() {
+            Value target = getTarget();
             // 将target的值保存到a0中
             if (target instanceof Constant) {
                 new LiAsm(Register.A0, ((Constant)target).getValue());

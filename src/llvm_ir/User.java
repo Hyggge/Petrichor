@@ -14,7 +14,9 @@ public class User extends Value{
 
     public void addOperands(Value value) {
         operands.add(value);
-        value.addUse(this);
+        if (value != null) {
+            value.addUse(this);
+        }
     }
 
     public boolean modifyOperand(Value oldValue, Value newValue) {

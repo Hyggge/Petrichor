@@ -8,8 +8,8 @@ public class MoveInstr extends Instr {
 
     public MoveInstr(String name, Value dst, Value src) {
         super(BaseType.VOID, name, InstrType.MOVE);
-        operands.add(dst);
-        operands.add(src);
+        addOperands(dst);
+        addOperands(src);
     }
 
     public Value getDst() {
@@ -19,6 +19,16 @@ public class MoveInstr extends Instr {
     public Value getSrc() {
         return operands.get(1);
     }
+
+    public void setDst(Value dst) {
+        operands.set(0,dst);
+    }
+
+    public void setSrc(Value src) {
+        operands.set(1, src);
+    }
+
+
 
     @Override
     public String toString() {

@@ -19,15 +19,18 @@ public class Printer {
     private static FileOutputStream outFile = null;
     private static FileOutputStream errFile = null;
     private static FileOutputStream oriLLVMFile = null;
-    private static FileOutputStream llvmFile = null;
+    private static FileOutputStream phiLLVMFile = null;
+    private static FileOutputStream moveLLVMFile = null;
     private static FileOutputStream mipsFile = null;
     private static HashMap<Integer, ErrorType> errorMap;
 
-    public static void init(FileOutputStream out, FileOutputStream err, FileOutputStream llvm, FileOutputStream mips) {
-        Printer.outFile = out;
-        Printer.errFile = err;
-        Printer.llvmFile = llvm;
-        Printer.mipsFile = mips;
+    public static void init() throws Exception{
+        Printer.outFile = new FileOutputStream("output.txt");
+        Printer.errFile = new FileOutputStream("error.txt");
+        Printer.oriLLVMFile = new FileOutputStream("llvm_ir.txt");
+        Printer.phiLLVMFile = new FileOutputStream("llvm_ir_phi.txt");
+        Printer.moveLLVMFile = new FileOutputStream("llvm_ir_move.txt");
+        Printer.mipsFile = new FileOutputStream("mips.txt");
         Printer.errorMap = new HashMap<>();
     }
 
@@ -60,9 +63,21 @@ public class Printer {
         }
     }
 
-    public static void printLLVM(Module module) {
+    public static void printOriLLVM(Module module) {
         if (onOff & LLVM_PERM) {
-            try {llvmFile.write(module.toString().getBytes());} catch (IOException e) {throw new RuntimeException(e);}
+            try {oriLLVMFile.write(module.toString().getBytes());} catch (IOException e) {throw new RuntimeException(e);}
+        }
+    }
+
+    public static void printPhiLLVM(Module module) {
+        if (onOff & LLVM_PERM) {
+            try {phiLLVMFile.write(module.toString().getBytes());} catch (IOException e) {throw new RuntimeException(e);}
+        }
+    }
+
+    public static void printMoveLLVM(Module module) {
+        if (onOff & LLVM_PERM) {
+            try {moveLLVMFile.write(module.toString().getBytes());} catch (IOException e) {throw new RuntimeException(e);}
         }
     }
 

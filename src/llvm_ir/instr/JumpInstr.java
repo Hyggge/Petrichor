@@ -11,7 +11,7 @@ public class JumpInstr extends Instr {
 
     public JumpInstr(String name, BasicBlock targetBB) {
         super(BaseType.VOID, name, InstrType.JUMP);
-        operands.add(targetBB);
+        addOperands(targetBB);
     }
 
     public BasicBlock getTargetBB() {

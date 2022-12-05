@@ -1,6 +1,7 @@
 package mid_end;
 
 import llvm_ir.BasicBlock;
+import llvm_ir.Constant;
 import llvm_ir.Function;
 import llvm_ir.IRBuilder;
 import llvm_ir.Instr;
@@ -9,10 +10,13 @@ import llvm_ir.UndefinedValue;
 import llvm_ir.Value;
 import llvm_ir.instr.BranchInstr;
 import llvm_ir.instr.JumpInstr;
+import llvm_ir.instr.MoveInstr;
 import llvm_ir.instr.PcopyInstr;
 import llvm_ir.instr.PhiInstr;
+import llvm_ir.type.BaseType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -64,6 +68,8 @@ public class RemovePhi {
                             pcopyList.get(i).addCopy(phi, option);
                         }
                     }
+                    // 删除phi指令
+                    iterator.remove();
                 }
             }
 
@@ -111,17 +117,63 @@ public class RemovePhi {
 
     private void Pcopy2Move(Function function) {
         for (BasicBlock bb : function.getBBList()) {
-            // 找到基本块中的pcopy指令
-            PcopyInstr pcopy = null;
-            for (Instr instr : bb.getInstrList()) {
-                if (instr instanceof PcopyInstr) {
-                    pcopy = (PcopyInstr) instr;
+            // 找到基本块中的pcopy指令, 将其转化为一系列move
+            LinkedList<Instr> instrList = bb.getInstrList();
+            if (instrList.size() >= 2 && instrList.get(instrList.size() - 2) instanceof PcopyInstr) {
+                PcopyInstr pcopy = (PcopyInstr) instrList.get(instrList.size() - 2);
+                // 删掉pcopy
+                instrList.remove(instrList.size() - 2);
+                // 将pcopy转化为一系列move
+                LinkedList<MoveInstr> moveList = convert(pcopy);
+                // 将move加入到instrList
+                for (MoveInstr move : moveList) {
+                    instrList.add(instrList.size() - 1, move);
+                    move.setParentBB(bb);
                 }
-            }
-            // 如果找到了pcopy指令，则将pcopy转化为一系列move
-            if (pcopy != null) {
-
+                int a = 0;
             }
         }
+    }
+
+    private LinkedList<MoveInstr> convert(PcopyInstr pcopy) {
+        ArrayList<Value> dstList = pcopy.getDstList();
+        ArrayList<Value> srcList = pcopy.getSrcList();
+        // 创建初始move序列
+        // TODO: 在这个阶段可以先对move的先后顺序进行优化
+        LinkedList<MoveInstr> moveList = new LinkedList<>();
+        for (int i = 0; i < dstList.size(); i++) {
+            MoveInstr move = new MoveInstr(IRBuilder.getInstance().genLocalVarName(), dstList.get(i), srcList.get(i));
+            moveList.add(move);
+        }
+        // 解决循环赋值的问题
+        HashSet<Value> rec = new HashSet<>();
+        for (int i = 0; i < moveList.size(); i++) {
+            Value value =  moveList.get(i).getDst();
+            if (! (value instanceof Constant) && ! rec.contains(value)) {
+                // 检查该指令之后的所有指令，如果value同时是某一个move的src，那么存在循环赋值的问题
+                boolean loopAssign = false;
+                for (int j = i + 1; j < moveList.size(); j++) {
+                    if (moveList.get(j).getSrc().equals(value)) {
+                        loopAssign = true;
+                        break;
+                    }
+                }
+                // 如果出现了循环赋值的情况，我们需要增加中间变量
+                if (loopAssign) {
+                    Value midValue = new Value(BaseType.INT32, value.getName() + "_tmp");
+                    // 将所有使用value作为src的move指令，将改为使用midValue作为src
+                    for (MoveInstr move : moveList) {
+                        if (move.getSrc().equals(value)) {
+                            move.setSrc(midValue);
+                        }
+                    }
+                    // 在moveList的开头插入新的move
+                    MoveInstr move = new MoveInstr(IRBuilder.getInstance().genLocalVarName(), midValue, value);
+                    moveList.addFirst(move);
+                }
+                rec.add(value);
+            }
+        }
+        return moveList;
     }
 }
