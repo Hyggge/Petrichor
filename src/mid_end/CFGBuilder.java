@@ -136,7 +136,7 @@ public class CFGBuilder {
     private void getIDom(Function function) {
         LinkedList<BasicBlock> bbList = function.getBBList();
         for (BasicBlock domer : bbList) {
-            for (BasicBlock domed : bbList) {
+            for (BasicBlock domed : domer.getDomList()) {
                 if (judgeIDOM(domer, domed, bbList)) {
                     assert parentMap.get(domed) == null;
                     parentMap.put(domed, domer);
