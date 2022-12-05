@@ -105,7 +105,7 @@ public class Mem2Reg {
 
     private void insert(BasicBlock bb) {
         LinkedList<Instr> instrList = bb.getInstrList();
-        String name = IRBuilder.getInstance().genLocalVarName();
+        String name = IRBuilder.getInstance().genLocalVarName(bb.getParentFunction());
         Instr phi = new PhiInstr(name, bb.getPreList());
         instrList.addFirst(phi);
         phi.setParentBB(bb);

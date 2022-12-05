@@ -1,0 +1,40 @@
+declare i32 @getint(...) 
+declare void @putint(i32)
+declare void @putstr(i8* )
+
+
+
+
+
+define dso_local i32 @f_factorial(i32 %a0) {
+b0:
+	move i32 %v22, 2
+	move i32 %v21, 1
+	br label %b1
+b1:
+	%v9 = icmp sle i32 %v22, %a0
+	br i1 %v9, label %b8, label %b9
+b2:
+	%v13 = mul i32 %v21, %v22
+	%v16 = add i32 %v22, 1
+	move i32 %v22, %v16
+	move i32 %v21, %v13
+	br label %b1
+b3:
+	ret i32 %v13
+}
+
+define dso_local i32 @main() {
+b4:
+	move i32 %v13, 0
+	br label %b5
+b5:
+	%v3 = icmp sgt i32 2, 1
+	br i1 %v3, label %b10, label %b11
+b6:
+	call void @putint(i32 %v13)
+	move i32 %v13, 1
+	br label %b5
+b7:
+	ret i32 0
+}

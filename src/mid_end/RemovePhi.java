@@ -41,7 +41,7 @@ public class RemovePhi {
             // 遍历bb的前驱基本块集合，有多少前驱就增加多少个pcopy
             ArrayList<BasicBlock> preList = bb.getPreList();
             ArrayList<PcopyInstr> pcopyList = new ArrayList<>();
-            preList.forEach((x) -> pcopyList.add(new PcopyInstr(IRBuilder.getInstance().genLocalVarName())));
+            preList.forEach((x) -> pcopyList.add(new PcopyInstr(IRBuilder.getInstance().genLocalVarName(function))));
             // 将每个pcopy插入适当的位置
             for (int i = 0; i < preList.size(); i++) {
                 BasicBlock preBB = preList.get(i);
@@ -82,24 +82,30 @@ public class RemovePhi {
         assert lastInstr instanceof BranchInstr || lastInstr instanceof JumpInstr;
         // 将pcopy插入到跳转语句之前
         instrList.add(instrList.indexOf(lastInstr), pcopy);
+        pcopy.setParentBB(preBB);
     }
 
     private void insertPcopyToMidBB(PcopyInstr pcopy, BasicBlock preBB, BasicBlock sucBB) {
+        Function function = preBB.getParentFunction();
         BasicBlock midBB = new BasicBlock(IRBuilder.getInstance().genBBName());
-
+        midBB.addInstr(pcopy);
+        pcopy.setParentBB(midBB);
+        midBB.setParentFunction(function);
         // 修改跳转关系(preBB的最后一句一定是branch)
         BranchInstr instr = (BranchInstr)preBB.getLastInstr();
         BasicBlock thenBlock = instr.getThenBlock();
         BasicBlock elseBlock = instr.getElseBlock();
         if (sucBB.equals(thenBlock)) {
             instr.setThenBlock(midBB);
-            JumpInstr jump = new JumpInstr(IRBuilder.getInstance().genLocalVarName(), sucBB);
+            String name = IRBuilder.getInstance().genLocalVarName(function);
+            JumpInstr jump = new JumpInstr(name, sucBB);
             midBB.addInstr(jump);
             jump.setParentBB(midBB);
         }
         else {
             instr.setElseBlock(midBB);
-            JumpInstr jump = new JumpInstr(IRBuilder.getInstance().genLocalVarName(), sucBB);
+            String name = IRBuilder.getInstance().genLocalVarName(function);
+            JumpInstr jump = new JumpInstr(name, sucBB);
             midBB.addInstr(jump);
             jump.setParentBB(midBB);
         }
@@ -138,11 +144,13 @@ public class RemovePhi {
     private LinkedList<MoveInstr> convert(PcopyInstr pcopy) {
         ArrayList<Value> dstList = pcopy.getDstList();
         ArrayList<Value> srcList = pcopy.getSrcList();
+        Function function = pcopy.getParentBB().getParentFunction();
         // 创建初始move序列
         // TODO: 在这个阶段可以先对move的先后顺序进行优化
         LinkedList<MoveInstr> moveList = new LinkedList<>();
         for (int i = 0; i < dstList.size(); i++) {
-            MoveInstr move = new MoveInstr(IRBuilder.getInstance().genLocalVarName(), dstList.get(i), srcList.get(i));
+            MoveInstr move = new MoveInstr(IRBuilder.getInstance().genLocalVarName(function),
+                                            dstList.get(i), srcList.get(i));
             moveList.add(move);
         }
         // 解决循环赋值的问题
@@ -168,7 +176,7 @@ public class RemovePhi {
                         }
                     }
                     // 在moveList的开头插入新的move
-                    MoveInstr move = new MoveInstr(IRBuilder.getInstance().genLocalVarName(), midValue, value);
+                    MoveInstr move = new MoveInstr(IRBuilder.getInstance().genLocalVarName(function), midValue, value);
                     moveList.addFirst(move);
                 }
                 rec.add(value);

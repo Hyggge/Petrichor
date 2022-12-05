@@ -1,5 +1,6 @@
 package llvm_ir;
 
+import java.util.HashMap;
 import java.util.Stack;
 
 public class IRBuilder {
@@ -24,7 +25,7 @@ public class IRBuilder {
     // class attributes
     private int bbCnt;
     private int paramCnt;
-    private int localVarCnt;
+    private HashMap<Function, Integer> localVarCntMap;
     private int globalVarCnt;
     private int stringLiteralCnt;
 
@@ -37,7 +38,7 @@ public class IRBuilder {
     private IRBuilder() {
         this.bbCnt = 0;
         this.paramCnt = 0;
-        this.localVarCnt = 0;
+        this.localVarCntMap = new HashMap<>();
         this.globalVarCnt = 0;
         this.stringLiteralCnt = 0;
         this.curModule = new Module();
@@ -76,7 +77,18 @@ public class IRBuilder {
 
     // 名字生成
     public String genLocalVarName() {
-        return LOCAL_VAR_NAME_PREFIX + localVarCnt++;
+        int cutIndex = localVarCntMap.get(curFunction);
+        String name = LOCAL_VAR_NAME_PREFIX + cutIndex;
+        localVarCntMap.put(curFunction, cutIndex + 1);
+        return name;
+    }
+
+    public String genLocalVarName(Function bb) {
+        int cutIndex = localVarCntMap.get(bb);
+        String name = LOCAL_VAR_NAME_PREFIX + cutIndex;
+        localVarCntMap.put(bb, cutIndex + 1);
+        return name;
+
     }
 
     public String genGlobalVarName() {
@@ -120,7 +132,7 @@ public class IRBuilder {
     }
 
     public void setCurFunction(Function curFunction) {
-        this.localVarCnt = 0;
+        this.localVarCntMap.put(curFunction, 0);
         this.curFunction = curFunction;
     }
 

@@ -10,13 +10,13 @@ define dso_local i32 @f_factorial(i32 %a0) {
 b0:
 	br label %b1
 b1:
-	%v14 = phi i32 [ 2, %b0 ], [ %v16, %b2 ]
-	%v13 = phi i32 [ 1, %b0 ], [ %v13, %b2 ]
-	%v9 = icmp sle i32 %v14, %a0
+	%v22 = phi i32 [ 2, %b0 ], [ %v16, %b2 ]
+	%v21 = phi i32 [ 1, %b0 ], [ %v13, %b2 ]
+	%v9 = icmp sle i32 %v22, %a0
 	br i1 %v9, label %b2, label %b3
 b2:
-	%v13 = mul i32 %v13, %v14
-	%v16 = add i32 %v14, 1
+	%v13 = mul i32 %v21, %v22
+	%v16 = add i32 %v22, 1
 	br label %b1
 b3:
 	ret i32 %v13
@@ -26,11 +26,11 @@ define dso_local i32 @main() {
 b4:
 	br label %b5
 b5:
-	%v15 = phi i32 [ 0, %b4 ], [ 1, %b6 ]
+	%v13 = phi i32 [ 0, %b4 ], [ 1, %b6 ]
 	%v3 = icmp sgt i32 2, 1
 	br i1 %v3, label %b6, label %b7
 b6:
-	call void @putint(i32 %v15)
+	call void @putint(i32 %v13)
 	br label %b5
 b7:
 	ret i32 0
