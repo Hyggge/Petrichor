@@ -9,6 +9,7 @@ import back_end.mips.assembly.MemAsm;
 import llvm_ir.Constant;
 import llvm_ir.Function;
 import llvm_ir.Instr;
+import llvm_ir.UndefinedValue;
 import llvm_ir.Value;
 
 import java.util.ArrayList;
@@ -63,8 +64,8 @@ public class CallInstr extends Instr {
         for (Value param : paramList) {
             ++paramNum;
             // 将实参的值load到t0寄存器中
-            if (param instanceof Constant) {
-                new LiAsm(Register.T0, ((Constant)param).getValue());
+            if (param instanceof Constant || param instanceof UndefinedValue) {
+                new LiAsm(Register.T0, Integer.parseInt(param.getName()));
             } else {
                 new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, MipsBuilder.getInstance().getOffsetOf(param));
             }

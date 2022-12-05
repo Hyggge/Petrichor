@@ -8,6 +8,7 @@ import back_end.mips.assembly.MemAsm;
 import llvm_ir.Constant;
 import llvm_ir.GlobalVar;
 import llvm_ir.Instr;
+import llvm_ir.UndefinedValue;
 import llvm_ir.Value;
 import llvm_ir.type.BaseType;
 import llvm_ir.type.PointerType;
@@ -69,9 +70,9 @@ public class GEPInstr extends Instr {
         }
 
         // 如果offset是一个常数
-        if (offset instanceof Constant) {
+        if (offset instanceof Constant || offset instanceof UndefinedValue) {
             // 将t0和4*offset相加，得到所求地址，存到t2中
-            new AluAsm(AluAsm.Op.ADDI, Register.T2, Register.T0, ((Constant)offset).getValue() * 4);
+            new AluAsm(AluAsm.Op.ADDI, Register.T2, Register.T0, Integer.parseInt(offset.getName()) * 4);
         }
         // 如果offset存在堆栈中
         else {

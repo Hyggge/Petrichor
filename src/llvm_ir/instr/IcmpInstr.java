@@ -7,6 +7,7 @@ import back_end.mips.assembly.LiAsm;
 import back_end.mips.assembly.MemAsm;
 import llvm_ir.Constant;
 import llvm_ir.Instr;
+import llvm_ir.UndefinedValue;
 import llvm_ir.Value;
 import llvm_ir.type.BaseType;
 
@@ -57,14 +58,14 @@ public class IcmpInstr extends Instr {
         // 即使是和数字比较，我们也将数字存到寄存器中再比较，类似于ALUAsm，TODO：后期可以考虑常数优化
 
         // 获得operand1的值，存到t0中
-        if (operand1 instanceof Constant) {
-            new LiAsm(Register.T0, ((Constant)operand1).getValue());
+        if (operand1 instanceof Constant || operand1 instanceof UndefinedValue) {
+            new LiAsm(Register.T0, Integer.parseInt(operand1.getName()));
         } else {
             new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, MipsBuilder.getInstance().getOffsetOf(operand1));
         }
         // 获得operand2的值，存到t1中
-        if (operand2 instanceof Constant) {
-            new LiAsm(Register.T1, ((Constant)operand2).getValue());
+        if (operand2 instanceof Constant || operand2 instanceof UndefinedValue) {
+            new LiAsm(Register.T1, Integer.parseInt(operand2.getName()));
         } else {
             new MemAsm(MemAsm.Op.LW, Register.T1, Register.SP, MipsBuilder.getInstance().getOffsetOf(operand2));
         }

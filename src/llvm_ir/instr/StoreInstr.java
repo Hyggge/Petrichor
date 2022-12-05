@@ -8,6 +8,7 @@ import back_end.mips.assembly.MemAsm;
 import llvm_ir.Constant;
 import llvm_ir.GlobalVar;
 import llvm_ir.Instr;
+import llvm_ir.UndefinedValue;
 import llvm_ir.Value;
 import llvm_ir.type.BaseType;
 
@@ -52,9 +53,9 @@ public class StoreInstr extends Instr {
             new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, MipsBuilder.getInstance().getOffsetOf(to));
         }
         // 下面获取value，并存到address代表的位置
-        if (from instanceof Constant) {
+        if (from instanceof Constant || from instanceof UndefinedValue) {
             // 将常数保存到t1中
-            new LiAsm(Register.T1, ((Constant)from).getValue());
+            new LiAsm(Register.T1, Integer.parseInt(from.getName()));
             // 将value存到address的位置
             new MemAsm(MemAsm.Op.SW, Register.T1, Register.T0, 0);
         }

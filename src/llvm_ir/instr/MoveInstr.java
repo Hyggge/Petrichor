@@ -6,6 +6,7 @@ import back_end.mips.assembly.LiAsm;
 import back_end.mips.assembly.MemAsm;
 import llvm_ir.Constant;
 import llvm_ir.Instr;
+import llvm_ir.UndefinedValue;
 import llvm_ir.Value;
 import llvm_ir.type.BaseType;
 
@@ -49,8 +50,8 @@ public class MoveInstr extends Instr {
         Value src = getSrc();
 
         // 先将src的值取出来, 放到t0中
-        if (src instanceof Constant) {
-            new LiAsm(Register.T0, ((Constant)src).getValue());
+        if (src instanceof Constant || src instanceof UndefinedValue) {
+            new LiAsm(Register.T0, Integer.parseInt(src.getName()));
         }
         else {
             Integer srcOffset = MipsBuilder.getInstance().getOffsetOf(src);

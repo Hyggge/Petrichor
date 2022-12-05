@@ -9,6 +9,7 @@ import back_end.mips.assembly.SyscallAsm;
 import llvm_ir.Constant;
 import llvm_ir.Instr;
 import llvm_ir.StringLiteral;
+import llvm_ir.UndefinedValue;
 import llvm_ir.Value;
 import llvm_ir.type.BaseType;
 import llvm_ir.type.PointerType;
@@ -69,8 +70,8 @@ public class IOInstr extends Instr {
         public void toAssembly() {
             Value target = getTarget();
             // 将target的值保存到a0中
-            if (target instanceof Constant) {
-                new LiAsm(Register.A0, ((Constant)target).getValue());
+            if (target instanceof Constant || target instanceof UndefinedValue) {
+                new LiAsm(Register.A0, Integer.parseInt(target.getName()));
             } else {
                 int offset = MipsBuilder.getInstance().getOffsetOf(target);
                 new MemAsm(MemAsm.Op.LW, Register.A0, Register.SP, offset);

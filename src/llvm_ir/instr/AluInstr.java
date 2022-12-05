@@ -9,6 +9,7 @@ import back_end.mips.assembly.MDAsm;
 import back_end.mips.assembly.MemAsm;
 import llvm_ir.Constant;
 import llvm_ir.Instr;
+import llvm_ir.UndefinedValue;
 import llvm_ir.Value;
 import llvm_ir.type.BaseType;
 
@@ -56,15 +57,15 @@ public class AluInstr extends Instr {
         Value operand2 = getOperand2();
         // TODO: 优化思路——可以利用addi等进行优化
         // 将第一个操作数的值保存到t0
-        if (operand1 instanceof Constant) {
-            new LiAsm(Register.T0, ((Constant)operand1).getValue());
+        if (operand1 instanceof Constant || operand1 instanceof UndefinedValue) {
+            new LiAsm(Register.T0, Integer.parseInt(operand1.getName()));
         } else {
             int operand1Offset = MipsBuilder.getInstance().getOffsetOf(operand1);
             new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, operand1Offset);
         }
         // 将第二个操作数的值保存到t0
-        if (operand2 instanceof Constant) {
-            new LiAsm(Register.T1, ((Constant)operand2).getValue());
+        if (operand2 instanceof Constant || operand2 instanceof UndefinedValue) {
+            new LiAsm(Register.T1, Integer.parseInt(operand2.getName()));
         } else {
             int operand2Offset = MipsBuilder.getInstance().getOffsetOf(operand2);
             new MemAsm(MemAsm.Op.LW, Register.T1, Register.SP, operand2Offset);

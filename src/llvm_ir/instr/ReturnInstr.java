@@ -8,6 +8,7 @@ import back_end.mips.assembly.MemAsm;
 import llvm_ir.Constant;
 import llvm_ir.Function;
 import llvm_ir.Instr;
+import llvm_ir.UndefinedValue;
 import llvm_ir.Value;
 import llvm_ir.type.BaseType;
 
@@ -38,8 +39,8 @@ public class ReturnInstr extends Instr {
         Value retValue = getRetValue();
         Function function = getParentBB().getParentFunction();
         if (retValue != null) {
-            if (retValue instanceof Constant) {
-                new LiAsm(Register.V0, ((Constant)retValue).getValue());
+            if (retValue instanceof Constant || retValue instanceof UndefinedValue) {
+                new LiAsm(Register.V0, Integer.parseInt(retValue.getName()));
             } else {
                 int offset = MipsBuilder.getInstance().getOffsetOf(retValue);
                 new MemAsm(MemAsm.Op.LW, Register.V0, Register.SP, offset);
