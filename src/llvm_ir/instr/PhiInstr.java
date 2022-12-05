@@ -20,7 +20,9 @@ public class PhiInstr extends Instr {
     }
 
     public void addOption(Value value, BasicBlock preBB) {
-        operands.set(preBBList.indexOf(preBB), value);
+        int index = preBBList.indexOf(preBB);
+        operands.set(index, value);
+        value.addUse(this);
     }
 
     public ArrayList<Value> getOptions() {
