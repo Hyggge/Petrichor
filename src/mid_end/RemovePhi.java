@@ -46,9 +46,8 @@ public class RemovePhi {
             ArrayList<PcopyInstr> pcopyList = new ArrayList<>();
             preList.forEach((x) -> pcopyList.add(new PcopyInstr(IRBuilder.getInstance().genLocalVarName(function))));
             // 将每个pcopy插入适当的位置
-            ArrayList<BasicBlock> oriPreList = new ArrayList<>(preList);
-            for (int i = 0; i < oriPreList.size(); i++) {
-                BasicBlock preBB = oriPreList.get(i);
+            for (int i = 0; i < preList.size(); i++) {
+                BasicBlock preBB = preList.get(i);
                 PcopyInstr pcopy = pcopyList.get(i);
                 // 如果preBB只有bb一个后继，那么我们直接将pcopy放在preBB中即可
                 if (preBB.getSucList().size() == 1) insertPcopyToPreBB(pcopy, preBB);
@@ -116,10 +115,10 @@ public class RemovePhi {
             jump.setParentBB(midBB);
         }
         // 修改preBB和sucBB的前驱和后继关系
+        preBB.getSucList().add(preBB.getSucList().indexOf(sucBB), midBB);
         preBB.getSucList().remove(sucBB);
-        preBB.getSucList().add(midBB);
+        sucBB.getPreList().add(sucBB.getPreList().indexOf(preBB), midBB);
         sucBB.getPreList().remove(preBB);
-        sucBB.getPreList().add(midBB);
         // 为midBB增加前驱后继关系
         midBB.setSucList(new ArrayList<>());
         midBB.getSucList().add(sucBB);
