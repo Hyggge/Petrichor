@@ -13,11 +13,13 @@ public class Instr extends User{
         ICMP,
         JUMP,
         LOAD,
-        PHI,
         RETURN,
         STORE,
         ZEXT,
-        IO
+        IO,
+        PHI,
+        PCOPY,
+        MOVE
     }
 
     private InstrType instrType;
