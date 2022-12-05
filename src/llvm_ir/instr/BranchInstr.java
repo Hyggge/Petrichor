@@ -34,6 +34,15 @@ public class BranchInstr extends Instr {
         return (BasicBlock) operands.get(2);
     }
 
+    public void setThenBlock(BasicBlock thenBlock) {
+        operands.set(1, thenBlock);
+    }
+
+    public void setElseBlock(BasicBlock elseBlock) {
+        operands.set(2, elseBlock);
+    }
+
+
     @Override
     public String toString() {
         Value con = getCon();
