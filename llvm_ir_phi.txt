@@ -24,14 +24,7 @@ b3:
 
 define dso_local i32 @main() {
 b4:
-	br label %b5
-b5:
-	%v13 = phi i32 [ 0, %b4 ], [ 1, %b6 ]
-	%v3 = icmp sgt i32 2, 1
-	br i1 %v3, label %b6, label %b7
-b6:
-	call void @putint(i32 %v13)
-	br label %b5
-b7:
+	%v2 = call i32 @f_factorial(i32 5)
+	call void @putint(i32 %v2)
 	ret i32 0
 }

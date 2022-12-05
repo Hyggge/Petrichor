@@ -38,6 +38,8 @@ public class RemovePhi {
 
     private void Phi2Pcopy(Function function) {
         for (BasicBlock bb : function.getBBList()) {
+            // 先保证bb中含有phi指令
+            if (! (bb.getFirstInstr() instanceof PhiInstr)) continue;
             // 遍历bb的前驱基本块集合，有多少前驱就增加多少个pcopy
             ArrayList<BasicBlock> preList = bb.getPreList();
             ArrayList<PcopyInstr> pcopyList = new ArrayList<>();

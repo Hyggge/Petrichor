@@ -31,7 +31,7 @@ public class MipsBuilder {
         stackOffsetMap.put(value, offset);
     }
 
-    public int getOffsetOf(Value value) {
+    public Integer getOffsetOf(Value value) {
         return stackOffsetMap.get(value);
     }
 
