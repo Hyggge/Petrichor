@@ -72,9 +72,9 @@ public class Function extends User{
         this.childMap = childMap;
     }
 
-    // 我们需要保证函数最后一个BB一定有一个ret语句
+    // 我们需要保证函数一定有一个ret语句
     public void checkExistRet() {
-        BasicBlock lastBB = BBList.getLast();
+        BasicBlock lastBB = IRBuilder.getInstance().getCurBB();
         if (lastBB.isEmpty() || ! (lastBB.getLastInstr() instanceof ReturnInstr)) {
             // int类型函数, 默认最后一句为'ret i32 0'
             if (retType.isInt32()) new ReturnInstr(IRBuilder.getInstance().genLocalVarName(), new Constant(0));

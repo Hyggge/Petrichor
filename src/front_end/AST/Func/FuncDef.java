@@ -14,7 +14,6 @@ import llvm_ir.type.BaseType;
 import llvm_ir.type.LLVMType;
 import utils.ErrorType;
 import utils.Printer;
-import utils.SymbolType;
 import utils.SyntaxVarType;
 import utils.ValueType;
 
@@ -102,7 +101,7 @@ public class FuncDef extends Node {
         IRBuilder.getInstance().setCurBB(bb);
         // 解析函数参数和函数体
         super.genIR();
-        // 保证函数最后一个BB一定有一个ret语句
+        // 保证函数一定有一个ret语句
         function.checkExistRet();
         SymbolManager.getInstance().leaveFuncDef();
         return null;

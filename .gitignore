@@ -8,3 +8,5 @@ output.txt
 /error.txt
 /llvm_ir.txt
 /mips.txt
+/llvm_ir_move.txt
+/llvm_ir_phi.txt
