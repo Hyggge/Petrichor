@@ -121,18 +121,18 @@ public class Mem2Reg {
         Iterator<Instr> iterator = entry.getInstrList().iterator();
         while (iterator.hasNext()) {
             Instr instr = iterator.next();
-            if (instr instanceof LoadInstr) {
+            if (instr instanceof LoadInstr && useInstrList.contains(instr)) {
                 // 将所有使用该load指令的指令，改为使用stack.peek()
                 // 如果当前的stack.peek()为空，则说明该变量没有被def，值是未定义的undefined
                 Value newValue = stack.empty() ? new UndefinedValue() : stack.peek();
                 instr.modifyAllUseThisToNewValue(newValue);
             }
-            else if (instr instanceof StoreInstr) {
+            else if (instr instanceof StoreInstr && defInstrList.contains(instr)) {
                 // 将该指令使用的值推入stack
                 Value value = ((StoreInstr) instr).getFrom();
                 stack.push(value);
             }
-            else if (instr instanceof PhiInstr) {
+            else if (instr instanceof PhiInstr && defInstrList.contains(instr)) {
                 // 将该指令推入stack
                 stack.push(instr);
             }
