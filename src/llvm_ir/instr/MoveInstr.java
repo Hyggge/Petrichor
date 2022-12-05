@@ -51,9 +51,16 @@ public class MoveInstr extends Instr {
         // 先将src的值取出来, 放到t0中
         if (src instanceof Constant) {
             new LiAsm(Register.T0, ((Constant)src).getValue());
-        } else {
-            int operand1Offset = MipsBuilder.getInstance().getOffsetOf(src);
-            new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, operand1Offset);
+        }
+        else {
+            Integer srcOffset = MipsBuilder.getInstance().getOffsetOf(src);
+            // move指令的src可能在后面某个bb中被定义，这里我们先为其分配栈空间
+            if (srcOffset == null) {
+                MipsBuilder.getInstance().subCurOffset(4);
+                srcOffset = MipsBuilder.getInstance().getCurOffset();
+                MipsBuilder.getInstance().addValueOffsetMap(src, srcOffset);
+            }
+            new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, srcOffset);
         }
 
         Integer offset = MipsBuilder.getInstance().getOffsetOf(dst);
