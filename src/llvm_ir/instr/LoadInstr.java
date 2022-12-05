@@ -34,7 +34,13 @@ public class LoadInstr extends Instr {
         if (pointer instanceof GlobalVar) {
             new LaAsm(Register.T0, pointer.getName().substring(1));
         } else {
-            new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, MipsBuilder.getInstance().getOffsetOf(pointer));
+            Integer offset = MipsBuilder.getInstance().getOffsetOf(pointer);
+            if (offset == null) {
+                MipsBuilder.getInstance().subCurOffset(4);
+                offset = MipsBuilder.getInstance().getCurOffset();
+                MipsBuilder.getInstance().addValueOffsetMap(pointer, offset);
+            }
+            new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, offset);
         }
         // 获得address的值, 保存到t0中
         // 取得“t0中保存的地址”所存储的数值，保存到t1中

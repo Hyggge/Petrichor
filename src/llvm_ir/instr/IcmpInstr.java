@@ -61,13 +61,25 @@ public class IcmpInstr extends Instr {
         if (operand1 instanceof Constant || operand1 instanceof UndefinedValue) {
             new LiAsm(Register.T0, Integer.parseInt(operand1.getName()));
         } else {
-            new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, MipsBuilder.getInstance().getOffsetOf(operand1));
+            Integer operand1Offset = MipsBuilder.getInstance().getOffsetOf(operand1);
+            if (operand1Offset == null) {
+                MipsBuilder.getInstance().subCurOffset(4);
+                operand1Offset = MipsBuilder.getInstance().getCurOffset();
+                MipsBuilder.getInstance().addValueOffsetMap(operand1, operand1Offset);
+            }
+            new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, operand1Offset);
         }
         // 获得operand2的值，存到t1中
         if (operand2 instanceof Constant || operand2 instanceof UndefinedValue) {
             new LiAsm(Register.T1, Integer.parseInt(operand2.getName()));
         } else {
-            new MemAsm(MemAsm.Op.LW, Register.T1, Register.SP, MipsBuilder.getInstance().getOffsetOf(operand2));
+            Integer operand2Offset = MipsBuilder.getInstance().getOffsetOf(operand2);
+            if (operand2Offset == null) {
+                MipsBuilder.getInstance().subCurOffset(4);
+                operand2Offset = MipsBuilder.getInstance().getCurOffset();
+                MipsBuilder.getInstance().addValueOffsetMap(operand2, operand2Offset);
+            }
+            new MemAsm(MemAsm.Op.LW, Register.T1, Register.SP, operand2Offset);
         }
         // 根据op进行比较，结果存储在t2中
         switch (op) {

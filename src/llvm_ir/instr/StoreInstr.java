@@ -60,7 +60,12 @@ public class StoreInstr extends Instr {
             new MemAsm(MemAsm.Op.SW, Register.T1, Register.T0, 0);
         }
         else {
-            int valueOffset = MipsBuilder.getInstance().getOffsetOf(from);
+            Integer valueOffset = MipsBuilder.getInstance().getOffsetOf(from);
+            if (valueOffset == null) {
+                MipsBuilder.getInstance().subCurOffset(4);
+                valueOffset = MipsBuilder.getInstance().getCurOffset();
+                MipsBuilder.getInstance().addValueOffsetMap(from, valueOffset);
+            }
             // 然后获得value的值，保存到t1中
             new MemAsm(MemAsm.Op.LW, Register.T1, Register.SP, valueOffset);
             // 将value存到address的位置

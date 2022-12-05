@@ -42,7 +42,12 @@ public class ReturnInstr extends Instr {
             if (retValue instanceof Constant || retValue instanceof UndefinedValue) {
                 new LiAsm(Register.V0, Integer.parseInt(retValue.getName()));
             } else {
-                int offset = MipsBuilder.getInstance().getOffsetOf(retValue);
+                Integer offset = MipsBuilder.getInstance().getOffsetOf(retValue);
+                if (offset == null) {
+                    MipsBuilder.getInstance().subCurOffset(4);
+                    offset = MipsBuilder.getInstance().getCurOffset();
+                    MipsBuilder.getInstance().addValueOffsetMap(retValue, offset);
+                }
                 new MemAsm(MemAsm.Op.LW, Register.V0, Register.SP, offset);
             }
         }

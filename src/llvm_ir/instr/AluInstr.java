@@ -60,14 +60,24 @@ public class AluInstr extends Instr {
         if (operand1 instanceof Constant || operand1 instanceof UndefinedValue) {
             new LiAsm(Register.T0, Integer.parseInt(operand1.getName()));
         } else {
-            int operand1Offset = MipsBuilder.getInstance().getOffsetOf(operand1);
+            Integer operand1Offset = MipsBuilder.getInstance().getOffsetOf(operand1);
+            if (operand1Offset == null) {
+                MipsBuilder.getInstance().subCurOffset(4);
+                operand1Offset = MipsBuilder.getInstance().getCurOffset();
+                MipsBuilder.getInstance().addValueOffsetMap(operand1, operand1Offset);
+            }
             new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, operand1Offset);
         }
         // 将第二个操作数的值保存到t0
         if (operand2 instanceof Constant || operand2 instanceof UndefinedValue) {
             new LiAsm(Register.T1, Integer.parseInt(operand2.getName()));
         } else {
-            int operand2Offset = MipsBuilder.getInstance().getOffsetOf(operand2);
+            Integer operand2Offset = MipsBuilder.getInstance().getOffsetOf(operand2);
+            if (operand2Offset == null) {
+                MipsBuilder.getInstance().subCurOffset(4);
+                operand2Offset = MipsBuilder.getInstance().getCurOffset();
+                MipsBuilder.getInstance().addValueOffsetMap(operand2, operand2Offset);
+            }
             new MemAsm(MemAsm.Op.LW, Register.T1, Register.SP, operand2Offset);
         }
         // 计算，将结果保存到t2寄存器中

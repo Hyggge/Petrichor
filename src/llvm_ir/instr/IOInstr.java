@@ -73,7 +73,12 @@ public class IOInstr extends Instr {
             if (target instanceof Constant || target instanceof UndefinedValue) {
                 new LiAsm(Register.A0, Integer.parseInt(target.getName()));
             } else {
-                int offset = MipsBuilder.getInstance().getOffsetOf(target);
+                Integer offset = MipsBuilder.getInstance().getOffsetOf(target);
+                if (offset == null) {
+                    MipsBuilder.getInstance().subCurOffset(4);
+                    offset = MipsBuilder.getInstance().getCurOffset();
+                    MipsBuilder.getInstance().addValueOffsetMap(target, offset);
+                }
                 new MemAsm(MemAsm.Op.LW, Register.A0, Register.SP, offset);
             }
             new LiAsm(Register.V0, 1);

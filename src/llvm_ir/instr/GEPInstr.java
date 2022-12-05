@@ -76,8 +76,14 @@ public class GEPInstr extends Instr {
         }
         // 如果offset存在堆栈中
         else {
+            Integer offsetOffset = MipsBuilder.getInstance().getOffsetOf(offset);
+            if (offsetOffset == null) {
+                MipsBuilder.getInstance().subCurOffset(4);
+                offsetOffset = MipsBuilder.getInstance().getCurOffset();
+                MipsBuilder.getInstance().addValueOffsetMap(offset, offsetOffset);
+            }
             // 将offset的值放入t1中
-            new MemAsm(MemAsm.Op.LW, Register.T1, Register.SP, MipsBuilder.getInstance().getOffsetOf(offset));
+            new MemAsm(MemAsm.Op.LW, Register.T1, Register.SP, offsetOffset);
             // 将offset向左移2位(相当与*4),然后再存入t1中
             new AluAsm(AluAsm.Op.SLL, Register.T1, Register.T1, 2);
             // 将t0和t1将加，得到所求地址，存入t2
