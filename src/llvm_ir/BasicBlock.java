@@ -19,6 +19,9 @@ public class BasicBlock extends Value {
     private ArrayList<BasicBlock> domList;
     private ArrayList<BasicBlock> DF;
 
+    // 是否被删除
+    private boolean isDeleted = false;
+
 
     public BasicBlock(String name) {
         super(OtherType.FUNCTION, name);
@@ -103,6 +106,14 @@ public class BasicBlock extends Value {
 
     public void setDF(ArrayList<BasicBlock> DF) {
         this.DF = DF;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public boolean isDeleted() {
+        return this.isDeleted;
     }
 
     @Override

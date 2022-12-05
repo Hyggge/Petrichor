@@ -69,15 +69,16 @@ public class Mem2Reg {
         this.useInstrList = new ArrayList<>();
         this.defInstrList = new ArrayList<>();
         this.stack = new Stack<>();
+
         for (Use use : instr.getUseList()) {
             assert use.getUser() instanceof Instr;
             Instr user = (Instr)use.getUser();
-            if (user instanceof StoreInstr) {
+            if (user instanceof StoreInstr && ! user.getParentBB().isDeleted()) {
                 defInstrList.add(user);
                 if (! defBBList.contains(user.getParentBB()))
                     defBBList.add(user.getParentBB());
             }
-            else if (user instanceof LoadInstr) {
+            else if (user instanceof LoadInstr && ! user.getParentBB().isDeleted()) {
                 useInstrList.add(user);
                 if (! defBBList.contains(user.getParentBB()))
                     useBBList.add(user.getParentBB());
@@ -88,16 +89,20 @@ public class Mem2Reg {
 
     private void insertPhi(Instr instr) {
         HashSet<BasicBlock> F = new HashSet<>(); // 需要添加phi的基本块的集合
-        HashSet<BasicBlock> W = new HashSet<>(defBBList); // 定义变量的基本块的集合
+        Stack<BasicBlock> W = new Stack<>(); // 定义变量的基本块的集合
+        // 将defBBList中的基本块推入栈
+        for (BasicBlock bb : defBBList) {
+            W.push(bb);
+        }
+        // 执行算法
         while (! W.isEmpty()) {
-            BasicBlock X = W.iterator().next();
-            W.remove(X);
+            BasicBlock X = W.pop();
             for (BasicBlock Y : X.getDF()) {
                 if (! F.contains(Y)) {
                     insert(Y);
                     F.add(Y);
                     if (! defBBList.contains(Y)) {
-                        W.add(Y);
+                        W.push(Y);
                     }
                 }
             }

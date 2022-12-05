@@ -50,7 +50,14 @@ public class SimplifyBB {
         BasicBlock entry = function.getBBList().get(0);
         HashSet<BasicBlock> vis = new HashSet<>();
         dfs(entry, vis);
-        function.getBBList().removeIf(bb -> !vis.contains(bb));
+        Iterator<BasicBlock> iterator = function.getBBList().iterator();
+        while (iterator.hasNext()) {
+            BasicBlock bb = iterator.next();
+            if (! vis.contains(bb)) {
+                iterator.remove();
+                bb.delete(); // 为基本块打上“被删除”的标记
+            }
+        }
     }
 
     private void dfs(BasicBlock entry, HashSet<BasicBlock>vis) {
