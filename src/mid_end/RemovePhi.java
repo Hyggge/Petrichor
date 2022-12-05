@@ -37,7 +37,8 @@ public class RemovePhi {
     }
 
     private void Phi2Pcopy(Function function) {
-        for (BasicBlock bb : function.getBBList()) {
+        ArrayList<BasicBlock> bbList = new ArrayList<>(function.getBBList());
+        for (BasicBlock bb : bbList) {
             // 先保证bb中含有phi指令
             if (! (bb.getFirstInstr() instanceof PhiInstr)) continue;
             // 遍历bb的前驱基本块集合，有多少前驱就增加多少个pcopy
@@ -45,8 +46,9 @@ public class RemovePhi {
             ArrayList<PcopyInstr> pcopyList = new ArrayList<>();
             preList.forEach((x) -> pcopyList.add(new PcopyInstr(IRBuilder.getInstance().genLocalVarName(function))));
             // 将每个pcopy插入适当的位置
-            for (int i = 0; i < preList.size(); i++) {
-                BasicBlock preBB = preList.get(i);
+            ArrayList<BasicBlock> oriPreList = new ArrayList<>(preList);
+            for (int i = 0; i < oriPreList.size(); i++) {
+                BasicBlock preBB = oriPreList.get(i);
                 PcopyInstr pcopy = pcopyList.get(i);
                 // 如果preBB只有bb一个后继，那么我们直接将pcopy放在preBB中即可
                 if (preBB.getSucList().size() == 1) insertPcopyToPreBB(pcopy, preBB);
@@ -90,9 +92,11 @@ public class RemovePhi {
     private void insertPcopyToMidBB(PcopyInstr pcopy, BasicBlock preBB, BasicBlock sucBB) {
         Function function = preBB.getParentFunction();
         BasicBlock midBB = new BasicBlock(IRBuilder.getInstance().genBBName());
+        midBB.setParentFunction(function);
+        function.getBBList().add(function.getBBList().indexOf(sucBB), midBB);
+        // 将pcopy插入midBB
         midBB.addInstr(pcopy);
         pcopy.setParentBB(midBB);
-        midBB.setParentFunction(function);
         // 修改跳转关系(preBB的最后一句一定是branch)
         BranchInstr instr = (BranchInstr)preBB.getLastInstr();
         BasicBlock thenBlock = instr.getThenBlock();
@@ -125,6 +129,9 @@ public class RemovePhi {
 
     private void Pcopy2Move(Function function) {
         for (BasicBlock bb : function.getBBList()) {
+            if (bb.getName().equals("b20")) {
+                int a = 1;
+            }
             // 找到基本块中的pcopy指令, 将其转化为一系列move
             LinkedList<Instr> instrList = bb.getInstrList();
             if (instrList.size() >= 2 && instrList.get(instrList.size() - 2) instanceof PcopyInstr) {

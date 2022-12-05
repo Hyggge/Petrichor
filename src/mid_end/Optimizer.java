@@ -11,6 +11,8 @@ public class Optimizer {
     }
 
     public void run(Module module) {
+        new SimplifyBB(module).run();
+        Printer.printOriLLVM(module);
         new CFGBuilder(module).run();
         new Mem2Reg(module).run();
         Printer.printPhiLLVM(module);
