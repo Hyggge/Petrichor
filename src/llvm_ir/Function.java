@@ -8,6 +8,7 @@ import llvm_ir.type.OtherType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -107,8 +108,26 @@ public class Function extends User{
             MipsBuilder.getInstance().addValueOffsetMap(paramList.get(i), curOffset);
         }
         // 调用各个BB的toAssembly
-        for (BasicBlock block : BBList) {
-            block.toAssembly();
+        // 当没有进行优化时，直接顺序toAssembly即可
+        if (sucMap == null) {
+            for (BasicBlock block : BBList) {
+                block.toAssembly();
+            }
+        }
+        // 当进行优化后，新增了move指令，必须按照前驱后继关系来toAssembly
+        else {
+            HashSet<BasicBlock> vis = new HashSet<>();
+            dfs(BBList.get(0), vis);
+        }
+    }
+
+    private void dfs(BasicBlock entry, HashSet<BasicBlock> vis) {
+        vis.add(entry);
+        entry.toAssembly();
+        for (BasicBlock sucBB : entry.getSucList()) {
+            if (! vis.contains(sucBB)) {
+                dfs(sucBB, vis);
+            }
         }
     }
 }

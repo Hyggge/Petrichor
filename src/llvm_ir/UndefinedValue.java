@@ -4,7 +4,7 @@ import llvm_ir.type.BaseType;
 
 public class UndefinedValue extends Value {
     public UndefinedValue() {
-        super(BaseType.INT32, "undefined");
+        super(BaseType.INT32, "0");
     }
 
     @Override
