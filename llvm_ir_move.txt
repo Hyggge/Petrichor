@@ -45,6 +45,7 @@ b5:
 	%v17 = mul i32 %v15, %v16
 	%v18 = add i32 %v17, 0
 	%v19 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 1
+	%v20 = load i32, i32* %v19
 	%v21 = mul i32 %v20, 1
 	%v22 = add i32 %v18, %v21
 	%v23 = sdiv i32 1, 2
@@ -75,71 +76,92 @@ b5:
 	%v51 = sub i32 %v42, %v50
 	%v52 = add i32 %v33, %v51
 	%v55 = sub i32 0, 6
-	move i32 %v171, %v25
+	move i32 %v170, %v25
 	br label %b6
 b6:
-	%v59 = icmp sle i32 %v171, 100
+	%v59 = icmp sle i32 %v170, 100
 	br i1 %v59, label %b7, label %b8
 b7:
 	%v61 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 0
 	%v62 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 0
+	%v63 = load i32, i32* %v62
 	%v66 = mul i32 %v55, %v55
 	%v67 = add i32 %v63, %v66
+	store i32 %v67, i32* %v61
 	%v69 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 1
 	%v70 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 1
+	%v71 = load i32, i32* %v70
 	%v74 = mul i32 %v55, %v55
 	%v75 = add i32 %v71, %v74
+	store i32 %v75, i32* %v69
 	%v77 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 2
 	%v78 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 2
+	%v79 = load i32, i32* %v78
 	%v82 = mul i32 %v55, %v55
 	%v83 = add i32 %v79, %v82
+	store i32 %v83, i32* %v77
 	%v85 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 3
 	%v86 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 3
+	%v87 = load i32, i32* %v86
 	%v90 = mul i32 %v55, %v55
 	%v91 = add i32 %v87, %v90
+	store i32 %v91, i32* %v85
 	%v93 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 4
 	%v94 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 4
+	%v95 = load i32, i32* %v94
 	%v98 = mul i32 %v55, %v55
 	%v99 = add i32 %v95, %v98
+	store i32 %v99, i32* %v93
 	%v101 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 5
 	%v102 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 5
+	%v103 = load i32, i32* %v102
 	%v106 = mul i32 %v55, %v55
 	%v107 = add i32 %v103, %v106
+	store i32 %v107, i32* %v101
 	%v109 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 6
 	%v110 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 6
+	%v111 = load i32, i32* %v110
 	%v114 = mul i32 %v55, %v55
 	%v115 = add i32 %v111, %v114
+	store i32 %v115, i32* %v109
 	%v117 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 7
 	%v118 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 7
+	%v119 = load i32, i32* %v118
 	%v122 = mul i32 %v55, %v55
 	%v123 = add i32 %v119, %v122
+	store i32 %v123, i32* %v117
 	%v125 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 8
 	%v126 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 8
+	%v127 = load i32, i32* %v126
 	%v130 = mul i32 %v55, %v55
 	%v131 = add i32 %v127, %v130
+	store i32 %v131, i32* %v125
 	%v133 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 9
 	%v134 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 9
+	%v135 = load i32, i32* %v134
 	%v138 = mul i32 %v55, %v55
 	%v139 = add i32 %v135, %v138
-	%v142 = add i32 %v171, 1
-	move i32 %v171, %v142
+	store i32 %v139, i32* %v133
+	%v142 = add i32 %v170, 1
+	move i32 %v170, %v142
 	br label %b6
 b8:
-	move i32 %v170, 0
+	move i32 %v171, 0
 	br label %b9
 b9:
-	%v148 = icmp slt i32 %v170, 10
+	%v148 = icmp slt i32 %v171, 10
 	br i1 %v148, label %b10, label %b11
 b10:
-	%v151 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 %v170
+	%v151 = getelementptr inbounds [10 x i32], [10 x i32]* @g1, i32 0, i32 %v171
+	%v152 = load i32, i32* %v151
 	call void @putint(i32 %v152)
 	call void @putstr(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @s0, i64 0, i64 0))
-	%v156 = add i32 %v170, 1
-	move i32 %v170, %v156
+	%v156 = add i32 %v171, 1
+	move i32 %v171, %v156
 	br label %b9
 b11:
 	call void @putstr(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @s1, i64 0, i64 0))
-	call void @putint(i32 %v170)
+	call void @putint(i32 %v171)
 	call void @putstr(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @s2, i64 0, i64 0))
 	call void @putint(i32 %v52)
 	call void @putstr(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @s3, i64 0, i64 0))

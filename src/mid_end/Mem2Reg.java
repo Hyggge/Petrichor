@@ -23,6 +23,7 @@ import java.util.Stack;
 
 public class Mem2Reg {
     private Module module;
+    private Instr curAllocaInstr;
     private ArrayList<Instr> useInstrList;
     private ArrayList<Instr> defInstrList;
     private ArrayList<BasicBlock> defBBList;
@@ -32,6 +33,7 @@ public class Mem2Reg {
 
     public Mem2Reg(Module module) {
         this.module = module;
+        this.curAllocaInstr = null;
         this.useBBList = null;
         this.defBBList = null;
         this.useInstrList = null;
@@ -43,26 +45,25 @@ public class Mem2Reg {
         for (Function function : module.getFunctionList()) {
             // 遍历所有基本块，插入phi指令
             for (BasicBlock bb : function.getBBList()) {
-                for (Instr instr : bb.getInstrList()) {
+                // 遍历基本块中所有指令
+                ArrayList<Instr> instrList = new ArrayList<>(bb.getInstrList());
+                for (Instr instr : instrList) {
                     if (instr instanceof AllocaInstr && ((PointerType)instr.getType()).getTargetType() == BaseType.INT32) {
                         // 初始化和该alloca指令相关的数据结构
                         initAttr(instr);
                         // 找出需要添加phi指令的基本块，并添加phi
                         insertPhi(instr);
-                        // 通过DFS进行重命名，同时将相关的store和load指令删除
+                        // 通过DFS进行重命名，同时将相关的alloca, store,load指令删除
                         rename(function.getBBList().get(0));
                     }
                 }
-            }
-            // 遍历所有基本块，删除所有的alloca, load, store指令
-            for (BasicBlock bb : function.getBBList()) {
-                bb.getInstrList().removeIf(instr -> instr instanceof AllocaInstr || instr instanceof LoadInstr || instr instanceof StoreInstr);
             }
         }
     }
 
 
     private void initAttr(Instr instr) {
+        this.curAllocaInstr = instr;
         this.useBBList = new ArrayList<>();
         this.defBBList = new ArrayList<>();
         this.useInstrList = new ArrayList<>();
@@ -128,17 +129,20 @@ public class Mem2Reg {
                 // 如果当前的stack.peek()为空，则说明该变量没有被def，值是未定义的undefined
                 Value newValue = stack.empty() ? new UndefinedValue() : stack.peek();
                 instr.modifyAllUseThisToNewValue(newValue);
+                iterator.remove();
             }
             else if (instr instanceof StoreInstr && defInstrList.contains(instr)) {
                 // 将该指令使用的值推入stack
                 Value value = ((StoreInstr) instr).getFrom();
-                stack.push(value);
-                cnt++;
+                stack.push(value); cnt++;
+                iterator.remove();
             }
             else if (instr instanceof PhiInstr && defInstrList.contains(instr)) {
                 // 将该指令推入stack
-                stack.push(instr);
-                cnt++;
+                stack.push(instr); cnt++;
+            }
+            else if (instr.equals(curAllocaInstr)) {
+                iterator.remove();
             }
         }
         // 遍历entry的后继集合，将最新的define（stack.peek）填充进每个后继块的第一个phi指令中
