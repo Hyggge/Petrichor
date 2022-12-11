@@ -4,6 +4,7 @@ import back_end.mips.assembly.LabelAsm;
 import llvm_ir.type.OtherType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,12 @@ public class BasicBlock extends Value {
     private ArrayList<BasicBlock> childList; // 支配树
     private ArrayList<BasicBlock> domList;
     private ArrayList<BasicBlock> DF;
+
+    // 和活跃变量分析相关属性
+    private HashSet<Value> in;
+    private HashSet<Value> out;
+    private HashSet<Value> def;
+    private HashSet<Value> use;
 
     // 是否被删除
     private boolean isDeleted = false;
@@ -108,12 +115,53 @@ public class BasicBlock extends Value {
         this.DF = DF;
     }
 
+    public HashSet<Value> getIn() {
+        return in;
+    }
+
+    public void setIn(HashSet<Value> in) {
+        this.in = in;
+    }
+
+    public HashSet<Value> getOut() {
+        return out;
+    }
+
+    public void setOut(HashSet<Value> out) {
+        this.out = out;
+    }
+
+    public HashSet<Value> getDef() {
+        return def;
+    }
+
+    public HashSet<Value> getUse() {
+        return use;
+    }
+
     public void delete() {
         this.isDeleted = true;
     }
 
     public boolean isDeleted() {
         return this.isDeleted;
+    }
+
+    public void buildDefUse() {
+        def = new HashSet<>();
+        use = new HashSet<>();
+        for (Instr instr : instrList) {
+            // 先定义后使用的变量放在def中
+            if (! use.contains(instr) && instr.canBeUsed() ) {
+                def.add(instr);
+            }
+            // 先使用后定义的变量放在use中
+            for (Value operand : instr.operands) {
+                if (! def.contains(operand) && (operand instanceof Instr || operand instanceof Param || operand instanceof GlobalVar)) {
+                    use.add(operand);
+                }
+            }
+        }
     }
 
     @Override

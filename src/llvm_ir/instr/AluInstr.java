@@ -44,6 +44,11 @@ public class AluInstr extends Instr {
     }
 
     @Override
+    public boolean canBeUsed() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         Value operand1 = getOperand1();
         Value operand2 = getOperand2();

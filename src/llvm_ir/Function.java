@@ -72,6 +72,22 @@ public class Function extends User{
         this.childMap = childMap;
     }
 
+    public HashMap<BasicBlock, ArrayList<BasicBlock>> getPreMap() {
+        return preMap;
+    }
+
+    public HashMap<BasicBlock, ArrayList<BasicBlock>> getSucMap() {
+        return sucMap;
+    }
+
+    public HashMap<BasicBlock, BasicBlock> getParentMap() {
+        return parentMap;
+    }
+
+    public HashMap<BasicBlock, ArrayList<BasicBlock>> getChildMap() {
+        return childMap;
+    }
+
     // 我们需要保证函数一定有一个ret语句
     public void checkExistRet() {
         BasicBlock lastBB = IRBuilder.getInstance().getCurBB();

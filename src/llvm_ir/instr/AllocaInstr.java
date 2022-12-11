@@ -17,6 +17,11 @@ public class AllocaInstr extends Instr {
     }
 
     @Override
+    public boolean canBeUsed() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return name + " = alloca " + targetType;
     }

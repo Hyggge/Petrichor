@@ -22,6 +22,11 @@ public class LoadInstr extends Instr {
     }
 
     @Override
+    public boolean canBeUsed() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         Value pointer = getPointer();
         return name + " = load " + type + ", " + pointer.getType() + " " + pointer.getName();

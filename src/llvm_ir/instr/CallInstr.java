@@ -36,6 +36,12 @@ public class CallInstr extends Instr {
     }
 
     @Override
+    public boolean canBeUsed() {
+        return !type.isVoid();
+    }
+
+
+    @Override
     public String toString() {
         Function targetFunc = getTargetFunc();
         List<Value> paramList = getParamList();

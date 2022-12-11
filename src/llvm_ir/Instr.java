@@ -42,6 +42,8 @@ public class Instr extends User{
         this.parentBB = parentBB;
     }
 
+    public boolean canBeUsed() {return false; }
+
     @Override
     public void toAssembly() {
         new CommentAsm("\n# " + this.toString());

@@ -28,6 +28,12 @@ public class IOInstr extends Instr {
         public static String getDeclare() {
             return "declare i32 @getint(...) ";
         }
+
+        @Override
+        public boolean canBeUsed() {
+            return true;
+        }
+
         @Override
         public String toString() {
             return name + " = call i32 (...) @getint()";

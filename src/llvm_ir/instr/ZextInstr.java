@@ -19,6 +19,11 @@ public class ZextInstr extends Instr {
     }
 
     @Override
+    public boolean canBeUsed() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         Value oriValue = getOriValue();
         return name + " = zext " + oriValue.getType() + " " + oriValue.getName() + " to " + targetType;

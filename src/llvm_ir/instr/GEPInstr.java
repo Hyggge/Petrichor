@@ -33,6 +33,11 @@ public class GEPInstr extends Instr {
     }
 
     @Override
+    public boolean canBeUsed() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         Value pointer = getPointer();
         Value offset = getOffset();

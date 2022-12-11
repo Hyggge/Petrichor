@@ -30,6 +30,11 @@ public class PhiInstr extends Instr {
     }
 
     @Override
+    public boolean canBeUsed() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         ArrayList<Value> options = getOptions();
         //  %4 = phi i32 [ 1, %2 ], [ %6, %5 ]
