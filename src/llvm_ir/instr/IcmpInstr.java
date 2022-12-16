@@ -40,6 +40,11 @@ public class IcmpInstr extends Instr {
         return operands.get(1);
     }
 
+    public String getGVNHash() {
+        return getOperand1().getName() + " " + op + " " + getOperand2().getName();
+    }
+
+
     @Override
     public boolean canBeUsed() {
         return true;

@@ -2,6 +2,8 @@ package llvm_ir;
 
 import back_end.mips.MipsBuilder;
 import back_end.mips.assembly.LabelAsm;
+import llvm_ir.instr.CallInstr;
+import llvm_ir.instr.IOInstr;
 import llvm_ir.instr.ReturnInstr;
 import llvm_ir.type.LLVMType;
 import llvm_ir.type.OtherType;
@@ -24,6 +26,9 @@ public class Function extends User{
     // 支配树
     private HashMap<BasicBlock, BasicBlock> parentMap;
     private HashMap<BasicBlock, ArrayList<BasicBlock>> childMap;
+
+    // 是否可以进行GVN优化
+    private Boolean canGVN = null;
 
 
     public Function(String name, LLVMType retType) {
@@ -87,6 +92,38 @@ public class Function extends User{
     public HashMap<BasicBlock, ArrayList<BasicBlock>> getChildMap() {
         return childMap;
     }
+
+    // 检查该函数的调用是否进行GVN优化
+    // 必须满足：参数没有指针类型, 每个指令没有读写全局变量，不能调用其他函数
+    public boolean canGVN() {
+        if (canGVN != null) return canGVN;
+
+        for (Param param : paramList) {
+            if (param.getType().isPointer()) {
+                canGVN = false;
+                return false;
+            }
+        }
+        for (BasicBlock bb : BBList) {
+            for (Instr instr : bb.getInstrList()) {
+                // 不能调用其他函数
+                if (instr instanceof CallInstr || instr instanceof IOInstr) {
+                    canGVN = false;
+                    return false;
+                }
+                // 每个指令不能读写全局变量
+                for (Value operand : instr.getOperands()) {
+                    if (operand instanceof GlobalVar) {
+                        canGVN = false;
+                        return false;
+                    }
+                }
+            }
+        }
+        canGVN = true;
+        return true;
+    }
+
 
     // 我们需要保证函数一定有一个ret语句
     public void checkExistRet() {

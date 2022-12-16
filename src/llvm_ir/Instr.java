@@ -44,6 +44,8 @@ public class Instr extends User{
 
     public boolean canBeUsed() {return false; }
 
+    public String getGVNHash() {return null; }
+
     @Override
     public void toAssembly() {
         new CommentAsm("\n# " + this.toString());

@@ -16,12 +16,15 @@ public class Optimizer {
 
         new CFGBuilder(module).run();
         new Mem2Reg(module).run();
-        Printer.printPhiLLVM(module);
+        new GVN(module).run();
+        // new conflictGraph(module).run();
 
+
+
+        Printer.printPhiLLVM(module);
         new RemovePhi(module).run();
         Printer.printMoveLLVM(module);
 
-        new conflictGraph(module).run();
     }
 
 

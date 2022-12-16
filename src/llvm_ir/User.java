@@ -19,6 +19,10 @@ public class User extends Value{
         }
     }
 
+    public ArrayList<Value> getOperands() {
+        return operands;
+    }
+
     public boolean modifyOperand(Value oldValue, Value newValue) {
         if (! operands.contains(oldValue)) return false;
         int index = operands.indexOf(oldValue);

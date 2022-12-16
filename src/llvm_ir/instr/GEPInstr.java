@@ -32,6 +32,10 @@ public class GEPInstr extends Instr {
         return operands.get(1);
     }
 
+    public String getGVNHash() {
+        return getPointer().getName() + " " + getOffset().getName();
+    }
+
     @Override
     public boolean canBeUsed() {
         return true;

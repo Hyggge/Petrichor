@@ -35,12 +35,30 @@ public class AluInstr extends Instr {
         addOperands(operand2);
     }
 
+    public Op getOp() {
+        return op;
+    }
+
     public Value getOperand1() {
         return operands.get(0);
     }
 
     public Value getOperand2() {
         return operands.get(1);
+    }
+
+    public String getGVNHash() {
+        String operand1 = getOperand1().getName();
+        String operand2 = getOperand2().getName();
+        if (op == Op.ADD || op == Op.MUL) {
+            if (operand1.compareTo(operand2) < 0) {
+                return operand1 + " " + op + " " + operand2;
+            } else {
+                return operand2 + " " + op+ " " + operand1;
+            }
+        } else {
+            return operand1 + " " + op + " " + operand2;
+        }
     }
 
     @Override

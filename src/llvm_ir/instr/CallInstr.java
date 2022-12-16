@@ -14,6 +14,7 @@ import llvm_ir.Value;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CallInstr extends Instr {
     // private Function targetFunc;
@@ -33,6 +34,13 @@ public class CallInstr extends Instr {
 
     public List<Value> getParamList() {
         return operands.subList(1, operands.size());
+    }
+
+    public String getGVNHash() {
+        String hash = getTargetFunc().getName() + "(";
+        hash += getParamList().stream().map(Value::getName).collect(Collectors.joining(","));
+        hash += ")";
+        return hash;
     }
 
     @Override
