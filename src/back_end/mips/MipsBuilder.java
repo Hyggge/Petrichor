@@ -3,8 +3,11 @@ package back_end.mips;
 import back_end.mips.assembly.Assembly;
 import llvm_ir.Function;
 import llvm_ir.Value;
+import llvm_ir.instr.ZextInstr;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class MipsBuilder {
     private static MipsBuilder mipsBuilder = new MipsBuilder();
@@ -13,6 +16,7 @@ public class MipsBuilder {
     private Function curFunction;
     private int curStackOffset;
     private HashMap<Value, Integer> stackOffsetMap;
+    private HashMap<Value, Register> var2reg;
     private AssemblyTable assemblyTable;
 
     private MipsBuilder() {
@@ -25,6 +29,19 @@ public class MipsBuilder {
         this.curFunction = newFunction;
         this.curStackOffset = 0;
         this.stackOffsetMap = new HashMap<>();
+        this.var2reg = newFunction.getVar2reg();
+    }
+
+    public Register getRegOf(Value value) {
+        return var2reg.get(value);
+    }
+
+    public void allocRegForZext(ZextInstr instr, Register reg) {
+        var2reg.put(instr, reg);
+    }
+
+    public ArrayList<Register> getAllocatedRegs() {
+        return new ArrayList<>(new HashSet<>(var2reg.values()));
     }
 
     public void addValueOffsetMap(Value value, int offset) {

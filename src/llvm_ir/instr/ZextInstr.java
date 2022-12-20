@@ -1,6 +1,7 @@
 package llvm_ir.instr;
 
 import back_end.mips.MipsBuilder;
+import back_end.mips.Register;
 import llvm_ir.Instr;
 import llvm_ir.Value;
 import llvm_ir.type.LLVMType;
@@ -37,7 +38,15 @@ public class ZextInstr extends Instr {
         // 如果是i1转到i32，我们可以直接将this和“oriValue的offset“绑定
         // 那么每次我们使用this时，实际上是取的oriValue的值
         if (oriValue.getType().isInt1() && targetType.isInt32()) {
-            MipsBuilder.getInstance().addValueOffsetMap(this, MipsBuilder.getInstance().getOffsetOf(oriValue));
+            // 如果oriValue在寄存器中, 那么我们也将this映射到该寄存器中
+            if (MipsBuilder.getInstance().getRegOf(oriValue) != null) {
+                Register reg = MipsBuilder.getInstance().getRegOf(oriValue);
+                MipsBuilder.getInstance().allocRegForZext(this, reg);
+            }
+            // 如果oriValue在栈中，我们只需要把this映射到对应offset即可
+            else {
+                MipsBuilder.getInstance().addValueOffsetMap(this, MipsBuilder.getInstance().getOffsetOf(oriValue));
+            }
         }
         // TODO：如果是i32转到i1, 则不等于0时候转化为1，等于0时不用转化
         // TODO: 因为这种情况暂时不会出现，所以不实现也没问题...

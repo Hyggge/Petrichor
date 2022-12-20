@@ -2,8 +2,10 @@ package mid_end;
 
 import llvm_ir.BasicBlock;
 import llvm_ir.Function;
+import llvm_ir.Instr;
 import llvm_ir.Module;
 import llvm_ir.Value;
+import llvm_ir.instr.PhiInstr;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,20 +30,20 @@ public class ActivenessAnalysis {
             getInOut(function);
             // 打印相关信息
             for (BasicBlock bb : function.getBBList()) {
-                System.out.println("\n\n\n" + bb.getName() + ": ");
-                System.out.println("use");
+                System.out.println("\n" + bb.getName() + ": ");
+                System.out.print("use: ");
                 for (Value value : bb.getUse()) {
                     System.out.print(value.getName() + " ");
                 }
-                System.out.println("\ndef");
+                System.out.print("\ndef:");
                 for (Value value : bb.getDef()) {
                     System.out.print(value.getName() + " ");
                 }
-                System.out.println("\nin");
+                System.out.print("\nin:");
                 for (Value value : bb.getIn()) {
                     System.out.print(value.getName() + " ");
                 }
-                System.out.println("\nout");
+                System.out.print("\nout:");
                 for (Value value : bb.getOut()) {
                     System.out.print(value.getName() + " ");
                 }
@@ -72,6 +74,20 @@ public class ActivenessAnalysis {
                 HashSet<Value> out = new HashSet<>();
                 for (BasicBlock sucBB : bb.getSucList()) {
                     out.addAll(inMap.get(sucBB));
+                    // 因为后继的in中没有计算phi指令使用的operand
+                    // 如果sucBB中有PHI指令
+                    // 我们还需要将PHI指令中和bb相对应的operand加入到out中
+                    for (Instr instr : sucBB.getInstrList()) {
+                        if (instr instanceof PhiInstr) {
+                            Value targetOperand = ((PhiInstr) instr).getOperandFrom(bb);
+                            if (targetOperand != null) {
+                            //    if (targetOperand instanceof Instr || targetOperand instanceof Param || targetOperand instanceof GlobalVar) {
+                            //        out.add(targetOperand);
+                                out.add(instr);
+                                //}
+                            }
+                        }
+                    }
                     outMap.put(bb, out);
                 }
                 // 根据公式in = (out - def) + use，求出当前基本块的in

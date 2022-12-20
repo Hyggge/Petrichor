@@ -57,11 +57,17 @@ public class BranchInstr extends Instr {
         Value con = getCon();
         BasicBlock thenBlock = getThenBlock();
         BasicBlock elseBlock = getElseBlock();
+
+        Register reg = MipsBuilder.getInstance().getRegOf(con);
+
         // con == 1 相当于 con != 0， 所以我们可以利用BNE指令和$0寄存器实现功能
-        // 取出con的值，放到t0寄存器中
-        new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, MipsBuilder.getInstance().getOffsetOf(con));
+        // 如果con没有对应的寄存器，则从堆栈中取出con的值，放到reg中
+        if (reg == null) {
+            reg = Register.K0;
+            new MemAsm(MemAsm.Op.LW, reg, Register.SP, MipsBuilder.getInstance().getOffsetOf(con));
+        }
         // 如果con ！= 0，跳转到thenBlock
-        new BranchAsm(BranchAsm.Op.BNE, Register.T0, Register.ZERO, thenBlock.getName());
+        new BranchAsm(BranchAsm.Op.BNE, reg, Register.ZERO, thenBlock.getName());
         // 反之，直接jump到elseBlock
         new JumpAsm(JumpAsm.Op.J, elseBlock.getName());
     }

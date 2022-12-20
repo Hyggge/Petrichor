@@ -8,8 +8,11 @@ import llvm_ir.Module;
 import llvm_ir.Value;
 import llvm_ir.instr.AllocaInstr;
 import llvm_ir.instr.PhiInstr;
+import llvm_ir.instr.ZextInstr;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -38,8 +41,10 @@ public class RegAllocator {
             allocaForBB(entry);
             function.setVar2reg(var2reg);
             // 打印调试
-            System.out.println(function.getName());
-            for (Value var : var2reg.keySet()) {
+            System.out.println("\n" + function.getName());
+            ArrayList<Value> varList = new ArrayList<>(var2reg.keySet());
+            Collections.sort(varList, Comparator.comparing(Value::getName));
+            for (Value var : varList) {
                 Register reg = var2reg.get(var);
                 System.out.println(var.getName() + " ==> " + reg);
             }
@@ -80,7 +85,7 @@ public class RegAllocator {
                 }
             }
             // 如果该指令属于定义语句，并且不是创建数组的alloc指令
-            if (instr.canBeUsed() && !(instr instanceof AllocaInstr)) {
+            if (instr.canBeUsed() && !(instr instanceof AllocaInstr) && !(instr instanceof ZextInstr)) {
                 defined.add(instr);
                 Register reg = allocRegFor(instr);
                 if (reg != null) {

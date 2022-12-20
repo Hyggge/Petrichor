@@ -25,6 +25,15 @@ public class PhiInstr extends Instr {
         value.addUse(this);
     }
 
+    public Value getOperandFrom(BasicBlock bb) {
+        for (int i = 0; i < preBBList.size(); i++) {
+            if (preBBList.get(i) == bb) {
+                return operands.get(i);
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Value> getOptions() {
         return operands;
     }

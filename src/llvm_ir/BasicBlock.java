@@ -1,6 +1,7 @@
 package llvm_ir;
 
 import back_end.mips.assembly.LabelAsm;
+import llvm_ir.instr.PhiInstr;
 import llvm_ir.type.OtherType;
 
 import java.util.ArrayList;
@@ -150,6 +151,17 @@ public class BasicBlock extends Value {
     public void buildDefUse() {
         def = new HashSet<>();
         use = new HashSet<>();
+        // 因为所有的phi指令是并行赋值的，所以其所有的右值都是先使用的
+        for (Instr instr : instrList) {
+            if (instr instanceof PhiInstr) {
+                for (Value operand : instr.getOperands()) {
+                    if (operand instanceof Instr || operand instanceof Param || operand instanceof GlobalVar) {
+                        use.add(operand);
+                    }
+                }
+            }
+        }
+
         for (Instr instr : instrList) {
             // 先使用后定义的变量放在use中
             for (Value operand : instr.operands) {

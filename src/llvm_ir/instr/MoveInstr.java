@@ -4,6 +4,7 @@ import back_end.mips.MipsBuilder;
 import back_end.mips.Register;
 import back_end.mips.assembly.LiAsm;
 import back_end.mips.assembly.MemAsm;
+import back_end.mips.assembly.MoveAsm;
 import llvm_ir.Constant;
 import llvm_ir.Instr;
 import llvm_ir.UndefinedValue;
@@ -48,10 +49,16 @@ public class MoveInstr extends Instr {
         super.toAssembly();
         Value dst = getDst();
         Value src = getSrc();
+        Register dstReg = MipsBuilder.getInstance().getRegOf(dst);
+        if (dstReg == null) dstReg = Register.K0;
 
-        // 先将src的值取出来, 放到t0中
+        // 先将src的值取出来，直接放入dstReg中
         if (src instanceof Constant || src instanceof UndefinedValue) {
-            new LiAsm(Register.T0, Integer.parseInt(src.getName()));
+            new LiAsm(dstReg, Integer.parseInt(src.getName()));
+        }
+        else if (MipsBuilder.getInstance().getRegOf(src) != null) {
+            Register srcReg = MipsBuilder.getInstance().getRegOf(src);
+            new MoveAsm(dstReg, srcReg);
         }
         else {
             Integer srcOffset = MipsBuilder.getInstance().getOffsetOf(src);
@@ -61,20 +68,24 @@ public class MoveInstr extends Instr {
                 srcOffset = MipsBuilder.getInstance().getCurOffset();
                 MipsBuilder.getInstance().addValueOffsetMap(src, srcOffset);
             }
-            new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, srcOffset);
+            new MemAsm(MemAsm.Op.LW, dstReg, Register.SP, srcOffset);
         }
 
-        Integer offset = MipsBuilder.getInstance().getOffsetOf(dst);
-        // 如果dst没有被定义，需要为dst开一个栈空间，并将t0的值store到堆栈上
-        if (offset == null) {
-            MipsBuilder.getInstance().subCurOffset(4);
-            int curOffset = MipsBuilder.getInstance().getCurOffset();
-            MipsBuilder.getInstance().addValueOffsetMap(dst, curOffset);
-            new MemAsm(MemAsm.Op.SW, Register.T0, Register.SP, curOffset);
-        }
-        // 如果dst被定义了，直接将t0写入堆栈
-        else {
-            new MemAsm(MemAsm.Op.SW, Register.T0, Register.SP, offset);
+        // 如果dst本身不在寄存器中，那么需要写入对应的内存
+        if (MipsBuilder.getInstance().getRegOf(dst) == null)  {
+            Integer offset = MipsBuilder.getInstance().getOffsetOf(dst);
+            // 如果dst没有被定义，需要为dst开一个栈空间，并将srcReg的值store到堆栈上
+            if (offset == null) {
+                MipsBuilder.getInstance().subCurOffset(4);
+                int curOffset = MipsBuilder.getInstance().getCurOffset();
+                MipsBuilder.getInstance().addValueOffsetMap(dst, curOffset);
+                new MemAsm(MemAsm.Op.SW, dstReg, Register.SP, curOffset);
+            }
+            // 如果dst被定义了，直接将srcReg的值写入对应的桟空间
+            else {
+                new MemAsm(MemAsm.Op.SW, dstReg, Register.SP, offset);
+            }
+
         }
 
     }

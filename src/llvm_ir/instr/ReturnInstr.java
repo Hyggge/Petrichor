@@ -5,6 +5,7 @@ import back_end.mips.Register;
 import back_end.mips.assembly.JumpAsm;
 import back_end.mips.assembly.LiAsm;
 import back_end.mips.assembly.MemAsm;
+import back_end.mips.assembly.MoveAsm;
 import llvm_ir.Constant;
 import llvm_ir.Function;
 import llvm_ir.Instr;
@@ -41,7 +42,12 @@ public class ReturnInstr extends Instr {
         if (retValue != null) {
             if (retValue instanceof Constant || retValue instanceof UndefinedValue) {
                 new LiAsm(Register.V0, Integer.parseInt(retValue.getName()));
-            } else {
+            }
+            else if (MipsBuilder.getInstance().getRegOf(retValue) != null) {
+                Register reg = MipsBuilder.getInstance().getRegOf(retValue);
+                new MoveAsm(Register.V0, reg);
+            }
+            else {
                 Integer offset = MipsBuilder.getInstance().getOffsetOf(retValue);
                 if (offset == null) {
                     MipsBuilder.getInstance().subCurOffset(4);

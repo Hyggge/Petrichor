@@ -46,18 +46,25 @@ public class StoreInstr extends Instr {
         super.toAssembly();
         Value from = getFrom();
         Value to = getTo();
-        // 我们先获得address的值, 保存到t0中
+        Register fromReg = Register.K0;
+        Register toReg = Register.K1;
+        // 我们先获得address的值, 保存到toReg中
         if (to instanceof GlobalVar) {
-            new LaAsm(Register.T0, to.getName().substring(1));
-        } else {
-            new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, MipsBuilder.getInstance().getOffsetOf(to));
+            new LaAsm(toReg, to.getName().substring(1));
         }
-        // 下面获取value，并存到address代表的位置
+        else if (MipsBuilder.getInstance().getRegOf(to) != null) {
+            toReg = MipsBuilder.getInstance().getRegOf(to);
+        }
+        else {
+            new MemAsm(MemAsm.Op.LW, toReg, Register.SP, MipsBuilder.getInstance().getOffsetOf(to));
+        }
+        // 下面获取需要存入的值
         if (from instanceof Constant || from instanceof UndefinedValue) {
-            // 将常数保存到t1中
-            new LiAsm(Register.T1, Integer.parseInt(from.getName()));
-            // 将value存到address的位置
-            new MemAsm(MemAsm.Op.SW, Register.T1, Register.T0, 0);
+            // 将常数保存到fromReg中
+            new LiAsm(fromReg, Integer.parseInt(from.getName()));
+        }
+        else if (MipsBuilder.getInstance().getRegOf(from) != null) {
+            fromReg = MipsBuilder.getInstance().getRegOf(from);
         }
         else {
             Integer valueOffset = MipsBuilder.getInstance().getOffsetOf(from);
@@ -66,10 +73,10 @@ public class StoreInstr extends Instr {
                 valueOffset = MipsBuilder.getInstance().getCurOffset();
                 MipsBuilder.getInstance().addValueOffsetMap(from, valueOffset);
             }
-            // 然后获得value的值，保存到t1中
-            new MemAsm(MemAsm.Op.LW, Register.T1, Register.SP, valueOffset);
-            // 将value存到address的位置
-            new MemAsm(MemAsm.Op.SW, Register.T1, Register.T0, 0);
+            // 然后获得value的值，保存到fromReg中
+            new MemAsm(MemAsm.Op.LW, fromReg, Register.SP, valueOffset);
         }
+        // 将fromReg的值存到address的位置
+        new MemAsm(MemAsm.Op.SW, fromReg, toReg, 0);
     }
 }

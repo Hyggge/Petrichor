@@ -28,7 +28,6 @@ public class GVN {
         for (Function function : module.getFunctionList()) {
             BasicBlock entry = function.getBBList().get(0);
             initAttr();
-            AluOptimize(entry);
             GVNVisit(entry);
         }
     }
@@ -38,6 +37,7 @@ public class GVN {
     }
 
     public void GVNVisit(BasicBlock entry) {
+        AluOptimize(entry);
         HashSet<Instr> inserted = new HashSet<>();
         LinkedList<Instr> instrList = entry.getInstrList();
         Iterator<Instr> iterator = instrList.iterator();

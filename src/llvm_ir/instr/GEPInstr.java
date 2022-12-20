@@ -70,38 +70,55 @@ public class GEPInstr extends Instr {
         super.toAssembly();
         Value pointer = getPointer();
         Value offset = getOffset();
-        // 先获得pointer中的值（也就是数组的首地址），存入t0中
+        Register pointerReg = Register.K0;
+        Register offsetReg = Register.K1;
+        Register tarReg = MipsBuilder.getInstance().getRegOf(this);
+        if (tarReg == null) tarReg = Register.K0;
+
+        // 先获得pointer中的值（也就是数组的首地址），存入pointerReg中
         if (pointer instanceof GlobalVar) {
-            new LaAsm(Register.T0, pointer.getName().substring(1));
+            new LaAsm(pointerReg, pointer.getName().substring(1));
+        }
+        else if (MipsBuilder.getInstance().getRegOf(pointer) != null) {
+            pointerReg = MipsBuilder.getInstance().getRegOf(pointer);
         }
         else {
-            new MemAsm(MemAsm.Op.LW, Register.T0, Register.SP, MipsBuilder.getInstance().getOffsetOf(pointer));
+            new MemAsm(MemAsm.Op.LW, pointerReg, Register.SP, MipsBuilder.getInstance().getOffsetOf(pointer));
         }
 
         // 如果offset是一个常数
         if (offset instanceof Constant || offset instanceof UndefinedValue) {
-            // 将t0和4*offset相加，得到所求地址，存到t2中
-            new AluAsm(AluAsm.Op.ADDI, Register.T2, Register.T0, Integer.parseInt(offset.getName()) * 4);
+            // 将pointerReg和4*offset相加，得到所求地址，存到tarReg中
+            new AluAsm(AluAsm.Op.ADDI, tarReg, pointerReg, Integer.parseInt(offset.getName()) * 4);
         }
-        // 如果offset存在堆栈中
         else {
-            Integer offsetOffset = MipsBuilder.getInstance().getOffsetOf(offset);
-            if (offsetOffset == null) {
-                MipsBuilder.getInstance().subCurOffset(4);
-                offsetOffset = MipsBuilder.getInstance().getCurOffset();
-                MipsBuilder.getInstance().addValueOffsetMap(offset, offsetOffset);
+            // 如果offset在寄存器中
+            if (MipsBuilder.getInstance().getRegOf(offset) != null) {
+                offsetReg = MipsBuilder.getInstance().getRegOf(offset);
             }
-            // 将offset的值放入t1中
-            new MemAsm(MemAsm.Op.LW, Register.T1, Register.SP, offsetOffset);
-            // 将offset向左移2位(相当与*4),然后再存入t1中
-            new AluAsm(AluAsm.Op.SLL, Register.T1, Register.T1, 2);
-            // 将t0和t1将加，得到所求地址，存入t2
-            new AluAsm(AluAsm.Op.ADDU, Register.T2, Register.T0, Register.T1);
+            // 如果offset在堆栈中
+            else {
+                Integer offsetOffset = MipsBuilder.getInstance().getOffsetOf(offset);
+                if (offsetOffset == null) {
+                    MipsBuilder.getInstance().subCurOffset(4);
+                    offsetOffset = MipsBuilder.getInstance().getCurOffset();
+                    MipsBuilder.getInstance().addValueOffsetMap(offset, offsetOffset);
+                }
+                // 将offset的值放入t1中
+                new MemAsm(MemAsm.Op.LW, offsetReg, Register.SP, offsetOffset);
+            }
+            // 将offset向左移2位(相当与*4),然后再存入tarReg中
+            new AluAsm(AluAsm.Op.SLL, tarReg , offsetReg, 2);
+            // 将tarReg和pointerReg相加，得到所求地址，存入tarReg
+            new AluAsm(AluAsm.Op.ADDU, tarReg, tarReg, pointerReg);
         }
-        // 为Value申请一个栈空间，将t2存入堆栈中
-        MipsBuilder.getInstance().subCurOffset(4);
-        int curOffset = MipsBuilder.getInstance().getCurOffset();
-        MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
-        new MemAsm(MemAsm.Op.SW, Register.T2, Register.SP, curOffset);
+
+        // 如果this不在寄存器中，那么我们需要为Value申请一个栈空间，将tarReg存入堆栈中
+        if (MipsBuilder.getInstance().getRegOf(this) == null) {
+            MipsBuilder.getInstance().subCurOffset(4);
+            int curOffset = MipsBuilder.getInstance().getCurOffset();
+            MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
+            new MemAsm(MemAsm.Op.SW, tarReg, Register.SP, curOffset);
+        }
     }
 }

@@ -5,6 +5,7 @@ import back_end.mips.Register;
 import back_end.mips.assembly.LaAsm;
 import back_end.mips.assembly.LiAsm;
 import back_end.mips.assembly.MemAsm;
+import back_end.mips.assembly.MoveAsm;
 import back_end.mips.assembly.SyscallAsm;
 import llvm_ir.Constant;
 import llvm_ir.Instr;
@@ -41,13 +42,21 @@ public class IOInstr extends Instr {
 
         @Override
         public void toAssembly() {
+            super.toAssembly();
             new LiAsm(Register.V0, 5);
             new SyscallAsm();
-            // 为当前value开辟栈空间，将v0中读取到的值存入
-            MipsBuilder.getInstance().subCurOffset(4);
-            int curOffset = MipsBuilder.getInstance().getCurOffset();
-            MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
-            new MemAsm(MemAsm.Op.SW, Register.V0, Register.SP, curOffset);
+            // 如果this有对应的寄存器，直接将V0的值保存在该寄存器中即可
+            if (MipsBuilder.getInstance().getRegOf(this) != null) {
+                Register reg = MipsBuilder.getInstance().getRegOf(this);
+                new MoveAsm(reg, Register.V0);
+            }
+            // 否则，为当前value开辟栈空间，将v0中读取到的值存入
+            else {
+                MipsBuilder.getInstance().subCurOffset(4);
+                int curOffset = MipsBuilder.getInstance().getCurOffset();
+                MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
+                new MemAsm(MemAsm.Op.SW, Register.V0, Register.SP, curOffset);
+            }
         }
     }
 
@@ -74,11 +83,17 @@ public class IOInstr extends Instr {
 
         @Override
         public void toAssembly() {
+            super.toAssembly();
             Value target = getTarget();
             // 将target的值保存到a0中
             if (target instanceof Constant || target instanceof UndefinedValue) {
                 new LiAsm(Register.A0, Integer.parseInt(target.getName()));
-            } else {
+            }
+            else if (MipsBuilder.getInstance().getRegOf(target) != null) {
+                Register reg = MipsBuilder.getInstance().getRegOf(target);
+                new MoveAsm(Register.A0, reg);
+            }
+            else {
                 Integer offset = MipsBuilder.getInstance().getOffsetOf(target);
                 if (offset == null) {
                     MipsBuilder.getInstance().subCurOffset(4);
