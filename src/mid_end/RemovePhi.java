@@ -1,5 +1,6 @@
 package mid_end;
 
+import back_end.mips.Register;
 import llvm_ir.BasicBlock;
 import llvm_ir.Constant;
 import llvm_ir.Function;
@@ -16,6 +17,7 @@ import llvm_ir.instr.PhiInstr;
 import llvm_ir.type.BaseType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -153,6 +155,7 @@ public class RemovePhi {
         ArrayList<Value> dstList = pcopy.getDstList();
         ArrayList<Value> srcList = pcopy.getSrcList();
         Function function = pcopy.getParentBB().getParentFunction();
+        HashMap<Value, Register> var2reg = function.getVar2reg();
         // 创建初始move序列
         // TODO: 在这个阶段可以先对move的先后顺序进行优化
         LinkedList<MoveInstr> moveList = new LinkedList<>();
@@ -176,6 +179,36 @@ public class RemovePhi {
                 }
                 // 如果出现了循环赋值的情况，我们需要增加中间变量
                 if (loopAssign) {
+                    Value midValue = new Value(BaseType.INT32, value.getName() + "_tmp");
+                    // 将所有使用value作为src的move指令，将改为使用midValue作为src
+                    for (MoveInstr move : moveList) {
+                        if (move.getSrc().equals(value)) {
+                            move.setSrc(midValue);
+                        }
+                    }
+                    // 在moveList的开头插入新的move
+                    MoveInstr move = new MoveInstr(IRBuilder.getInstance().genLocalVarName(function), midValue, value);
+                    moveList.addFirst(move);
+                }
+                rec.add(value);
+            }
+        }
+
+        // 解决move1的dst和move2的src共享了一个寄存器（move1在move2前面）
+        rec = new HashSet<>();
+        for (int i = moveList.size() - 1; i >= 0; i--) {
+            Value value =  moveList.get(i).getSrc();
+            if (! (value instanceof Constant) && ! rec.contains(value)) {
+                // 检查该指令之前的所有指令，如果value对应的reg同时是某一个move的dst的reg，那么存在寄存器冲突的问题
+                boolean regConflict = false;
+                for (int j = 0; j < i; j++) {
+                    if (var2reg.get(moveList.get(j).getDst()) == var2reg.get(value)) {
+                        regConflict = true;
+                        break;
+                    }
+                }
+                // 如果出现了寄存器冲突的情况，我们需要增加中间变量
+                if (regConflict) {
                     Value midValue = new Value(BaseType.INT32, value.getName() + "_tmp");
                     // 将所有使用value作为src的move指令，将改为使用midValue作为src
                     for (MoveInstr move : moveList) {

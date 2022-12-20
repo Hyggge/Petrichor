@@ -96,6 +96,11 @@ public class ActivenessAnalysis {
                 newIn.addAll(out);
                 newIn.removeAll(bb.getDef());
                 newIn.addAll(bb.getUse());
+                for (Instr instr : bb.getInstrList()) {
+                    if (instr instanceof PhiInstr) {
+                        newIn.add(instr);
+                    }
+                }
                 if (! newIn.equals(oriIn)) {
                     inMap.put(bb, newIn);
                     change = true;
