@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-public class conflictGraph {
+public class ActivenessAnalysis {
     private Module module;
     private HashMap<BasicBlock, HashSet<Value>> inMap;
     private HashMap<BasicBlock, HashSet<Value>> outMap;
 
 
-    public conflictGraph(Module module) {
+    public ActivenessAnalysis(Module module) {
         this.module = module;
     }
 

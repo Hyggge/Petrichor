@@ -1,6 +1,7 @@
 package llvm_ir;
 
 import back_end.mips.MipsBuilder;
+import back_end.mips.Register;
 import back_end.mips.assembly.LabelAsm;
 import llvm_ir.instr.CallInstr;
 import llvm_ir.instr.IOInstr;
@@ -29,6 +30,9 @@ public class Function extends User{
 
     // 是否可以进行GVN优化
     private Boolean canGVN = null;
+
+    // 寄存器分配
+    private HashMap<Value, Register> var2reg;
 
 
     public Function(String name, LLVMType retType) {
@@ -91,6 +95,14 @@ public class Function extends User{
 
     public HashMap<BasicBlock, ArrayList<BasicBlock>> getChildMap() {
         return childMap;
+    }
+
+    public HashMap<Value, Register> getVar2reg() {
+        return var2reg;
+    }
+
+    public void setVar2reg(HashMap<Value, Register> var2reg) {
+        this.var2reg = var2reg;
     }
 
     // 检查该函数的调用是否进行GVN优化

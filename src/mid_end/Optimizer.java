@@ -17,8 +17,8 @@ public class Optimizer {
         new CFGBuilder(module).run();
         new Mem2Reg(module).run();
         new GVN(module).run();
-        // new conflictGraph(module).run();
-
+        new ActivenessAnalysis(module).run();
+        new RegAllocator(module).run();
 
 
         Printer.printPhiLLVM(module);

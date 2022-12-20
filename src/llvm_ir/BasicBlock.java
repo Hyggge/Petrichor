@@ -151,15 +151,15 @@ public class BasicBlock extends Value {
         def = new HashSet<>();
         use = new HashSet<>();
         for (Instr instr : instrList) {
-            // 先定义后使用的变量放在def中
-            if (! use.contains(instr) && instr.canBeUsed() ) {
-                def.add(instr);
-            }
             // 先使用后定义的变量放在use中
             for (Value operand : instr.operands) {
                 if (! def.contains(operand) && (operand instanceof Instr || operand instanceof Param || operand instanceof GlobalVar)) {
                     use.add(operand);
                 }
+            }
+            // 先定义后使用的变量放在def中
+            if (! use.contains(instr) && instr.canBeUsed() ) {
+                def.add(instr);
             }
         }
     }
