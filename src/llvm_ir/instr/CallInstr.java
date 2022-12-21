@@ -89,7 +89,7 @@ public class CallInstr extends Instr {
         for (Value param : paramList) {
             ++paramNum;
             // 如果参数在前3个中，我们直接将他们放入a1-a3寄存器中
-            if (paramNum <= 3) {
+            if (paramNum <= 3 && MipsBuilder.getInstance().useReg()) {
                 Register paramReg = Register.indexToReg(Register.A0.ordinal() + paramNum);
                 // 将实参的值load到paramReg中
                 if (param instanceof Constant || param instanceof UndefinedValue) {

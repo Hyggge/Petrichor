@@ -33,14 +33,21 @@ public class MipsBuilder {
     }
 
     public Register getRegOf(Value value) {
+        if (var2reg == null) return null;
         return var2reg.get(value);
     }
 
     public void allocRegForParam(Param param, Register reg) {
+        if (var2reg == null) return;
         var2reg.put(param, reg);
     }
 
+    public boolean useReg() {
+        return var2reg != null;
+    }
+
     public ArrayList<Register> getAllocatedRegs() {
+        if (var2reg == null) return new ArrayList<>();
         return new ArrayList<>(new HashSet<>(var2reg.values()));
     }
 
