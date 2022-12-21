@@ -2,10 +2,8 @@ package mid_end;
 
 import llvm_ir.BasicBlock;
 import llvm_ir.Function;
-import llvm_ir.Instr;
 import llvm_ir.Module;
 import llvm_ir.Value;
-import llvm_ir.instr.PhiInstr;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -77,17 +75,17 @@ public class ActivenessAnalysis {
                     // 因为后继的in中没有计算phi指令使用的operand
                     // 如果sucBB中有PHI指令
                     // 我们还需要将PHI指令中和bb相对应的operand加入到out中
-                    for (Instr instr : sucBB.getInstrList()) {
-                        if (instr instanceof PhiInstr) {
-                            Value targetOperand = ((PhiInstr) instr).getOperandFrom(bb);
-                            if (targetOperand != null) {
-                            //    if (targetOperand instanceof Instr || targetOperand instanceof Param || targetOperand instanceof GlobalVar) {
-                            //        out.add(targetOperand);
-                                out.add(instr);
-                                //}
-                            }
-                        }
-                    }
+                    //for (Instr instr : sucBB.getInstrList()) {
+                    //    if (instr instanceof PhiInstr) {
+                    //        Value targetOperand = ((PhiInstr) instr).getOperandFrom(bb);
+                    //        if (targetOperand != null) {
+                    //        //    if (targetOperand instanceof Instr || targetOperand instanceof Param || targetOperand instanceof GlobalVar) {
+                    //        //        out.add(targetOperand);
+                    //            out.add(instr);
+                    //            //}
+                    //        }
+                    //    }
+                    //}
                     outMap.put(bb, out);
                 }
                 // 根据公式in = (out - def) + use，求出当前基本块的in
@@ -96,11 +94,11 @@ public class ActivenessAnalysis {
                 newIn.addAll(out);
                 newIn.removeAll(bb.getDef());
                 newIn.addAll(bb.getUse());
-                for (Instr instr : bb.getInstrList()) {
-                    if (instr instanceof PhiInstr) {
-                        newIn.add(instr);
-                    }
-                }
+                //for (Instr instr : bb.getInstrList()) {
+                //    if (instr instanceof PhiInstr) {
+                //        newIn.add(instr);
+                //    }
+                //}
                 if (! newIn.equals(oriIn)) {
                     inMap.put(bb, newIn);
                     change = true;

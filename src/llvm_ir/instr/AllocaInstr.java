@@ -35,13 +35,13 @@ public class AllocaInstr extends Instr {
         } else {
             MipsBuilder.getInstance().subCurOffset(4);
         }
-        // t0保存分配空间的首地址（实际上是最低地址）
+        // k0保存分配空间的首地址（实际上是最低地址）
         int curOffset = MipsBuilder.getInstance().getCurOffset();
-        new AluAsm(AluAsm.Op.ADDI, Register.T0, Register.SP, curOffset);
+        new AluAsm(AluAsm.Op.ADDI, Register.K0, Register.SP, curOffset);
         // 再从栈上为Value开一个空间，保存刚刚新分配空间的首地址
         MipsBuilder.getInstance().subCurOffset(4);
         curOffset = MipsBuilder.getInstance().getCurOffset();
         MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
-        new MemAsm(MemAsm.Op.SW, Register.T0, Register.SP, curOffset);
+        new MemAsm(MemAsm.Op.SW, Register.K0, Register.SP, curOffset);
     }
 }
