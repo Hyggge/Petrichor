@@ -10,6 +10,7 @@ import back_end.mips.assembly.MoveAsm;
 import llvm_ir.Constant;
 import llvm_ir.Function;
 import llvm_ir.Instr;
+import llvm_ir.Param;
 import llvm_ir.UndefinedValue;
 import llvm_ir.Value;
 
@@ -81,22 +82,53 @@ public class CallInstr extends Instr {
         // 将sp和ra存到sp+curOffset-4*regNum-4 和sp+curOffset-4*regNum-8中
         new MemAsm(MemAsm.Op.SW, Register.SP, Register.SP, curOffset - regNum * 4 - 4);
         new MemAsm(MemAsm.Op.SW, Register.RA, Register.SP, curOffset - regNum * 4 - 8);
-        // 将实参的值压入被调用函数的堆栈中
+        // 将实参的值压入被调用函数的堆栈或者寄存器中
+        // 对于放入寄存器中的实参，我们仍然为其在桟中预留空间
         // 被调用函数的栈底为 sp + curOffset(负数) - regNum * 4 - 8
         int paramNum = 0;
         for (Value param : paramList) {
             ++paramNum;
-            Register tempReg = Register.K0;
-            // 将实参的值load到K0寄存器中
-            if (param instanceof Constant || param instanceof UndefinedValue) {
-                new LiAsm(tempReg, Integer.parseInt(param.getName()));
-            } else if (MipsBuilder.getInstance().getRegOf(param) != null) {
-                tempReg = MipsBuilder.getInstance().getRegOf(param);
-            } else {
-                new MemAsm(MemAsm.Op.LW, tempReg, Register.SP, MipsBuilder.getInstance().getOffsetOf(param));
+            // 如果参数在前3个中，我们直接将他们放入a1-a3寄存器中
+            if (paramNum <= 3) {
+                Register paramReg = Register.indexToReg(Register.A0.ordinal() + paramNum);
+                // 将实参的值load到paramReg中
+                if (param instanceof Constant || param instanceof UndefinedValue) {
+                    new LiAsm(paramReg, Integer.parseInt(param.getName()));
+                } else if (MipsBuilder.getInstance().getRegOf(param) != null) {
+                    Register srcReg = MipsBuilder.getInstance().getRegOf(param);
+                    // 如果实参是本身就是当前函数的形参, 即此时srcReg是$a*, 我们需要从对应的堆栈中空间中取值
+                    if (param instanceof Param) {
+                        new MemAsm(MemAsm.Op.LW, paramReg, Register.SP, curOffset - (allocatedRegs.indexOf(srcReg) + 1) * 4);
+                    }
+                    // 否则srcReg是$t*或者$s*寄存器，直接赋值给$a*即可
+                    else {
+                        new MoveAsm(paramReg, MipsBuilder.getInstance().getRegOf(param));
+                    }
+                } else {
+                    new MemAsm(MemAsm.Op.LW, paramReg, Register.SP, MipsBuilder.getInstance().getOffsetOf(param));
+                }
             }
-            // 将tempReg中的值存入被调用函数的栈区域
-            new MemAsm(MemAsm.Op.SW, tempReg, Register.SP,  curOffset - regNum * 4 - 8 -paramNum * 4);
+            // 如果参数不在前3个中，我们将其存入堆栈中
+            else {
+                Register tempReg = Register.K0;
+                // 将实参的值load到K0寄存器中
+                if (param instanceof Constant || param instanceof UndefinedValue) {
+                    new LiAsm(tempReg, Integer.parseInt(param.getName()));
+                } else if (MipsBuilder.getInstance().getRegOf(param) != null) {
+                    Register srcReg = MipsBuilder.getInstance().getRegOf(param);
+                    // 如果实参是本身就是当前函数的形参, 即此时srcReg是$a*, 我们需要从对应的堆栈中空间中取值
+                    if (param instanceof Param) {
+                        new MemAsm(MemAsm.Op.LW, tempReg, Register.SP, curOffset - (allocatedRegs.indexOf(srcReg) + 1) * 4);
+                    }
+                    // 否则srcReg是$t*或者$s*寄存器，直接赋值给$a*即可
+                    else tempReg = srcReg;
+                } else {
+                    new MemAsm(MemAsm.Op.LW, tempReg, Register.SP, MipsBuilder.getInstance().getOffsetOf(param));
+                }
+                // 将tempReg中的值存入被调用函数的栈区域
+                new MemAsm(MemAsm.Op.SW, tempReg, Register.SP,  curOffset - regNum * 4 - 8 -paramNum * 4);
+            }
+
         }
         // 将sp设置为被调用函数的栈底地址，即sp + curOffset(负数) - regNum * 4 - 8
         new AluAsm(AluAsm.Op.ADDI, Register.SP, Register.SP, curOffset- regNum * 4 - 8);

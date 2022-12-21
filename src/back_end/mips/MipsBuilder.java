@@ -2,8 +2,8 @@ package back_end.mips;
 
 import back_end.mips.assembly.Assembly;
 import llvm_ir.Function;
+import llvm_ir.Param;
 import llvm_ir.Value;
-import llvm_ir.instr.ZextInstr;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,8 +36,8 @@ public class MipsBuilder {
         return var2reg.get(value);
     }
 
-    public void allocRegForZext(ZextInstr instr, Register reg) {
-        var2reg.put(instr, reg);
+    public void allocRegForParam(Param param, Register reg) {
+        var2reg.put(param, reg);
     }
 
     public ArrayList<Register> getAllocatedRegs() {

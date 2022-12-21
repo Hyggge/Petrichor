@@ -166,7 +166,12 @@ public class Function extends User{
         MipsBuilder.getInstance().enterFunc(this);
         // 建立形参和offset的映射关系
         // 因为调用一个函数前，已经将函数的参数压入新栈的栈底了，所以curOffset不等于0
+        // 在这里我们可以为前四个参数分配a1-a3寄存器，但仍然在桟里为其预留空间
         for (int i = 0; i < paramList.size(); i++) {
+            if (i < 3) {
+                MipsBuilder.getInstance().allocRegForParam(paramList.get(i),
+                                                            Register.indexToReg(Register.A0.ordinal() + i + 1));
+            }
             MipsBuilder.getInstance().subCurOffset(4);
             int curOffset = MipsBuilder.getInstance().getCurOffset();
             MipsBuilder.getInstance().addValueOffsetMap(paramList.get(i), curOffset);
