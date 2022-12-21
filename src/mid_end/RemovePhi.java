@@ -202,7 +202,7 @@ public class RemovePhi {
                 // 检查该指令之前的所有指令，如果value对应的reg同时是某一个move的dst的reg，那么存在寄存器冲突的问题
                 boolean regConflict = false;
                 for (int j = 0; j < i; j++) {
-                    if (var2reg.get(moveList.get(j).getDst()) == var2reg.get(value)) {
+                    if (var2reg.get(value) != null && var2reg.get(moveList.get(j).getDst()) == var2reg.get(value)) {
                         regConflict = true;
                         break;
                     }
