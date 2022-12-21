@@ -2,6 +2,7 @@ package llvm_ir.instr;
 
 import back_end.mips.MipsBuilder;
 import back_end.mips.Register;
+import back_end.mips.assembly.MemAsm;
 import llvm_ir.Instr;
 import llvm_ir.Value;
 import llvm_ir.type.LLVMType;
@@ -37,11 +38,16 @@ public class ZextInstr extends Instr {
         // 实际在MIPS中不需要考虑位宽，i32和i1都存储在4字节的堆栈空间中
         // 如果是i1转到i32，我们可以直接将this和“oriValue的offset“绑定
         // 那么每次我们使用this时，实际上是取的oriValue的值
+        // TODO: 可以考虑把Zext变量也放到寄存器中
         if (oriValue.getType().isInt1() && targetType.isInt32()) {
             // 如果oriValue在寄存器中, 那么我们也将this映射到该寄存器中
             if (MipsBuilder.getInstance().getRegOf(oriValue) != null) {
                 Register reg = MipsBuilder.getInstance().getRegOf(oriValue);
-                MipsBuilder.getInstance().allocRegForZext(this, reg);
+                //MipsBuilder.getInstance().allocRegForZext(this, reg);
+                MipsBuilder.getInstance().subCurOffset(4);
+                int curOffset = MipsBuilder.getInstance().getCurOffset();
+                MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
+                new MemAsm(MemAsm.Op.SW, reg, Register.SP, curOffset);
             }
             // 如果oriValue在栈中，我们只需要把this映射到对应offset即可
             else {
