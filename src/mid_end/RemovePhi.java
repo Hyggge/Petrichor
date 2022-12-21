@@ -164,7 +164,9 @@ public class RemovePhi {
                                             dstList.get(i), srcList.get(i));
             moveList.add(move);
         }
+
         // 解决循环赋值的问题
+        ArrayList<MoveInstr> tempList = new ArrayList<>();
         HashSet<Value> rec = new HashSet<>();
         for (int i = 0; i < moveList.size(); i++) {
             Value value =  moveList.get(i).getDst();
@@ -188,7 +190,7 @@ public class RemovePhi {
                     }
                     // 在moveList的开头插入新的move
                     MoveInstr move = new MoveInstr(IRBuilder.getInstance().genLocalVarName(function), midValue, value);
-                    moveList.addFirst(move);
+                    tempList.add(move);
                 }
                 rec.add(value);
             }
@@ -218,11 +220,17 @@ public class RemovePhi {
                     }
                     // 在moveList的开头插入新的move
                     MoveInstr move = new MoveInstr(IRBuilder.getInstance().genLocalVarName(function), midValue, value);
-                    moveList.addFirst(move);
+                    tempList.add(move);
                 }
                 rec.add(value);
             }
         }
+
+        // 将创建的临时变量(tempList中)依次插入到moveList开头
+        for (MoveInstr value : tempList) {
+            moveList.addFirst(value);
+        }
+
         return moveList;
     }
 }
