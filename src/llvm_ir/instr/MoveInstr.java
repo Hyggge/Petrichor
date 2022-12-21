@@ -50,6 +50,11 @@ public class MoveInstr extends Instr {
         Value dst = getDst();
         Value src = getSrc();
         Register dstReg = MipsBuilder.getInstance().getRegOf(dst);
+        // 如果dst和src都分配了寄存器，并且寄存器是相同的，没有必要再move
+        if (dstReg != null && MipsBuilder.getInstance().getRegOf(src) == dstReg) {
+            return;
+        }
+
         if (dstReg == null) dstReg = Register.K0;
 
         // 先将src的值取出来，直接放入dstReg中
