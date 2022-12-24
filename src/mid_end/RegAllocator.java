@@ -6,7 +6,6 @@ import llvm_ir.Function;
 import llvm_ir.Instr;
 import llvm_ir.Module;
 import llvm_ir.Value;
-import llvm_ir.instr.AllocaInstr;
 import llvm_ir.instr.PhiInstr;
 import llvm_ir.instr.ZextInstr;
 
@@ -85,7 +84,7 @@ public class RegAllocator {
                 }
             }
             // 如果该指令属于定义语句，并且不是创建数组的alloc指令
-            if (instr.canBeUsed() && !(instr instanceof AllocaInstr) && !(instr instanceof ZextInstr)) {
+            if (instr.canBeUsed() && !(instr instanceof ZextInstr)) {
                 defined.add(instr);
                 Register reg = allocRegFor(instr);
                 if (reg != null) {

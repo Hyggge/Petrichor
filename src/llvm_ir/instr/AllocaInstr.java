@@ -35,13 +35,23 @@ public class AllocaInstr extends Instr {
         } else {
             MipsBuilder.getInstance().subCurOffset(4);
         }
-        // k0保存分配空间的首地址（实际上是最低地址）
-        int curOffset = MipsBuilder.getInstance().getCurOffset();
-        new AluAsm(AluAsm.Op.ADDI, Register.K0, Register.SP, curOffset);
-        // 再从栈上为Value开一个空间，保存刚刚新分配空间的首地址
-        MipsBuilder.getInstance().subCurOffset(4);
-        curOffset = MipsBuilder.getInstance().getCurOffset();
-        MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
-        new MemAsm(MemAsm.Op.SW, Register.K0, Register.SP, curOffset);
+        // 如果alloca出来的指针有对应的寄存器，那么我们直接讲地址赋值给这个寄存器即可
+        if (MipsBuilder.getInstance().getRegOf(this) != null) {
+            Register pointerReg = MipsBuilder.getInstance().getRegOf(this);
+            int curOffset = MipsBuilder.getInstance().getCurOffset();
+            new AluAsm(AluAsm.Op.ADDI, pointerReg, Register.SP, curOffset);
+        }
+        // 反之，我们只能将这个指针值存入桟中（紧跟着前面分配的空间）
+        else {
+            // k0保存分配空间的首地址（实际上是最低地址）
+            int curOffset = MipsBuilder.getInstance().getCurOffset();
+            new AluAsm(AluAsm.Op.ADDI, Register.K0, Register.SP, curOffset);
+            // 再从栈上为this开一个空间，保存刚刚新分配空间的首地址
+            MipsBuilder.getInstance().subCurOffset(4);
+            curOffset = MipsBuilder.getInstance().getCurOffset();
+            MipsBuilder.getInstance().addValueOffsetMap(this, curOffset);
+            new MemAsm(MemAsm.Op.SW, Register.K0, Register.SP, curOffset);
+        }
+
     }
 }
