@@ -108,9 +108,9 @@ public class GEPInstr extends Instr {
                 new MemAsm(MemAsm.Op.LW, offsetReg, Register.SP, offsetOffset);
             }
             // 将offset向左移2位(相当与*4),然后再存入K0中(这里我们不能写成offsetReg或者tarReg，因为offsetReg和tarReg都有可能指向t*或者s*寄存器)
-            new AluAsm(AluAsm.Op.SLL, Register.K0, offsetReg, 2);
+            new AluAsm(AluAsm.Op.SLL, Register.K1, offsetReg, 2);
             // 将tarReg和pointerReg相加，得到所求地址，存入tarReg
-            new AluAsm(AluAsm.Op.ADDU, tarReg, Register.K0, pointerReg);
+            new AluAsm(AluAsm.Op.ADDU, tarReg, Register.K1, pointerReg);
         }
 
         // 如果this不在寄存器中，那么我们需要为Value申请一个栈空间，将tarReg存入堆栈中
