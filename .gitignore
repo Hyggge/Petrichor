@@ -10,3 +10,4 @@ output.txt
 /mips.txt
 /llvm_ir_move.txt
 /llvm_ir_phi.txt
+/script/
