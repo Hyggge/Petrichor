@@ -19,6 +19,7 @@ public class Optimizer {
         new GVN(module).run();
         new ActivenessAnalysis(module).run();
         new RegAllocator(module).run();
+        new DeadCodeRemove(module).run();
 
 
         Printer.printPhiLLVM(module);
