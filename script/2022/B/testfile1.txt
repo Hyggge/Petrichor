@@ -1,0 +1,55 @@
+
+int main()
+{
+
+	int a;
+	int array1[3] = {0,1,2};
+	int array2[2][2] = {{1,2},{3,4}}; 
+	int b = 1*2;
+	int c = 1+1*2;
+	int d = b+c;
+	int i = 0;
+	
+	a=getint();
+	b = c+d;
+	b = c*d;
+	b = c-d;
+	b = c+d+d;
+	b = c/1;
+	d = 1;
+	b = c/1;
+	b = c%1;
+	int m = 1;
+	int n = 0;
+	int result;
+	if(m+n){
+		m = 1;
+	}
+	if(!n){
+		m = 1;
+	}
+	if(m-n){
+		m = 1;
+	}
+	if(m<n){
+		m = 1;
+	}
+	if(m<=n){
+		m =1;
+	}
+	if(m>=n){
+		m = 1;
+	}
+	if(m!=n){
+		m =1;
+	}
+
+	printf("19231240\n");
+	printf("%d\n",a);
+	printf("%d\n",array1[0]);
+	printf("%d\n",array1[0]);
+	printf("%d\n",array1[0]);
+	printf("%d\n",array1[0]);
+	printf("%d\n",array1[0]);
+    return 0;
+}

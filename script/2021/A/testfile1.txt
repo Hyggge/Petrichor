@@ -1,0 +1,30 @@
+// C : dead code
+
+int d = 4;
+
+int hhh(int i){
+    int c = i * i;
+    if (i == 1) {
+        return 1;
+    }
+    if (i == 2) {
+        return 2;
+    }
+    c = c * c % 10;
+    return hhh(i - 1) + hhh(i - 2);
+}
+
+int main () {
+    int i = 2,j = 5;
+    i = getint();
+    j = getint();
+    j = 7*5923/56*56 - hhh(hhh(3)) + (1+2-(89/2*36-53) /1*6-2*(45*56/85-56+35*56/4-9));
+    int k = -+-5;
+    int n = 10;
+    while (n < k*k*k*k*k*k) {
+        d = d * d % 10000;
+        n = n + 1;
+    }
+    printf("%d, %d, %d\n", i, j, k);
+    return 0;
+}

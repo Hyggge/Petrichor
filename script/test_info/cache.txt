@@ -1,0 +1,304 @@
+Symbol{symbolName='A', symbolType=SYMBOL_CONST}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 1, isGlobal=true, llvmValue=null}
+Symbol{symbolName='B', symbolType=SYMBOL_CONST}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 2, isGlobal=true, llvmValue=null}
+Symbol{symbolName='C', symbolType=SYMBOL_CONST}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 3, isGlobal=true, llvmValue=null}
+Symbol{symbolName='D', symbolType=SYMBOL_CONST}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 4, isGlobal=true, llvmValue=null}
+Symbol{symbolName='n', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 10, isGlobal=true, llvmValue=null}
+Symbol{symbolName='m', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 20, isGlobal=true, llvmValue=null}
+Symbol{symbolName='p', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 99, isGlobal=true, llvmValue=null}
+Symbol{symbolName='q', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 66, isGlobal=true, llvmValue=null}
+Symbol{symbolName='f0', symbolType=SYMBOL_FUNC}  >>>  FuncSymbol{returnType=VOID, FParamTypes=null, FParamDims=null}
+Symbol{symbolName='f1', symbolType=SYMBOL_FUNC}  >>>  FuncSymbol{returnType=INT, FParamTypes=null, FParamDims=null}
+Symbol{symbolName='x', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='f2', symbolType=SYMBOL_FUNC}  >>>  FuncSymbol{returnType=INT, FParamTypes=null, FParamDims=null}
+Symbol{symbolName='x', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='y', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='z', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='a', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+[0]
+[0]
+Symbol{symbolName='gi', symbolType=SYMBOL_FUNC}  >>>  FuncSymbol{returnType=INT, FParamTypes=null, FParamDims=null}
+Symbol{symbolName='r', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='main', symbolType=SYMBOL_FUNC}  >>>  FuncSymbol{returnType=INT, FParamTypes=null, FParamDims=null}
+[0, 0, 0]
+[0, 0, 0]
+[]
+[]
+Symbol{symbolName='a', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+[]
+[]
+[0]
+[0]
+[]
+[]
+[0, 0, 0]
+[0, 0, 0]
+[]
+[]
+Symbol{symbolName='b', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='c', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='d', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+[0, 0, 0]
+[0, 0, 0]
+[]
+[]
+[0, 0, 0]
+[0, 0, 0]
+[]
+[]
+Symbol{symbolName='A', symbolType=SYMBOL_CONST}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 1, isGlobal=true, llvmValue=null}
+Symbol{symbolName='B', symbolType=SYMBOL_CONST}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 2, isGlobal=true, llvmValue=null}
+Symbol{symbolName='C', symbolType=SYMBOL_CONST}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 3, isGlobal=true, llvmValue=null}
+Symbol{symbolName='D', symbolType=SYMBOL_CONST}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 4, isGlobal=true, llvmValue=null}
+Symbol{symbolName='n', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 10, isGlobal=true, llvmValue=null}
+Symbol{symbolName='m', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 20, isGlobal=true, llvmValue=null}
+Symbol{symbolName='p', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 99, isGlobal=true, llvmValue=null}
+Symbol{symbolName='q', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=i32 66, isGlobal=true, llvmValue=null}
+Symbol{symbolName='f0', symbolType=SYMBOL_FUNC}  >>>  FuncSymbol{returnType=VOID, FParamTypes=[], FParamDims=[]}
+Symbol{symbolName='f1', symbolType=SYMBOL_FUNC}  >>>  FuncSymbol{returnType=INT, FParamTypes=[INT], FParamDims=[0]}
+Symbol{symbolName='x', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='f2', symbolType=SYMBOL_FUNC}  >>>  FuncSymbol{returnType=INT, FParamTypes=[INT, INT, INT], FParamDims=[0, 0, 0]}
+Symbol{symbolName='x', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='y', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='z', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='a', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='gi', symbolType=SYMBOL_FUNC}  >>>  FuncSymbol{returnType=INT, FParamTypes=[], FParamDims=[]}
+Symbol{symbolName='r', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='main', symbolType=SYMBOL_FUNC}  >>>  FuncSymbol{returnType=INT, FParamTypes=[], FParamDims=[]}
+Symbol{symbolName='a', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='b', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='c', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+Symbol{symbolName='d', symbolType=SYMBOL_VAR}  >>>  VarSymbol{valueType=INT, dim=0, lenList=[], initial=null, isGlobal=false, llvmValue=null}
+
+b0: 
+use: 
+def:
+in:
+out:
+
+b1: 
+use: %a0 
+def:%v3 
+in:%v33 %v6 %v42 %v25 %a0 %v13 
+out:%v33 %v6 %v42 %v25 %a0 %v13 
+
+b2: 
+use: %a0 
+def:%v6 
+in:%v33 %v42 %v25 %a0 %v13 
+out:%v33 %v6 %v42 %v25 %a0 %v13 
+
+b3: 
+use: %v6 %a0 
+def:%v10 %v68 
+in:%v33 %v6 %v42 %v25 %a0 %v13 
+out:%v33 %v42 %v68 %v25 %v13 
+
+b4: 
+use: %v68 
+def:%v13 
+in:%v33 %v42 %v68 %v25 
+out:%v33 %v42 %v68 %v25 %v13 
+
+b5: 
+use: 
+def:
+in:%v33 %v42 %v68 %v25 %v13 
+out:%v33 %v42 %v68 %v25 %v13 
+
+b6: 
+use: %v68 %v13 
+def:%v18 %v67 
+in:%v33 %v42 %v68 %v25 %v13 
+out:%v33 %v42 %v18 %v25 
+
+b7: 
+use: %v18 %v25 
+def:%v22 %v66 
+in:%v33 %v42 %v18 %v25 
+out:%v33 %v42 %v18 %v66 
+
+b8: 
+use: %v66 
+def:%v25 
+in:%v33 %v42 %v18 %v66 
+out:%v33 %v42 %v18 %v25 
+
+b9: 
+use: 
+def:
+in:%v33 %v42 %v66 
+out:%v33 %v42 %v66 
+
+b10: 
+use: %v33 %v66 
+def:%v30 %v65 
+in:%v33 %v42 %v66 
+out:%v42 %v66 %v65 
+
+b11: 
+use: %v65 
+def:%v33 
+in:%v42 %v66 %v65 
+out:%v33 %v42 %v66 
+
+b12: 
+use: 
+def:
+in:%v42 %v65 
+out:%v42 %v65 
+
+b13: 
+use: %v42 %v65 
+def:%v64 %v39 
+in:%v42 %v65 
+out:%v64 %v65 
+
+b14: 
+use: %v64 
+def:%v42 
+in:%v64 %v65 
+out:%v42 %v65 
+
+b15: 
+use: 
+def:
+in:%v64 
+out:%v64 
+
+b16: 
+use: %v64 
+def:%v47 
+in:%v64 
+out:%v64 
+
+b17: 
+use: 
+def:
+in:%v64 
+out:%v64 
+
+b18: 
+use: 
+def:
+in:%v64 
+out:%v64 
+
+b19: 
+use: 
+def:%v52 
+in:%v64 
+out:%v64 
+
+b20: 
+use: 
+def:
+in:%v64 
+out:%v64 
+
+b21: 
+use: %v64 
+def:
+in:%v64 
+out:
+
+b22: 
+use: 
+def:%v57 %v55 %v56 
+in:%v64 
+out:%v64 
+
+b23: 
+use: 
+def:
+in:%v64 
+out:%v64 
+
+b24: 
+use: 
+def:
+in:%v64 
+out:%v64 
+
+b25: 
+use: @g4 @g0 @g5 @g1 %a2 %a1 @g2 %a3 
+def:%v21 %v14 %v28 %v22 %v17 %v13 %v15 %v38 %v8 %v12 %v24 %v9 %v25 %v32 %v10 %v11 %v31 %v27 %v20 %v36 %v19 %v18 
+in:@g4 @g0 @g5 @g1 %a2 %a1 @g2 %a3 
+out:
+
+b26: 
+use: 
+def:%v1 
+in:
+out:
+
+b27: 
+use: @g7 @g4 @g0 
+def:%v25 %v10 %v17 %v34 %v35 %v15 %v26 %v27 %v33 %v2 %v9 %v3 %v16 
+in:@g7 @g4 @g0 
+out:
+
+@f_f0
+
+@f_f1
+%v10 ==> $t1
+%v13 ==> $t1
+%v18 ==> $t1
+%v22 ==> $t2
+%v25 ==> $t0
+%v3 ==> $t0
+%v30 ==> $t2
+%v33 ==> $t1
+%v39 ==> $t2
+%v42 ==> $t0
+%v47 ==> $t1
+%v52 ==> $t1
+%v55 ==> $t1
+%v57 ==> $t1
+%v6 ==> $t0
+%v64 ==> $t0
+%v65 ==> $t1
+%v66 ==> $t0
+%v67 ==> $t1
+%v68 ==> $t0
+
+@f_f2
+%v10 ==> $t0
+%v11 ==> $t0
+%v12 ==> $t1
+%v13 ==> $t2
+%v14 ==> $t1
+%v15 ==> $t0
+%v17 ==> $t1
+%v18 ==> $t2
+%v19 ==> $t1
+%v20 ==> $t1
+%v21 ==> $t0
+%v22 ==> $t0
+%v24 ==> $t1
+%v25 ==> $t0
+%v27 ==> $t1
+%v28 ==> $t0
+%v31 ==> $t1
+%v32 ==> $t0
+%v36 ==> $t1
+%v38 ==> $t0
+%v8 ==> $t0
+%v9 ==> $t1
+
+@f_gi
+%v1 ==> $t0
+
+@main
+%v10 ==> $t1
+%v15 ==> $t1
+%v16 ==> $t2
+%v17 ==> $t0
+%v2 ==> $t0
+%v25 ==> $t1
+%v26 ==> $t2
+%v27 ==> $t0
+%v3 ==> $t0
+%v33 ==> $t1
+%v34 ==> $t2
+%v35 ==> $t0
+%v9 ==> $t1

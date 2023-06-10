@@ -1,10 +1,12 @@
-# 编译器设计文档
+# Petrichor
+
+$\tt{Petrichor}$ 是采用Java语言编写的MIPS编译器（以 LLVM IR 作为中间代码）
 
 ## 编译器总体设计
 
 ### 总体结构
 
-本文描述的编译器是采用Java语言编写的MIPS编译器。该编译器分为前端，中端，后端三部分——
+编译器分为前端、中端、后端三部分——
 
 - 前端：词法分析、语法分析、语义分析，最终将源程序生成为LLVM IR
 - 中端：中间代码优化，包括mem2reg，GVN，图着色寄存器分配，死代码删除，常量计算
@@ -36,7 +38,7 @@
 │  ├─mid_end            # 中端
 │  ├─utils              # 工具类
 │  └─Compliler.java     # 入口程序
-└─test                  # 测试文件夹
+└─script                # 测试脚本
 
 ```
 
@@ -83,7 +85,7 @@ Printer.printMIPS(assemblyTable);
 
 词法分析主要由Lexer类实现。首先，我们将源文件转化为输入流（笔者采用的是可回退的输入流——PushbackInputStream），然后依次读取每个字符，按照下面的词法规则进行解析——
 
-![](./lexer.png)
+![](./img/lexer.png)
 
 每识别出一个token，我们就将其封装到下面的Token类中。其中TokenType为表示token类型的枚举类，value为token本身的名称，lineNumber是Token所在的行号（便于在错误处理时输出出错行号）。
 
@@ -289,7 +291,7 @@ LLVM中的核心观点就是“一切皆Value”——也就是说和LLVM相关�
 
 笔者在编程时也参考了这一观点，并参考LLVM原本的继承关系编写了User、Module、Function、Instr、Constant、Param、StringLiteral、UndefinedValue等类。
 
-![](./llvm_ir.png)
+![](./img/llvm_ir.png)
 
 关键类的定义如下所示——
 
@@ -390,7 +392,7 @@ public class IRBuilder {
 
 在LLVM IR中，每个Value都有特定的类型。笔者首先定义了LLVMType作为类型基类，然后定了ArrayType，PointerType，BaseType，OtherType继承它。
 
-![](./llvm_type.png)
+![](./img/llvm_type.png)
 
 - **BaseType**：基础类型，包括INT1（i1），INT8（i8），INT32(i32)，VOID（void） 。该类构造方法私有，上述类型都是已经建好的实例（相当于枚举）。
 - **ArrayType**：数组类型，由元素类型和元素数量组成。
@@ -427,7 +429,7 @@ mem2reg本质上就是在正确的位置上加入$\phi$函数，也即是LLVM中
 
 具体算法如下所示——
 
-![](./DF.png)
+![](./img/DF.png)
 
 #### 变量重命名
 

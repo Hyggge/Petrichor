@@ -1,7 +1,5 @@
 /.idea/
-/test/
 /out/
-/script/
 *.iml
 *.zip
 *.jar
